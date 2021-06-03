@@ -1,0 +1,44 @@
+Remove scrollbar
+and an install pwa button/ shortcut  <------still urgent currently working on it.
+then Imma be done with the front end.
+start the table screen in coordination with the back end which is a course in code ninja or default google channel cuz they also us typescript
+
+
+-->only render ( update the changed cells ) understand props change relation with render method
+
+
+
+for a group of cells take intersection teachers and consider them as one and take their added periods and the non repeating intersection of their available list and apply the standard metric.
+1. we need a lot of memory complexity to reduce the nessesary amount of prossesing power.
+2. I need to learn about async and await.
+3. apply a stack structure both for Undo and when the Async function return an issue so that user changes must be reverted and nessesry changes applied
+4. figure out an upper bound to the length of the sup sets so that you don't do an n-1xn-1 "massive" subset 2s , 3s ... N's
+
+
+
+
+
+
+
+
+
+
+expore
+redux
+hermies
+
+
+npm run-script build
+start vpn
+then firebase deploy
+workbox wizard to check if there is a problem with the serviceworker
+and boom just like that
+
+
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
+
+https://developers.google.com/web/fundamentals
+
+https://web.dev/promote-install/#browser-promotion
+
+
