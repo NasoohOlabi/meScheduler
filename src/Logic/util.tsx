@@ -1,6 +1,6 @@
 import { IClass , IWEEK_GLOBAL_Object} from "../Components/Week";
 import { IActlistObj } from "./Logic";
-
+// testing git here
 export const equals  = ( a : number[] , b : number[]) => {
     if (a.length === b.length){
       for (let i = 0 ; i<a.length ; i++){
