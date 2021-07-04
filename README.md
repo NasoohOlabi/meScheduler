@@ -8,3 +8,5 @@ So I'll start with just filling as much teachers as I can, then using legal vali
 And what's great about this method is that it already implement an editing algorithm, meaning when I eventually give the user a solution he/she can customize it how ever they like
 
 
+### Demo ###
+https://meschedule-64bda.web.app/
