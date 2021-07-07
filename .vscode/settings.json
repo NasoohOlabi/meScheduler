@@ -5,7 +5,6 @@
         "schedule",
         "webfonts"
     ],
-    "git.enabled": false,
     "breadcrumbs.enabled": false,
     "telemetry.enableTelemetry": false
 }
