@@ -1587,7 +1587,7 @@ export function WeekView(): JSX.Element {
     console.clear();
     teacherScheduleInit(WEEK_GLOBAL_Object , availables);
     fill(WEEK_GLOBAL_Object);
-    // randomFiller(WEEK_GLOBAL_Object);
+    randomFiller(WEEK_GLOBAL_Object);
     forceUpdate();
   },
     // eslint-disable-next-line react-hooks/exhaustive-deps

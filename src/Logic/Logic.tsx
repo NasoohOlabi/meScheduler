@@ -59,15 +59,15 @@ export function fill(week:IWEEK_GLOBAL_Object) {
 	const teachersGuild = week.teachersGuild
 	const allClasses : IClass[] = week.allClasses
 	let table : any = emptyObjArray(allClasses.length);
-	allClasses.forEach((Class,i)=>{
-		for (let x = 0; x < Class.l.length; x++) {
-			for (let y = 0; y < Class.l[x].length; y++) {
+	allClasses.forEach((Class,m)=>{
+		loopOverClass(
+			(x,y)=>{
 				// scanning the teachers in the class
 				Object.keys(Class.teachers).forEach((teacher)=>{
-					let [periods , PosList]= [Class.teachers[teacher].remPeriods,Class.teachers[teacher].emptyAvailables];
+					let [periods , PosList]=[Class.teachers[teacher].remPeriods,Class.teachers[teacher].emptyAvailables];
 					if( contains(availables[teacher],[x,y]) && periods>0) {
 						Class.l[x][y].Options.forEach((teacherAtThisPos)=>{
-							createEdgeIN(table[i],teacher,teacherAtThisPos,[x,y],teachersGuild);
+							createEdgeIN(table[m],teacher,teacherAtThisPos,[x,y],teachersGuild);
 						});
 						Class.l[x][y].Options.push(teacher);
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,9 +75,9 @@ export function fill(week:IWEEK_GLOBAL_Object) {
 					}
 				});
 			}
-		}
-		CementNoOtherOptionButToPutHere(allClasses , i , teachersGuild , week);
-		Class.laps = table[i];
+		);
+		CementNoOtherOptionButToPutHere(allClasses , m , teachersGuild , week);
+		Class.laps = table[m];
 	});
 };
 export function teacherScheduleInit(week : IWEEK_GLOBAL_Object , availables : any){
@@ -112,8 +112,8 @@ export function randomFiller(week:IWEEK_GLOBAL_Object){
 			for(let j = 0 ; j<Class.l[i].length ; j++){
 				if(Class.l[i][j].Options.length !== 0){
 					const aOptions : string[] = actualOptions([i,j],m,week);
-					if (aOptions[Math.floor(Math.random() * aOptions.length)] !== undefined){
-						const teacher = aOptions[0];    
+					if (aOptions.length > 0){
+						const teacher = aOptions[Math.floor(Math.random() * aOptions.length)];    
 						putHimAt(week,m,teacher,[i,j]);
 						autoFill(allClasses,m,teachersGuild,week);
 						noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
@@ -211,7 +211,6 @@ export const putHimAt = function (
 					teachers[teacher].emptyAvailables = withoutPos(teachers[teacher].emptyAvailables , Pos)
 				}
 			);
-			alert(`week.HandyAny.teacherSchedule[${teacher}][ ${(X*10 + Y)} ] = ${m};`);
 			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = m;
 		}
 		if (week.refreshTable !== undefined){
@@ -231,7 +230,6 @@ export const putHimAt = function (
 					}
 				}
 			);
-			alert(`week.HandyAny.teacherSchedule[${teacher}][ ${(X*10 + Y)} ] = -1;`);
 			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = -1;
 		}
 		if (week.refreshTable !== undefined){
