@@ -17,7 +17,8 @@ import { Button, Paper } from '@material-ui/core';
 //import Select from "@material-ui/core/Select";
 import {IClass,IWEEK_GLOBAL_Object} from './Week';
 import Cell from "./TableCell";
-import { useForceUpdate , Done} from "../Logic/Logic";
+import { useForceUpdate} from "../Logic/Logic";
+import {Done} from "../Logic/CoreAlgo";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -88,13 +88,13 @@ export function teacherScheduleInit(week : IWEEK_GLOBAL_Object , availables : an
 			availables[teacher].forEach(
 				(Pos : [number,number])=>{
 					const [X,Y] = Pos;
-					week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)] = 0
+					week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)] = -1
 				}
 			);
 			loopOverClass(
 				(i,j)=>{
-					if(week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] !== 0){
-						week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] =-1
+					if(week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] !== -1){
+						week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] =Number.NEGATIVE_INFINITY;
 					}
 				}
 			);
@@ -112,7 +112,7 @@ export function randomFiller(week:IWEEK_GLOBAL_Object){
 			for(let j = 0 ; j<Class.l[i].length ; j++){
 				if(Class.l[i][j].Options.length !== 0){
 					const aOptions : string[] = actualOptions([i,j],m,week);
-					if (aOptions[0] !== undefined){
+					if (aOptions[Math.floor(Math.random() * aOptions.length)] !== undefined){
 						const teacher = aOptions[0];    
 						putHimAt(week,m,teacher,[i,j]);
 						autoFill(allClasses,m,teachersGuild,week);
@@ -133,7 +133,7 @@ export function actualOptions(Pos : [number,number],m : number, week : IWEEK_GLO
 	const[X,Y] = Pos;
 	const options = week.allClasses[m].l[X][Y].Options;
 	const res = options.filter((teacher)=>{
-		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===0 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
+		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
 	  })
 	if ( res.length === 0 ){
 		return options;
@@ -197,13 +197,12 @@ export const putHimAt = function (
 	teacher : string ,
 	Pos : [number , number] ,
 	doit : boolean = true ,
-	stateIsChangeing = true
 	){
 	const allClasses = week.allClasses;
 	const [X,Y] = Pos;
 	const teachers = allClasses[m].teachers;
 	if (doit) {
-		if (!teacherHasNoMoreemptyAvailables(teacher,teachers) && allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' && week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===0){
+		if (!teacherHasNoMoreemptyAvailables(teacher,teachers) && allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' && week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1){
 			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = teacher;
 			teachers[teacher].remPeriods--;
 			teachers[teacher].periodsHere.push(Pos)
@@ -212,6 +211,7 @@ export const putHimAt = function (
 					teachers[teacher].emptyAvailables = withoutPos(teachers[teacher].emptyAvailables , Pos)
 				}
 			);
+			alert(`week.HandyAny.teacherSchedule[${teacher}][ ${(X*10 + Y)} ] = ${m};`);
 			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = m;
 		}
 		if (week.refreshTable !== undefined){
@@ -224,7 +224,6 @@ export const putHimAt = function (
 			teachers[teacher].remPeriods++;
 			teachers[teacher].periodsHere = withoutPos(teachers[teacher].periodsHere,Pos)
 			// allClasses[m].l[Pos[0]][Pos[1]].Options = removed(allClasses[m].l[Pos[0]][Pos[1]].Options,teacher);
-			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)+'' ] = 0;
 			Object.keys(teachers).forEach(
 				(teacher)=>{
 					if ( contains(week.availables[teacher] , Pos) ){
@@ -232,9 +231,9 @@ export const putHimAt = function (
 					}
 				}
 			);
-			// positionFilled(Pos , allClasses[m]);
+			alert(`week.HandyAny.teacherSchedule[${teacher}][ ${(X*10 + Y)} ] = -1;`);
+			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = -1;
 		}
-		
 		if (week.refreshTable !== undefined){
 			week.refreshTable[m][Pos[0]][Pos[1]]();
 		}

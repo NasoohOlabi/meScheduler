@@ -1,6 +1,6 @@
 import {IClass, IWEEK_GLOBAL_Object } from '../Components/Week';
-import { putHimAt , teacherHasNoMoreemptyAvailables, threeTeachersOptionsList} from "./Logic";
-import {  controledAdd, controledPush, Key, util , actionType} from "./util";
+import { putHimAt} from "./Logic";
+import {  util , actionType} from "./util";
 export type IActlistObj = {
 	Pos : [number,number],
 	m : number,
@@ -39,82 +39,6 @@ export const someHowPutHimAt = (
 	else if(Class.l[x][y].currentTeacher !== teacher && Class.l[x][y].Options.includes(teacher)){
 		week.Swaping = true;
 
-		const oldTeacher = Class.l[x][y].currentTeacher;
-		const N_teacher_NoemptyAvailables = teacherHasNoMoreemptyAvailables(teacher,Class.teachers);
-		const oldTeacherAvailables : [number,number][]= week.availables[oldTeacher];
-		const newTeacherAvailables : [number,number][]= week.availables[teacher];
-				
-		//if the oldTeacher has a free period 
-		for (let i = 0 ; i< oldTeacherAvailables.length ; i++){
-			const [X , Y] : [number,number] = oldTeacherAvailables[i];
-			if(Class.l[X][Y].currentTeacher === ''){
-				if (N_teacher_NoemptyAvailables){
-					newTeacherAvailables.forEach((Pos)=>{
-						const [u , v] = Pos;
-						if(Class.l[u][v].currentTeacher === teacher){
-							controledPush(week.activateList,
-								[
-									{Pos:[X,Y] , m , teacher:oldTeacher},
-									{Pos:[u,v] , m , teacher:''} ,
-									{Pos:[x,y] , m , teacher:teacher}
-								]
-							);
-						}
-					});
-				}else{
-					controledPush(week.activateList , [{Pos:[X,Y] , m , teacher:oldTeacher},{Pos:[x,y] , m , teacher:teacher}]);
-				}
-			}
-		}
-
-		
-		//Swap
-		const sharedList = Class.laps[Key(teacher,oldTeacher,teachersGuild)] || [];
-		sharedList.forEach((Pos:[number,number])=>{
-			const [sharedX , sharedY] : [number,number] = Pos;
-			if(Class.l[sharedX][sharedY].currentTeacher === teacher ){
-				controledPush(week.activateList,[{Pos:[sharedX,sharedY] , m , teacher:oldTeacher} , {Pos:[x,y] , m , teacher:teacher}]);
-			}
-		});
-
-		//NO RECURSION AND LIMIT activateList to 100
-		//list teacher position
-		// remove teacher from them 
-		//look for another teacher to fill the spot
-		controledAdd(
-			week.activateList,
-			
-			threeTeachersOptionsList(
-				teacher,oldTeacher , oldTeacherAvailables ,m,[x,y],week
-			)
-		);
-
-		// for teacher in options find where he at and then
-		// for teacher in options where he was at try and put any of the other
-		// in his spot by a recursive call and then append the result actlist of that call
-		// to put
-		// acc is already in week
-		
-		// const reason =(teacher : string , Pos : [number,number] , m:number , week : IWEEK_GLOBAL_Object)=>{
-		// 	const[X,Y] = Pos;
-		// 	const comp = week.HandyAny.teacherSchedule[teacher][(X*10)+Y];
-		// 	if (comp === 0){
-		// 		// if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
-		// 		// 	return "shift"
-		// 		// }else{
-		// 		// 	return "cycle"
-		// 		// }
-		// 		return true
-		// 	}
-		// 	else if (comp === -1){
-		// 		// eslint-disable-next-line no-throw-literal
-		// 		throw {name: 'illegal'};
-		// 		// return "teacher has other commitments"
-		// 	}
-		// 	else{
-		// 		return comp
-		// 	}
-		// }
 		
 		const pickAction = util.pickAction;
 		
@@ -247,13 +171,13 @@ export const Done = (
 	}
 	for(let i = 0 ; i< sol.length;i++){
 	  if(sol[i].teacher ===''){
-		putHimAt(week,m,School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,sol[i].Pos,false,false);  
+		putHimAt(week,m,School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,sol[i].Pos,false);  
 	  }
 	}
 	for(let i = 0 ; i< sol.length;i++){
 	  if (!(sol[i].teacher ==='')){
 		if(School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher !== ''){
-		  putHimAt(week,m,School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,sol[i].Pos,false,false);  
+		  putHimAt(week,m,School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,sol[i].Pos,false);  
 		}
 	  }
 	}
