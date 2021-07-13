@@ -8,16 +8,14 @@ export type IActlistObj = {
 }
 
 export const someHowPutHimAt = (
-	allClasses : IClass[] , 
 	m : number,
 	teacher : string ,
 	Pos : [number , number] ,
-	teachersGuild : string[],
 	week : IWEEK_GLOBAL_Object,
-	doit : boolean = true,
 	freeze :boolean = true
 ):void=>{
 	//short hands
+	const allClasses = week.allClasses;
 	const Class = allClasses[m];
 	const [x,y] = Pos;
 
@@ -33,75 +31,113 @@ export const someHowPutHimAt = (
 
 
 	if(Class.l[x][y].currentTeacher ==='' ){
-		putHimAt(week,m,teacher,Pos,doit);
+		putHimAt(week,m,teacher,Pos,true);
 		return
 	} 
 	else if(Class.l[x][y].currentTeacher !== teacher && Class.l[x][y].Options.includes(teacher)){
 		week.Swaping = true;
 
 		
-		const pickAction = util.pickAction;
-		
+	
 		const delegate = (
 			teacher:string ,
 			Pos:[number,number] ,
 			m : number, week : IWEEK_GLOBAL_Object ,
 			base : {teacher:string , Pos:[number,number] , m : number}[],
-			// acc : {Pos:[number,number] , m : number , teacher : string }[] ,
-			// action : actionType 
 			)=>{
+				const pickAction = util.pickAction;
+				const situationInt = util.situationInt;
 				const [X,Y]=Pos;
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const [ _ , a , reason] = util.situation(teacher,Pos,m,week);
-				if (reason ===0){
-					re(teacher,Pos,m,week,[],a , 4)
+				const S = util.situation(teacher,Pos,m,week);
+				const [_, a ,r] = S;
+				switch (situationInt(S)) {
+					case 1:
+						putHimAt(week,m,teacher,Pos,true);
+						break;
+					case 2:
+						// Pivot
+						const takeHisPlace =  week.allClasses[r].l[X][Y].Options
+						takeHisPlace.forEach(
+							(t)=>{
+								someHowPutHimAt(m,t,Pos,week)
+							}
+						);
+						break;
+					case 3:
+
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					case 6:
+						break;
+					case 7:
+						break;
+					case 8:
+						break;
+					default:
+						break;
 				}
-				if (reason === -1){
-					const err = {name:"illegal"}
-					throw err
-				}
-				else{
-					const takeHisPlace =  week.allClasses[reason].l[X][Y].Options
-					takeHisPlace.forEach(
-						(t)=>{
-							re(t,Pos,reason,week,[],pickAction(t,reason,week) ,4)
-						}
-					);
-					re(teacher,Pos,m,week,[],a ,4)
-				}
+				// if (reason ===0){
+				// 	re(teacher,Pos,m,week,[],a , 4)
+				// }
+				// if (reason === -1){
+				// 	const err = {name:"illegal"}
+				// 	throw err
+				// }
+				// else{
+				// 	const takeHisPlace =  week.allClasses[reason].l[X][Y].Options
+				// 	takeHisPlace.forEach(
+				// 		(t)=>{
+				// 			re(t,Pos,reason,week,[],pickAction(t,reason,week) ,4)
+				// 		}
+				// 	);
+				// 	re(teacher,Pos,m,week,[],a ,4)
+				// }
 		}
-		const re = (teacher:string , Pos:[number,number] , m : number, week : IWEEK_GLOBAL_Object , base : {Pos:[number,number] , m : number , teacher : string }[] , action : actionType , depth :number )=>{
-			// here we work under the assumtion that reason is 0
+		const re = (
+				teacher:string,
+				Pos:[number,number],
+				m : number,
+				week : IWEEK_GLOBAL_Object,
+				base : {Pos:[number,number],
+				m : number , teacher : string }[],
+				action : actionType,
+				depth :number
+			)=>{
+			// here we work under the assumtion that reason is -1
 			// recursion base condition
 			if (week.activateList.length >5){
+				// the numbers of solutions is less than 5. which is enough
 				return;
 			}
 			if (depth ===0){
+				// a safe guard
 				return
 			}
-			// const Rea
-			// if ()
 			//short-hands
 			const solutions = week.activateList;
-			const a = {Pos , teacher , m }
-			base.push(a);
+			const step = {Pos , teacher , m }
+			base.push(step);
 				const [X,Y] = Pos;
-				const ot = week.allClasses[m].l[X][Y].currentTeacher;
-				if (ot === ''){
+				const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
+				if (oldTeacher === ''){
 					if (action === "shift"){
-
+						// Done 
+						week.activateList.push(util.copyInstructions(base))
 					}
 					// if cycle then this empty slot is useless 
 				}
 				else
 				{
-					const edges : [number,number][] = week.availables[ot];
+					const edges : [number,number][] = week.availables[oldTeacher];
 					const notHandled : [number,number][] = edges.filter(
 						(Pos1)=>{
 							// check if this Pos1 is a valid answer to our problem by repeating the conditions above for starters
 							// if true then execute what's inside the privious if statement and
 							// return false so that it's removed
-							const a1 = {Pos:Pos1 , teacher: ot , m };
+							const a1 = {Pos:Pos1 , teacher: oldTeacher , m };
 							const [X1,Y1] = Pos1;
 							const t1 = week.allClasses[m].l[X1][Y1].currentTeacher;
 							if (
@@ -123,35 +159,21 @@ export const someHowPutHimAt = (
 					const requirePivoting = notHandled.filter(
 						(Pos1)=>{
 							// recursive call :
-							const r = week.HandyAny.teacherSchedule[ot][(Pos1[0]*10) +Pos1[1]] 
+							const r = week.HandyAny.teacherSchedule[oldTeacher][(Pos1[0]*10) +Pos1[1]] 
 							if (r===m){
 								return false
 							}
 							else if (r === 0){
-								re ( ot , Pos1 , m , week , base ,action , depth-1);
+								re ( oldTeacher , Pos1 , m , week , base ,action , depth-1);
 								return false
 							}
 							return true
 						}
 					);
-					if (depth === 0){
-						requirePivoting.forEach(
-							(p)=>{
-								// I don't know what I'm doing here
-								// fix it
-								delegate(ot,p,m,week,base)
-							}
-						);
-					}
 				}
-			// <- here
 			// remove the a from the base because it is a reference and you don't what to fuck up your recursion
 			base.pop()
 		}
-
-
-
-		//
 		if (!freeze){
 			Done(allClasses,m,week)({})
 		}

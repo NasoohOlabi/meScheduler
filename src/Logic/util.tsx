@@ -2,46 +2,46 @@ import { IClass , IWEEK_GLOBAL_Object} from "../Components/Week";
 import { IActlistObj } from "./Logic";
 // testing git here
 export const equals  = ( a : number[] , b : number[]) => {
-    if (a.length === b.length){
-      for (let i = 0 ; i<a.length ; i++){
-        if (!(a[i]===b[i])) {
-          return false;
-        }
-      }
-      return true;
-    }
-    else {
-      return false;
-    }
+	if (a.length === b.length){
+	  for (let i = 0 ; i<a.length ; i++){
+		if (!(a[i]===b[i])) {
+		  return false;
+		}
+	  }
+	  return true;
+	}
+	else {
+	  return false;
+	}
 }
 export const contains  = ( a : number[][] ,Pos : [number , number]) => {
 
-    for (let i = 0 ; i<a.length ; i++){
-    if (equals(a[i] , Pos)) {
-        return true;
-    }
-    }
-    return false;
+	for (let i = 0 ; i<a.length ; i++){
+	if (equals(a[i] , Pos)) {
+		return true;
+	}
+	}
+	return false;
 
 }
 export const guard = (a : any , Pos:[number,number] ) : [number,number][]=>{
-    if (a === undefined){
-        let b : [number,number][] = [Pos,];
-        return b;
-    }
-    else{
-        a.push(Pos)
-        return a;
-    }
+	if (a === undefined){
+		let b : [number,number][] = [Pos,];
+		return b;
+	}
+	else{
+		a.push(Pos)
+		return a;
+	}
 }
 export const guardRemove = (a : any , Pos:[number,number] ) : [number,number][]=>{
 if (a === undefined){
-    let b : [number,number][] = [Pos,];
-    return b;
+	let b : [number,number][] = [Pos,];
+	return b;
 }
 else{
-    a = a.filter((item:any) => !equals(item , Pos));
-    return a;
+	a = a.filter((item:any) => !equals(item , Pos));
+	return a;
 }
 };
 export const guardPeriodsList = (l : any) : [number,number][]=>{
@@ -68,11 +68,11 @@ return l;
 //   }
 // }
 export const withoutPos =( lst : [number,number][] , Pos : [number,number])=>{
-    return lst.filter(  p=>!equals(Pos,p) )
+	return lst.filter(  p=>!equals(Pos,p) )
 }
 export const removed = ( S : string[] , s : string) => {
-    return (S.slice(0,S.indexOf(s)).concat(S.slice(S.indexOf(s)+1)));
-    //return S.splice(S.indexOf(s),0,data);
+	return (S.slice(0,S.indexOf(s)).concat(S.slice(S.indexOf(s)+1)));
+	//return S.splice(S.indexOf(s),0,data);
 }
 // export async function AsyncFill() {
 //     try{
@@ -83,7 +83,7 @@ export const removed = ( S : string[] , s : string) => {
 //     }catch(err){
 //         console.log(err);
 //     }
-    
+	
 // }
 
 // export function asyncFill( allClasses : IClass[] , availables : any) {
@@ -113,121 +113,121 @@ export const removed = ( S : string[] , s : string) => {
 //     }});
 // };
 export const Key = (s1 : string , s2 : string , teachersGuild : string[])=>{
-    const i1 = teachersGuild.indexOf(s1);
-    const i2 = teachersGuild.indexOf(s2);
-    const s : string = (i1>i2)? ( i1.toString() + 'x' + i2.toString() ) : ( i2.toString() + 'x' + i1.toString() ); 
-    return s;
+	const i1 = teachersGuild.indexOf(s1);
+	const i2 = teachersGuild.indexOf(s2);
+	const s : string = (i1>i2)? ( i1.toString() + 'x' + i2.toString() ) : ( i2.toString() + 'x' + i1.toString() ); 
+	return s;
 }
 export const defineOrPush = (table : any , hash : string , Pos: [number,number])=>{
-    if(table[hash] === undefined){
-        table[hash] = [Pos,];
-    } 
-    else{
-        table[hash].push(Pos);
-    }
+	if(table[hash] === undefined){
+		table[hash] = [Pos,];
+	} 
+	else{
+		table[hash].push(Pos);
+	}
 }
 export const createEdgeIN = (table:any , s1 : string , s2 : string , Pos : [number, number] , teachersGuild : string[])=>{
-    // table[indes s1 , index s2] = pos
-    let hash = Key(s1,s2,teachersGuild);
-    defineOrPush(table,hash,Pos);
-    // table[i2][i1].push(Pos);
+	// table[indes s1 , index s2] = pos
+	let hash = Key(s1,s2,teachersGuild);
+	defineOrPush(table,hash,Pos);
+	// table[i2][i1].push(Pos);
 
 }
 
 export const emptyObjArray = (n:number)=>{
-    let g = [];
-    for (let i = 0 ; i<n ; i++){
-        g.push({});
-    }
+	let g = [];
+	for (let i = 0 ; i<n ; i++){
+		g.push({});
+	}
 
-    return g
+	return g
 }
 
 export const emptyNumMatrix = (x:number,y:number,z:number)=>{
-    let g : any= [];
-    for (let i = 0 ; i<x ; i++){
-        g.push([]);
-        for(let j = 0 ; j<y;j++){
-            g[i].push([]);
-            for(let k = 0 ; k < z ; k++){
-                g[i][j].push(0);
-            }
-        }
-    }
-    return g
+	let g : any= [];
+	for (let i = 0 ; i<x ; i++){
+		g.push([]);
+		for(let j = 0 ; j<y;j++){
+			g[i].push([]);
+			for(let k = 0 ; k < z ; k++){
+				g[i][j].push(0);
+			}
+		}
+	}
+	return g
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function periods(list : [string , number][] , teacher : string){
-    for (let i = 0 ; i< list.length ; i++){
-    if ( list[i][0] === teacher ){
-        return list[i][1];
-    }
-    }
-    return 0;
+	for (let i = 0 ; i< list.length ; i++){
+	if ( list[i][0] === teacher ){
+		return list[i][1];
+	}
+	}
+	return 0;
 }
 
 export const stringGuard = ( arg : unknown) : string=>{
-    if (typeof arg === "string"){
-        return arg;
-    }
-    else{
-        return '';
-        //do sth
-    }
+	if (typeof arg === "string"){
+		return arg;
+	}
+	else{
+		return '';
+		//do sth
+	}
 }
 export const castPosList =(l:any):[number,number][]=>{
-    return ((l !== undefined)? l : [] );
+	return ((l !== undefined)? l : [] );
 }
 export const getHisActPeriods = (Class : IClass,teacher:string)=>{
-    let result : [number,number][] = [];
-    for (let i = 0 ; i<Class.l.length;i++){
-        for (let j = 0 ; j<Class.l[0].length;j++){
-            if(Class.l[i][j].currentTeacher === teacher){
-                result.push([i,j]);
-            }
-        }
-    }
-    return result
+	let result : [number,number][] = [];
+	for (let i = 0 ; i<Class.l.length;i++){
+		for (let j = 0 ; j<Class.l[0].length;j++){
+			if(Class.l[i][j].currentTeacher === teacher){
+				result.push([i,j]);
+			}
+		}
+	}
+	return result
 }
 export const listMinusAnother = (a : [number,number][] , b :[number,number][]):[number,number][]=>{
-    const result: [number,number][] = [];
-    for (let i = 0 ; i<a.length;i++){
-        if(!contains(b,a[i])){
-            result.push(a[i]);
-        }
-    }
-    return result;
+	const result: [number,number][] = [];
+	for (let i = 0 ; i<a.length;i++){
+		if(!contains(b,a[i])){
+			result.push(a[i]);
+		}
+	}
+	return result;
 }
 export const controledPush = (a:IActlistObj[][],sth :IActlistObj[] ,n:number = 50)=>{
-    if(a.length<n){
-        a.push(sth);
-    }
+	if(a.length<n){
+		a.push(sth);
+	}
 }
 export const controledAdd = (a:IActlistObj[][],sth : IActlistObj[][]  ,n:number = 50)=>{
-    if(a.length<n){
-        for (let i = 0  ; i < sth.length ; i++){
-            a.push(sth[i])
-        }
-    }
+	if(a.length<n){
+		for (let i = 0  ; i < sth.length ; i++){
+			a.push(sth[i])
+		}
+	}
 }
 export const loopOverClass = (f : (i:number,j:number)=>void,n=5,m=7)=>{
-    for(let i = 0 ; i<n ; i++ ){
-        for(let j = 0 ; j<m ; j++ ){
-            f(i,j);
-        }        
-    }
+	for(let i = 0 ; i<n ; i++ ){
+		for(let j = 0 ; j<m ; j++ ){
+			f(i,j);
+		}        
+	}
 }
 export const newGrid = ():{currentTeacher: string , isCemented:Boolean , Options: string[]}[][]=>{
-    return (
-        [
-            [{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-            [{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-            [{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-            [{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-            [{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-          ]
-    );
+	return (
+		[
+			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
+			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
+			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
+			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
+			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
+		  ]
+	);
 }
 const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : string } )
 		: {Pos:[number,number] , m : number , teacher : string }  =>{
@@ -240,32 +240,71 @@ const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : st
 		}
 const copyInstructions = (objects : {Pos:[number,number] , m : number , teacher : string }[])
 : {Pos:[number,number] , m : number , teacher : string }[] =>{
-    const res : any = []
-    objects.forEach(
-        (object)=>{
-            res.push(copyInstruction(object));
-        }
-    );
-    return res;
+	const res : any = []
+	objects.forEach(
+		(object)=>{
+			res.push(copyInstruction(object));
+		}
+	);
+	return res;
 }
 const pickAction=(teacher:string ,m : number, week:IWEEK_GLOBAL_Object):actionType=>{
-    if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
-        return "shift"
-    }else{
-        return "cycle"
-    }
+	if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
+		return "shift"
+	}else{
+		return "cycle"
+	}
 }
 const situation = (teacher: string, Pos:[number,number] , m :number , week:IWEEK_GLOBAL_Object):[string,actionType,number]=>{
-    const ot = week.allClasses[m].l[Pos[0]][Pos[1]].currentTeacher;
-    const a = pickAction(teacher,m,week);
-    const r = week.HandyAny.teacherSchedule[teacher][(Pos[0]*10) +Pos[1]] 
-    return [ot,a,r]
+	const ot = week.allClasses[m].l[Pos[0]][Pos[1]].currentTeacher;
+	const a = pickAction(teacher,m,week);
+	const r = week.HandyAny.teacherSchedule[teacher][(Pos[0]*10) +Pos[1]] 
+	return [ot,a,r]
+}
+function situationInt( s : [string,actionType,number] ){
+	const [t,a,r] = s;
+	if(t === ''){
+		if(a === 'shift'){
+			if(r === -1){
+				return 1;
+			}
+			else{
+				return 2;
+			}
+		}
+		else{
+			if(r === -1){
+				return 3;
+			}
+			else{
+				return 4;
+			}
+		}
+	}
+	else{
+		if(a === 'shift'){
+			if(r === -1){
+				return 5;
+			}
+			else{
+				return 6;
+			}
+		}
+		else{
+			if(r === -1){
+				return 7;
+			}
+			else{
+				return 8;
+			}
+		}
+	}
 }
 export type actionType = "shift" | "cycle"
 export const util = {
-    copyInstructions,
-    copyInstruction,
-    pickAction,
-    situation
+	copyInstructions,
+	copyInstruction,
+	pickAction,
+	situation,
+	situationInt
 }
-
