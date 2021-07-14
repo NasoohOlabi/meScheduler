@@ -129,14 +129,19 @@ export function useForceUpdate(){
 	const [value, setValue] = useState(0); // integer state
 	return () => setValue(value => value + 1); // update the state to force render
 };
-export function actualOptions(Pos : [number,number],m : number, week : IWEEK_GLOBAL_Object){
+export function actualOptions(
+		Pos : [number,number],
+		m : number,
+		week : IWEEK_GLOBAL_Object,
+		command : "unfiltered"|"filtered" = "unfiltered"
+	){
 	const[X,Y] = Pos;
 	const options = week.allClasses[m].l[X][Y].Options;
 	const res = options.filter((teacher)=>{
 		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
 	  })
-	if ( res.length === 0 ){
-		return options;
+	if (command === "filtered"){
+		return options
 	}
 	return res;
 }
@@ -274,7 +279,7 @@ const autoFill = function(
 			for ( let y = 0 ; y < School[m].l[x].length ; y++){
 				if ( School[m].l[x][y].Options.length === 1 && School[m].l[x][y].currentTeacher === '' ){
 				//do the change
-				someHowPutHimAt(School , m , School[m].l[x][y].Options[0] , [x,y] ,teachersGuild, week );
+				someHowPutHimAt(m , School[m].l[x][y].Options[0] , [x,y] , week );
 				
 				//alert(`here in [${x},${y}] calling with ${School[i].l[x][y].Options[0]}  who ${(teacherHasNoMoreemptyAvailables(School[i].l[x][y].Options[0] ,School[i].teachers)?'has NOOOOO more':'has more')}`);
 				//go back to the start to see if your changes affected what you have already checked
@@ -296,7 +301,7 @@ const autoFill = function(
 export const SwitchEventHander = (Pos : [ number , number], School : IClass[] , m : number, teachersGuild: string[], week:IWEEK_GLOBAL_Object ) => { 
 	return(event: React.ChangeEvent<{ value: unknown }>) =>{
 		let teacher : string = stringGuard(event.target.value);  
-		someHowPutHimAt(School,m,teacher,Pos,teachersGuild, week);
+		someHowPutHimAt(m,teacher,Pos, week);
 		//clean teacher name from other places
 		//auto fill when only one name remain in a place
 		autoFill(School,m,teachersGuild,week);

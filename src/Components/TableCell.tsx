@@ -48,7 +48,7 @@ export default function Cell (props : ICell) : JSX.Element{
     const cell = (D:boolean , show:string) :JSX.Element=>{
       let ActList : string[] =[];
       if (show===''){
-        ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object);
+        ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object,"filtered");
       }else{
         ActList = [show].concat(actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object));
       }

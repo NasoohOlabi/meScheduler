@@ -1,12 +1,11 @@
 import {IClass, IWEEK_GLOBAL_Object } from '../Components/Week';
-import { putHimAt} from "./Logic";
+import { actualOptions, putHimAt} from "./Logic";
 import {  util , actionType} from "./util";
 export type IActlistObj = {
 	Pos : [number,number],
 	m : number,
 	teacher : string
 }
-
 export const someHowPutHimAt = (
 	m : number,
 	teacher : string ,
@@ -49,22 +48,23 @@ export const someHowPutHimAt = (
 				const situationInt = util.situationInt;
 				const [X,Y]=Pos;
 				const S = util.situation(teacher,Pos,m,week);
-				const [_, a ,r] = S;
 				switch (situationInt(S)) {
 					case 1:
 						putHimAt(week,m,teacher,Pos,true);
 						break;
 					case 2:
 						// Pivot
-						const takeHisPlace =  week.allClasses[r].l[X][Y].Options
+						const takeHisPlace =  week.allClasses[S.r].l[X][Y].Options
 						takeHisPlace.forEach(
 							(t)=>{
-								someHowPutHimAt(m,t,Pos,week)
+								// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+								// here I assumed re would work and thus already assigned the the first teacher
+								re(t,Pos,S.r,week,[{Pos,m,teacher}],[S.action],{oldM : m});
 							}
 						);
 						break;
 					case 3:
-
+						// use re functionality
 						break;
 					case 4:
 						break;
@@ -79,35 +79,26 @@ export const someHowPutHimAt = (
 					default:
 						break;
 				}
-				// if (reason ===0){
-				// 	re(teacher,Pos,m,week,[],a , 4)
-				// }
-				// if (reason === -1){
-				// 	const err = {name:"illegal"}
-				// 	throw err
-				// }
-				// else{
-				// 	const takeHisPlace =  week.allClasses[reason].l[X][Y].Options
-				// 	takeHisPlace.forEach(
-				// 		(t)=>{
-				// 			re(t,Pos,reason,week,[],pickAction(t,reason,week) ,4)
-				// 		}
-				// 	);
-				// 	re(teacher,Pos,m,week,[],a ,4)
-				// }
-		}
-		const re = (
+			}
+			const re = (
 				teacher:string,
 				Pos:[number,number],
 				m : number,
 				week : IWEEK_GLOBAL_Object,
-				base : {Pos:[number,number],
-				m : number , teacher : string }[],
-				action : actionType,
-				depth :number
+				base : {Pos:[number,number],m : number , teacher : string}[],
+				actionStack : actionType[],
+				misc? : any
 			)=>{
+			// put the teacher in and start eating the edges to find your solutions
+			// edges are places to move the current teacher elsewhere
 			// here we work under the assumtion that reason is -1
 			// recursion base condition
+			const oldM = misc.oldM | m;
+			if (m === oldM){
+				actionStack.push(util.situation(teacher,Pos,m,week).action);
+			}
+			const depth = misc.depth | 5;
+			const Act_StackTop = actionStack[actionStack.length-1];
 			if (week.activateList.length >5){
 				// the numbers of solutions is less than 5. which is enough
 				return;
@@ -116,6 +107,7 @@ export const someHowPutHimAt = (
 				// a safe guard
 				return
 			}
+			// unpack misc
 			//short-hands
 			const solutions = week.activateList;
 			const step = {Pos , teacher , m }
@@ -123,7 +115,7 @@ export const someHowPutHimAt = (
 				const [X,Y] = Pos;
 				const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
 				if (oldTeacher === ''){
-					if (action === "shift"){
+					if (Act_StackTop === "shift"){
 						// Done 
 						week.activateList.push(util.copyInstructions(base))
 					}
@@ -132,22 +124,21 @@ export const someHowPutHimAt = (
 				else
 				{
 					const edges : [number,number][] = week.availables[oldTeacher];
-					const notHandled : [number,number][] = edges.filter(
+					const requireWork : [number,number][] = edges.filter(
 						(Pos1)=>{
 							// check if this Pos1 is a valid answer to our problem by repeating the conditions above for starters
 							// if true then execute what's inside the privious if statement and
 							// return false so that it's removed
-							const a1 = {Pos:Pos1 , teacher: oldTeacher , m };
 							const [X1,Y1] = Pos1;
 							const t1 = week.allClasses[m].l[X1][Y1].currentTeacher;
 							if (
-								(action === "shift" && t1==='')||
-								(action === "cycle" && base[0] !== undefined && base[0].teacher=== t1)
+								(Act_StackTop === "shift" && t1==='')||
+								(Act_StackTop === "cycle" && base[0] !== undefined && base[0].teacher=== t1)
 								){
+								const a1 = {Pos:Pos1 , teacher: oldTeacher , m };
 								base.push(a1);
 								solutions.push(util.copyInstructions(base));
-								// <- here
-								// remove the a1 from the acc because it is a reference and you don't what to fuck up your recursion
+								// remove the a1 from the base because it is a reference and you don't what to fuck up your recursion
 								base.pop()
 								return false;
 							}
@@ -156,22 +147,41 @@ export const someHowPutHimAt = (
 							}
 						}
 					);
-					const requirePivoting = notHandled.filter(
+					const requirePivoting = requireWork.filter(
 						(Pos1)=>{
-							// recursive call :
-							const r = week.HandyAny.teacherSchedule[oldTeacher][(Pos1[0]*10) +Pos1[1]] 
-							if (r===m){
+							// looking for a place for the oldTeacher to call re with
+							// and try a solution where he is at Pos1
+							const S1 = util.situation(oldTeacher,Pos1,m,week)
+							if (S1.r===m){
+								// this condition should be equivilant to currentTeacher===oldTeacher
 								return false
 							}
-							else if (r === 0){
-								re ( oldTeacher , Pos1 , m , week , base ,action , depth-1);
+							else if (S1.r === -1){
+								// this means that it's possible for the old teacher to be put in this Pos
+								// but we still have to find a place to put the (current teacher at Pos1) in.
+								re ( oldTeacher , Pos1 , m , week , base ,actionStack , depth-1);
 								return false
 							}
 							return true
 						}
 					);
+					requirePivoting.forEach(
+						(p)=>{
+							const [x,y] = p;
+							const s = util.situation(oldTeacher,p,m,week);
+							const teachersToFillTheOtherPlace = actualOptions(p,m,week);
+							teachersToFillTheOtherPlace.forEach(
+								(replacementTeacher)=>{
+									re(replacementTeacher,p,s.r,week,base,actionStack,depth-1);
+								}
+							);
+						}
+					);
 				}
 			// remove the a from the base because it is a reference and you don't what to fuck up your recursion
+			if (m === oldM){
+				actionStack.pop();
+			}
 			base.pop()
 		}
 		if (!freeze){
@@ -182,7 +192,7 @@ export const someHowPutHimAt = (
 	}
 }
 export const Done = (
-	School : IClass[] , 
+	School : IClass[], 
 	m : number,
 	week : IWEEK_GLOBAL_Object)=>{
 	return (e : any)=>{

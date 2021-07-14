@@ -255,14 +255,14 @@ const pickAction=(teacher:string ,m : number, week:IWEEK_GLOBAL_Object):actionTy
 		return "cycle"
 	}
 }
-const situation = (teacher: string, Pos:[number,number] , m :number , week:IWEEK_GLOBAL_Object):[string,actionType,number]=>{
+const situation = (teacher: string, Pos:[number,number] , m :number , week:IWEEK_GLOBAL_Object):{currTeacher:string,action:actionType,r:number}=>{
 	const ot = week.allClasses[m].l[Pos[0]][Pos[1]].currentTeacher;
 	const a = pickAction(teacher,m,week);
 	const r = week.HandyAny.teacherSchedule[teacher][(Pos[0]*10) +Pos[1]] 
-	return [ot,a,r]
+	return {currTeacher:ot,action:a,r}
 }
-function situationInt( s : [string,actionType,number] ){
-	const [t,a,r] = s;
+function situationInt( s : {currTeacher:string,action:actionType,r:number} ){
+	const {currTeacher:t,action:a,r} = s;
 	if(t === ''){
 		if(a === 'shift'){
 			if(r === -1){
