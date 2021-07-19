@@ -140,7 +140,7 @@ export function actualOptions(
 	const res = options.filter((teacher)=>{
 		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
 	  })
-	if (command === "filtered"){
+	if (command === "filtered" && res.length === 0){
 		return options
 	}
 	return res;

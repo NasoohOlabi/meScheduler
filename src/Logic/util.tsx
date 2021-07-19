@@ -232,6 +232,7 @@ export const newGrid = ():{currentTeacher: string , isCemented:Boolean , Options
 const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : string } )
 		: {Pos:[number,number] , m : number , teacher : string }  =>{
 			const res = Object();
+			res.Pos = [];
 			res.Pos.push(obj.Pos[0]);
 			res.Pos.push(obj.Pos[1]);
 			res.m = obj.m;
@@ -300,11 +301,25 @@ function situationInt( s : {currTeacher:string,action:actionType,r:number} ){
 		}
 	}
 }
+
+function ruffleShuffle (arr: {Pos:[number,number] , m : number , teacher : string }[][],pivot : number):{Pos:[number,number] , m : number , teacher : string }[][]{
+	// a = [0,1,2,3,4,5,6]
+	// b = [0,1,2,3,4,5,6]
+	const res = [];
+	for (let i = 0 ; i<pivot ;i++){
+		for(let j = pivot; j<arr.length;j++){
+			res.push(arr[i].concat(arr[j]))
+		}
+	}
+	return res;
+}
+
 export type actionType = "shift" | "cycle"
 export const util = {
 	copyInstructions,
 	copyInstruction,
 	pickAction,
 	situation,
-	situationInt
+	situationInt,
+	ruffleShuffle
 }

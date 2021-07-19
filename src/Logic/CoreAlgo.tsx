@@ -17,7 +17,6 @@ export const someHowPutHimAt = (
 	const allClasses = week.allClasses;
 	const Class = allClasses[m];
 	const [x,y] = Pos;
-
 	/*
 				* discription*
 	for each teacher available here in the original list in this cell
@@ -26,33 +25,28 @@ export const someHowPutHimAt = (
 	this should be enough?!
 	?!
 	*/
-
-
-
 	if(Class.l[x][y].currentTeacher ==='' ){
 		putHimAt(week,m,teacher,Pos,true);
 		return
 	} 
 	else if(Class.l[x][y].currentTeacher !== teacher && Class.l[x][y].Options.includes(teacher)){
-		week.Swaping = true;
-
-		
-	
+		week.Swaping = true;	
 		const delegate = (
 			teacher:string ,
 			Pos:[number,number] ,
 			m : number, week : IWEEK_GLOBAL_Object ,
-			base : {teacher:string , Pos:[number,number] , m : number}[],
 			)=>{
-				const pickAction = util.pickAction;
 				const situationInt = util.situationInt;
 				const [X,Y]=Pos;
 				const S = util.situation(teacher,Pos,m,week);
+				const flag = true;
 				switch (situationInt(S)) {
 					case 1:
+						console.assert(flag,1);
 						putHimAt(week,m,teacher,Pos,true);
 						break;
 					case 2:
+						console.assert(flag,2);
 						// Pivot
 						const takeHisPlace =  week.allClasses[S.r].l[X][Y].Options
 						takeHisPlace.forEach(
@@ -64,45 +58,85 @@ export const someHowPutHimAt = (
 						);
 						break;
 					case 3:
+						console.assert(flag,3);
 						// use re functionality
+						re(teacher,Pos,m,week,[],[S.action])
 						break;
 					case 4:
+						console.assert(flag,4);
+						re(teacher,Pos,m,week,[],[S.action])
+						const pivot = week.activateList.length;
+						const takeHisPlace_4 =  week.allClasses[S.r].l[X][Y].Options
+						takeHisPlace_4.forEach(
+							(t)=>{
+								// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+								// here I assumed re would work and thus already assigned the the first teacher
+								re(t,Pos,S.r,week,[{Pos,m,teacher}],[S.action],{oldM : m});
+							}
+						);
+						week.activateList = util.ruffleShuffle(week.activateList,pivot);
 						break;
 					case 5:
+						console.assert(flag,5);
+						re(teacher,Pos,m,week,[],[S.action])
 						break;
 					case 6:
+						console.assert(flag,6);
+						re(teacher,Pos,m,week,[],[S.action])
+						const pivo = week.activateList.length
+						const takeHisPlace6 =  week.allClasses[S.r].l[X][Y].Options
+						takeHisPlace6.forEach(
+							(t)=>{
+								// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+								// here I assumed re would work and thus already assigned the the first teacher
+								re(t,Pos,S.r,week,[],[S.action],{oldM : m});
+							}
+						);
+						week.activateList = util.ruffleShuffle(week.activateList,pivo)
 						break;
 					case 7:
+						console.assert(flag,7);
+						re(teacher,Pos,m,week,[],[S.action])
 						break;
 					case 8:
+						console.assert(flag,8);
+						re(teacher,Pos,m,week,[],[S.action])
+						const pivot8 = week.activateList.length
+						const takeHisPlace8 =  week.allClasses[S.r].l[X][Y].Options
+						takeHisPlace8.forEach(
+							(t)=>{
+								// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+								// here I assumed re would work and thus already assigned the the first teacher
+								re(t,Pos,S.r,week,[],[S.action],{oldM : m});
+							}
+						);
+						week.activateList = util.ruffleShuffle(week.activateList,pivot8)
 						break;
 					default:
+						alert('impossible')
 						break;
 				}
 			}
-			const re = (
+		const re = (
 				teacher:string,
 				Pos:[number,number],
 				m : number,
 				week : IWEEK_GLOBAL_Object,
 				base : {Pos:[number,number],m : number , teacher : string}[],
 				actionStack : actionType[],
-				misc? : any
+				misc? : {depth? : number , oldM? : number}
 			)=>{
 			// put the teacher in and start eating the edges to find your solutions
 			// edges are places to move the current teacher elsewhere
 			// here we work under the assumtion that reason is -1
 			// recursion base condition
-			const oldM = misc.oldM | m;
-			if (m === oldM){
+			const Vmisc = misc? misc:{};
+			const oldM = Vmisc.oldM?Vmisc.oldM : m;
+			const depth = Vmisc.depth?Vmisc.depth : 5;
+			if (m !== oldM){
 				actionStack.push(util.situation(teacher,Pos,m,week).action);
 			}
-			const depth = misc.depth | 5;
 			const Act_StackTop = actionStack[actionStack.length-1];
-			if (week.activateList.length >5){
-				// the numbers of solutions is less than 5. which is enough
-				return;
-			}
 			if (depth ===0){
 				// a safe guard
 				return
@@ -159,7 +193,7 @@ export const someHowPutHimAt = (
 							else if (S1.r === -1){
 								// this means that it's possible for the old teacher to be put in this Pos
 								// but we still have to find a place to put the (current teacher at Pos1) in.
-								re ( oldTeacher , Pos1 , m , week , base ,actionStack , depth-1);
+								re ( oldTeacher , Pos1 , m , week , base ,actionStack , {depth:depth-1,oldM});
 								return false
 							}
 							return true
@@ -172,18 +206,21 @@ export const someHowPutHimAt = (
 							const teachersToFillTheOtherPlace = actualOptions(p,m,week);
 							teachersToFillTheOtherPlace.forEach(
 								(replacementTeacher)=>{
-									re(replacementTeacher,p,s.r,week,base,actionStack,depth-1);
+									re(replacementTeacher,p,s.r,week,base,actionStack,{depth : depth-1,oldM : m});
 								}
 							);
 						}
 					);
 				}
 			// remove the a from the base because it is a reference and you don't what to fuck up your recursion
-			if (m === oldM){
+			if (m !== oldM){
 				actionStack.pop();
 			}
 			base.pop()
 		}
+
+		delegate(teacher,Pos,m,week)
+
 		if (!freeze){
 			Done(allClasses,m,week)({})
 		}
@@ -227,3 +264,7 @@ export const Done = (
 }
 
 
+/*
+<sc<script></script><script>alert('hi');</sc<script></script><script>
+<<ss >script>alert('hi');<<ss >/script>
+*/
