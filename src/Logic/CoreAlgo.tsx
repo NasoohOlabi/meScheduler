@@ -17,6 +17,7 @@ export const someHowPutHimAt = (
 	const allClasses = week.allClasses;
 	const Class = allClasses[m];
 	const [x,y] = Pos;
+	console.clear();
 	/*
 				* discription*
 	for each teacher available here in the original list in this cell
@@ -39,14 +40,13 @@ export const someHowPutHimAt = (
 				const situationInt = util.situationInt;
 				const [X,Y]=Pos;
 				const S = util.situation(teacher,Pos,m,week);
-				const flag = true;
 				switch (situationInt(S)) {
-					case 1:
-						console.assert(flag,1);
+					case 1: // t=='' & r==-1 & a =='shift
+						console.log("->"+1);
 						putHimAt(week,m,teacher,Pos,true);
 						break;
-					case 2:
-						console.assert(flag,2);
+					case 2: // t=='' & r!=-1& a =='shift
+						console.log("->"+2);
 						// Pivot
 						const takeHisPlace =  week.allClasses[S.r].l[X][Y].Options
 						takeHisPlace.forEach(
@@ -57,13 +57,13 @@ export const someHowPutHimAt = (
 							}
 						);
 						break;
-					case 3:
-						console.assert(flag,3);
+					case 3:// t=='' & r==-1 & a =='cycle'
+						console.log("->"+3);
 						// use re functionality
 						re(teacher,Pos,m,week,[],[S.action])
 						break;
-					case 4:
-						console.assert(flag,4);
+					case 4: // t=='' & r!=-1 & a =='cycle'
+						console.log("->"+4);
 						re(teacher,Pos,m,week,[],[S.action])
 						const pivot = week.activateList.length;
 						const takeHisPlace_4 =  week.allClasses[S.r].l[X][Y].Options
@@ -76,12 +76,12 @@ export const someHowPutHimAt = (
 						);
 						week.activateList = util.ruffleShuffle(week.activateList,pivot);
 						break;
-					case 5:
-						console.assert(flag,5);
+					case 5:	// t!='' & r==-1 & a =='shift'
+						console.log("->"+5);
 						re(teacher,Pos,m,week,[],[S.action])
 						break;
-					case 6:
-						console.assert(flag,6);
+					case 6: // t!='' & r!=-1 & a =='shift'
+						console.log("->"+6);
 						re(teacher,Pos,m,week,[],[S.action])
 						const pivo = week.activateList.length
 						const takeHisPlace6 =  week.allClasses[S.r].l[X][Y].Options
@@ -94,12 +94,12 @@ export const someHowPutHimAt = (
 						);
 						week.activateList = util.ruffleShuffle(week.activateList,pivo)
 						break;
-					case 7:
-						console.assert(flag,7);
-						re(teacher,Pos,m,week,[],[S.action])
+					case 7: // t!='' & r==-1 & a =='cycle'
+						console.log("->"+7);
+						re(teacher,Pos,m,week,[],[S.action] )
 						break;
-					case 8:
-						console.assert(flag,8);
+					case 8: // t!='' & r!=-1 & a =='cycle'
+						console.log("->"+8);
 						re(teacher,Pos,m,week,[],[S.action])
 						const pivot8 = week.activateList.length
 						const takeHisPlace8 =  week.allClasses[S.r].l[X][Y].Options
@@ -124,23 +124,24 @@ export const someHowPutHimAt = (
 				week : IWEEK_GLOBAL_Object,
 				base : {Pos:[number,number],m : number , teacher : string}[],
 				actionStack : actionType[],
-				misc? : {depth? : number , oldM? : number}
+				misc : {depth? : number , oldM? : number} = {depth:5,oldM:-1534}
 			)=>{
 			// put the teacher in and start eating the edges to find your solutions
 			// edges are places to move the current teacher elsewhere
 			// here we work under the assumtion that reason is -1
 			// recursion base condition
-			const Vmisc = misc? misc:{};
-			const oldM = Vmisc.oldM?Vmisc.oldM : m;
-			const depth = Vmisc.depth?Vmisc.depth : 5;
+			const oldM = misc.oldM!==-1534?misc.oldM : m;
+			const depth = misc.depth?misc.depth:5;
 			if (m !== oldM){
 				actionStack.push(util.situation(teacher,Pos,m,week).action);
 			}
 			const Act_StackTop = actionStack[actionStack.length-1];
-			if (depth ===0){
+			if (depth ===0 || week.activateList.length>5){
 				// a safe guard
 				return
 			}
+			console.log(`teacher ${teacher}, Pos ${JSON.stringify(Pos)}, m ${m}, \nbase ${JSON.stringify(base)}, \nactionStack ${JSON.stringify(actionStack)}, \nmisc ${JSON.stringify(misc)}\nactlist${JSON.stringify(week.activateList)}`);
+			prompt('next?')
 			// unpack misc
 			//short-hands
 			const solutions = week.activateList;
@@ -201,7 +202,7 @@ export const someHowPutHimAt = (
 					);
 					requirePivoting.forEach(
 						(p)=>{
-							const [x,y] = p;
+							// const [x,y] = p;
 							const s = util.situation(oldTeacher,p,m,week);
 							const teachersToFillTheOtherPlace = actualOptions(p,m,week);
 							teachersToFillTheOtherPlace.forEach(
