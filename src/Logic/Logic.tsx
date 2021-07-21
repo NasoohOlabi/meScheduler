@@ -301,6 +301,7 @@ const autoFill = function(
 export const SwitchEventHander = (Pos : [ number , number], School : IClass[] , m : number, teachersGuild: string[], week:IWEEK_GLOBAL_Object ) => { 
 	return(event: React.ChangeEvent<{ value: unknown }>) =>{
 		let teacher : string = stringGuard(event.target.value);  
+		console.clear();
 		someHowPutHimAt(m,teacher,Pos, week);
 		//clean teacher name from other places
 		//auto fill when only one name remain in a place

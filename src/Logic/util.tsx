@@ -305,6 +305,9 @@ function situationInt( s : {currTeacher:string,action:actionType,r:number} ){
 function ruffleShuffle (arr: {Pos:[number,number] , m : number , teacher : string }[][],pivot : number):{Pos:[number,number] , m : number , teacher : string }[][]{
 	// a = [0,1,2,3,4,5,6]
 	// b = [0,1,2,3,4,5,6]
+	if(pivot>arr.length ||pivot<0){
+		alert("Fuck!! went wrong. ruffleShuffle returned empty list")
+	}
 	const res = [];
 	for (let i = 0 ; i<pivot ;i++){
 		for(let j = pivot; j<arr.length;j++){

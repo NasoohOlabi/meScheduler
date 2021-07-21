@@ -1,11 +1,130 @@
 import {IClass, IWEEK_GLOBAL_Object } from '../Components/Week';
 import { actualOptions, putHimAt} from "./Logic";
-import {  util , actionType} from "./util";
+import {  util , actionType, withoutPos} from "./util";
 export type IActlistObj = {
 	Pos : [number,number],
 	m : number,
 	teacher : string
 }
+
+function sleep(milliseconds : number) {
+	const date = Date.now();
+	let currentDate = null;
+	do {
+	  currentDate = Date.now();
+	} while (currentDate - date < milliseconds);
+  }
+
+function re (
+	teacher:string,
+	Pos:[number,number],
+	m : number,
+	week : IWEEK_GLOBAL_Object,
+	base : {Pos:[number,number],m : number , teacher : string}[],
+	actionStack : actionType[],
+	misc : {depth? : number , oldM? : number} = {depth:5}
+	){
+		// put the teacher in and start eating the edges to find your solutions
+		// edges are places to move the current teacher elsewhere
+		// here we work under the assumtion that reason is -1
+		// recursion base condition
+		const oldM = misc.oldM || m;
+		const depth = misc.depth?misc.depth:5;
+		console.log(`teacher ${teacher}, Pos ${JSON.stringify(Pos)}, m ${m}, \nbase ${JSON.stringify(base)}, \nactionStack ${JSON.stringify(actionStack)}, \nmisc ${JSON.stringify(misc)}\nactlist${JSON.stringify(week.activateList)}`);
+		sleep(2000)
+		if (m !== oldM){
+			actionStack.push(util.situation(teacher,Pos,m,week).action);
+		}
+		const Act_StackTop = actionStack[actionStack.length-1];
+		if (depth !==0 && week.activateList.length<=5){
+			// a safe guard
+		// unpack misc
+		//short-hands
+		const solutions = week.activateList;
+		const step = {Pos , teacher , m }
+		base.push(step);
+			const [X,Y] = Pos;
+			const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
+			if (oldTeacher === ''){
+				if (Act_StackTop === "shift"){
+					// Done 
+					week.activateList.push(util.copyInstructions(base))
+				}
+				// if cycle then this empty slot is useless 
+			}
+			else
+			{
+				const edges : [number,number][] = withoutPos(week.availables[oldTeacher],Pos);
+				const requireWork : [number,number][] = edges.filter(
+					(Pos1)=>{
+						// check if this Pos1 is a valid answer to our problem by repeating the conditions above for starters
+						// if true then execute what's inside the privious if statement and
+						// return false so that it's removed
+						if (solutions.length>5)
+							return false
+						const [X1,Y1] = Pos1;
+						const t1 = week.allClasses[m].l[X1][Y1].currentTeacher;
+						if (
+							(Act_StackTop === "shift" && t1==='')||
+							(Act_StackTop === "cycle" && base[0] !== undefined && base[0].teacher=== t1)
+							){
+							const a1 = {Pos:Pos1 , teacher: oldTeacher , m };
+							base.push(a1);
+							solutions.push(util.copyInstructions(base));
+							// remove the a1 from the base because it is a reference and you don't what to fuck up your recursion
+							base.pop()
+							return false;
+						}
+						else{
+							return true;
+						}
+					}
+				);
+				const requirePivoting = requireWork.filter(
+					(Pos1)=>{
+						// looking for a place for the oldTeacher to call re with
+						// and try a solution where he is at Pos1
+						if (solutions.length>5)
+							return false
+						const S1 = util.situation(oldTeacher,Pos1,m,week)
+						if (S1.r===m){
+							// this condition should be equivilant to currentTeacher===oldTeacher
+							return false
+						}
+						else if (S1.r === -1){
+							// this means that it's possible for the old teacher to be put in this Pos
+							// but we still have to find a place to put the (current teacher at Pos1) in.
+							re ( oldTeacher , Pos1 , m , week , base ,actionStack , {depth:depth-1,oldM});
+							return false
+						}
+						return true
+					}
+				);
+				requirePivoting.forEach(
+					(p)=>{
+						// const [x,y] = p;
+						if (solutions.length>5)
+							return false
+						const s = util.situation(oldTeacher,p,m,week);
+						const teachersToFillTheOtherPlace = actualOptions(p,m,week);
+						teachersToFillTheOtherPlace.forEach(
+							(replacementTeacher)=>{
+								re(replacementTeacher,p,s.r,week,base,actionStack,{depth : depth-1,oldM : m});
+							}
+						);
+					}
+				);
+			}
+		}
+		// remove the a from the base because it is a reference and you don't what to fuck up your recursion
+		if (m !== oldM){
+			actionStack.pop();
+		}
+		base.pop()
+}
+
+
+
 export const someHowPutHimAt = (
 	m : number,
 	teacher : string ,
@@ -17,7 +136,6 @@ export const someHowPutHimAt = (
 	const allClasses = week.allClasses;
 	const Class = allClasses[m];
 	const [x,y] = Pos;
-	console.clear();
 	/*
 				* discription*
 	for each teacher available here in the original list in this cell
@@ -103,6 +221,7 @@ export const someHowPutHimAt = (
 						re(teacher,Pos,m,week,[],[S.action])
 						const pivot8 = week.activateList.length
 						const takeHisPlace8 =  week.allClasses[S.r].l[X][Y].Options
+						console.log('Second re is Starting...')
 						takeHisPlace8.forEach(
 							(t)=>{
 								// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
@@ -110,6 +229,8 @@ export const someHowPutHimAt = (
 								re(t,Pos,S.r,week,[],[S.action],{oldM : m});
 							}
 						);
+						if (week.activateList.length === pivot8)
+							alert('shit ruffleShuffle will return empty list')
 						week.activateList = util.ruffleShuffle(week.activateList,pivot8)
 						break;
 					default:
@@ -117,108 +238,8 @@ export const someHowPutHimAt = (
 						break;
 				}
 			}
-		const re = (
-				teacher:string,
-				Pos:[number,number],
-				m : number,
-				week : IWEEK_GLOBAL_Object,
-				base : {Pos:[number,number],m : number , teacher : string}[],
-				actionStack : actionType[],
-				misc : {depth? : number , oldM? : number} = {depth:5,oldM:-1534}
-			)=>{
-			// put the teacher in and start eating the edges to find your solutions
-			// edges are places to move the current teacher elsewhere
-			// here we work under the assumtion that reason is -1
-			// recursion base condition
-			const oldM = misc.oldM!==-1534?misc.oldM : m;
-			const depth = misc.depth?misc.depth:5;
-			if (m !== oldM){
-				actionStack.push(util.situation(teacher,Pos,m,week).action);
-			}
-			const Act_StackTop = actionStack[actionStack.length-1];
-			if (depth ===0 || week.activateList.length>5){
-				// a safe guard
-				return
-			}
-			console.log(`teacher ${teacher}, Pos ${JSON.stringify(Pos)}, m ${m}, \nbase ${JSON.stringify(base)}, \nactionStack ${JSON.stringify(actionStack)}, \nmisc ${JSON.stringify(misc)}\nactlist${JSON.stringify(week.activateList)}`);
-			prompt('next?')
-			// unpack misc
-			//short-hands
-			const solutions = week.activateList;
-			const step = {Pos , teacher , m }
-			base.push(step);
-				const [X,Y] = Pos;
-				const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
-				if (oldTeacher === ''){
-					if (Act_StackTop === "shift"){
-						// Done 
-						week.activateList.push(util.copyInstructions(base))
-					}
-					// if cycle then this empty slot is useless 
-				}
-				else
-				{
-					const edges : [number,number][] = week.availables[oldTeacher];
-					const requireWork : [number,number][] = edges.filter(
-						(Pos1)=>{
-							// check if this Pos1 is a valid answer to our problem by repeating the conditions above for starters
-							// if true then execute what's inside the privious if statement and
-							// return false so that it's removed
-							const [X1,Y1] = Pos1;
-							const t1 = week.allClasses[m].l[X1][Y1].currentTeacher;
-							if (
-								(Act_StackTop === "shift" && t1==='')||
-								(Act_StackTop === "cycle" && base[0] !== undefined && base[0].teacher=== t1)
-								){
-								const a1 = {Pos:Pos1 , teacher: oldTeacher , m };
-								base.push(a1);
-								solutions.push(util.copyInstructions(base));
-								// remove the a1 from the base because it is a reference and you don't what to fuck up your recursion
-								base.pop()
-								return false;
-							}
-							else{
-								return true;
-							}
-						}
-					);
-					const requirePivoting = requireWork.filter(
-						(Pos1)=>{
-							// looking for a place for the oldTeacher to call re with
-							// and try a solution where he is at Pos1
-							const S1 = util.situation(oldTeacher,Pos1,m,week)
-							if (S1.r===m){
-								// this condition should be equivilant to currentTeacher===oldTeacher
-								return false
-							}
-							else if (S1.r === -1){
-								// this means that it's possible for the old teacher to be put in this Pos
-								// but we still have to find a place to put the (current teacher at Pos1) in.
-								re ( oldTeacher , Pos1 , m , week , base ,actionStack , {depth:depth-1,oldM});
-								return false
-							}
-							return true
-						}
-					);
-					requirePivoting.forEach(
-						(p)=>{
-							// const [x,y] = p;
-							const s = util.situation(oldTeacher,p,m,week);
-							const teachersToFillTheOtherPlace = actualOptions(p,m,week);
-							teachersToFillTheOtherPlace.forEach(
-								(replacementTeacher)=>{
-									re(replacementTeacher,p,s.r,week,base,actionStack,{depth : depth-1,oldM : m});
-								}
-							);
-						}
-					);
-				}
-			// remove the a from the base because it is a reference and you don't what to fuck up your recursion
-			if (m !== oldM){
-				actionStack.pop();
-			}
-			base.pop()
-		}
+			
+			
 
 		delegate(teacher,Pos,m,week)
 
