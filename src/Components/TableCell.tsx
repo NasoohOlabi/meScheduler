@@ -7,33 +7,29 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import {IWEEK_GLOBAL_Object} from './Week';
-// import { createStyles, makeStyles } from "@material-ui/core";
+import { ICell } from "../Interfaces/Interfaces";
+import { createStyles, makeStyles } from "@material-ui/core";
 
 
-// const useStyles = makeStyles((theme: any) =>
-//   createStyles({
-//     formControl: {
-//       margin: theme.spacing(1),
-//       minWidth: 120,
-//     },
-//     selectEmpty: {
-//       marginTop: theme.spacing(2),
-//     },
-//   }),
-// );
+const useStyles = makeStyles((theme: any) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+	highlighted:{
+		font : theme.secondary
+	}
+  }),
+);
 
-interface ICell{
-		Pos : [number , number],
-		data : {currentTeacher: string , isCemented:Boolean , Options: string[]},
-		cellInitializer : any,
-		m:number,
-		handleChange : (event : React.ChangeEvent<{ value: unknown }>) => (void),
-		WEEK_GLOBAL_Object:IWEEK_GLOBAL_Object,
-}
+
 
 export default function Cell (props : ICell) : JSX.Element{
-		
+		const classes = useStyles()
 		const week = props.WEEK_GLOBAL_Object;
 		// const classes = useStyles();
 
@@ -45,7 +41,7 @@ export default function Cell (props : ICell) : JSX.Element{
 		[]
 		);
 
-		const cell = (D:boolean , show:string) :JSX.Element=>{
+		const cell = (D:boolean , show:string,highlight = false) :JSX.Element=>{
 			let ActList : string[] =[];
 			if (show===''){
 				ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object,"filtered");
@@ -64,6 +60,7 @@ export default function Cell (props : ICell) : JSX.Element{
 								value={show}
 								onChange={props.handleChange}
 								onMouseOver = {refreshCell}
+								className = {((highlight)?classes.highlighted:'')}
 							>
 								{ActList && ActList.map(
 									(teachersName: string,index) => {
@@ -93,7 +90,7 @@ export default function Cell (props : ICell) : JSX.Element{
 					if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){
 						if( week.currentSolutionNumber === i){             
 							return(
-								cell(true,week.activateList[i][j].teacher)
+								cell(true,week.activateList[i][j].teacher,true)
 							);
 						}
 					}

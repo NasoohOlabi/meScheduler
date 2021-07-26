@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import {BasicTable} from "./BasicTable";
 import {fill,SwitchEventHander,useForceUpdate,teacherScheduleInit,randomFiller} from '../Logic/Logic';
 import {emptyNumMatrix,newGrid} from '../Logic/util';
-
+import {IClass , IWEEK_GLOBAL_Object} from '../Interfaces/Interfaces'
 //import greenlet from 'greenlet'
 
 
@@ -26,12 +26,7 @@ var day = {
   "-1": "All Day",
   "All Day": -1,
 };
-export interface IClass {
-  l: {currentTeacher: string , isCemented:Boolean , Options: string[]}[][];
-  Name: string;
-  teachers: any;
-  laps:any;
-}
+
 const teachersGuild : string[]= [
   'Rahaf Kayal',
   'Anas Shaban',
@@ -1546,19 +1541,9 @@ const headCol = [day[0], day[1], day[2], day[3], day[4]];
 //   //p.then((value : any)=>{[allClasses, availables]=value})
 // });
 
-export interface IWEEK_GLOBAL_Object{
-  allClasses : IClass[],
-  teachersGuild: string[] ,
-  refreshTable: (()=>void)[][][],
-  forceUpdate: ()=>void,
-  Swaping: boolean,
-  currentSolutionNumber : number,
-  activateList:{Pos:[number,number] , m : number , teacher : string }[][],
-  availables : any,
-  HandyAny:any
-}
 
-export function WeekView(): JSX.Element {
+
+export function WeekView( theme :any ): JSX.Element {
   const classes = useStyles();
   const forceUpdate = useForceUpdate();
   const School = React.useRef(allClasses);
@@ -1602,6 +1587,7 @@ export function WeekView(): JSX.Element {
             return (
               <Paper key ={i} className={classes.paper}>
                 <BasicTable 
+                  // theme = {props.theme}
                   School = {School.current} 
                   m={i}
                   headCol={headCol} 

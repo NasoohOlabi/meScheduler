@@ -1,4 +1,4 @@
-import { IClass, IWEEK_GLOBAL_Object } from "../Components/Week";
+import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
 import { actualOptions, putHimAt } from "./Logic";
 import { util, actionType, withoutPos, equals } from "./util";
 
@@ -142,6 +142,92 @@ function re(
 	base.pop();
 }
 
+const delegate = (
+	teacher: string,
+	Pos: [number, number],
+	m: number,
+	week: IWEEK_GLOBAL_Object
+ ) => {
+	const situationInt = util.situationInt;
+	const [X, Y] = Pos;
+	const S = util.situation(teacher, Pos, m, week);
+	switch (situationInt(S)) {
+		case 1: // t=='' & r==-1 & a =='shift
+		 console.log("->" + 1);
+		 putHimAt(week, m, teacher, Pos, true);
+		 break;
+		case 2: // t=='' & r!=-1& a =='shift
+		 console.log("->" + 2);
+		 // Pivot
+		 const takeHisPlace = week.allClasses[S.r].l[X][Y].Options;
+		 takeHisPlace.forEach((t) => {
+			// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+			// here I assumed re would work and thus already assigned the the first teacher
+			re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
+				oldM: m,
+			});
+		 });
+		 break;
+		case 3: // t=='' & r==-1 & a =='cycle'
+		 console.log("->" + 3);
+		 // use re functionality
+		 re(teacher, Pos, m, week, [], S.action);
+		 break;
+		case 4: // t=='' & r!=-1 & a =='cycle'
+		 console.log("->" + 4);
+		 re(teacher, Pos, m, week, [], S.action);
+		 const pivot = week.activateList.length;
+		 const takeHisPlace_4 = week.allClasses[S.r].l[X][Y].Options;
+		 takeHisPlace_4.forEach((t) => {
+			// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+			// here I assumed re would work and thus already assigned the the first teacher
+			re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
+				oldM: m,
+			});
+		 });
+		 week.activateList = util.ruffleShuffle(week.activateList, pivot);
+		 break;
+		case 5: // t!='' & r==-1 & a =='shift'
+		 console.log("->" + 5);
+		 re(teacher, Pos, m, week, [], S.action );
+		 break;
+		case 6: // t!='' & r!=-1 & a =='shift'
+		 console.log("->" + 6);
+		 re(teacher, Pos, m, week, [], S.action );
+		 const pivo = week.activateList.length;
+		 const takeHisPlace6 = week.allClasses[S.r].l[X][Y].Options;
+		 takeHisPlace6.forEach((t) => {
+			// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+			// here I assumed re would work and thus already assigned the the first teacher
+			re(t, Pos, S.r, week, [], S.action , { oldM: m });
+		 });
+		 week.activateList = util.ruffleShuffle(week.activateList, pivo);
+		 break;
+		case 7: // t!='' & r==-1 & a =='cycle'
+		 console.log("->" + 7);
+		 re(teacher, Pos, m, week, [], S.action );
+		 break;
+		case 8: // t!='' & r!=-1 & a =='cycle'
+		 console.log("->" + 8);
+		 re(teacher, Pos, m, week, [], S.action );
+		 const pivot8 = week.activateList.length;
+		 const takeHisPlace8 = week.allClasses[S.r].l[X][Y].Options;
+		 console.log("Second re is Starting...");
+		 takeHisPlace8.forEach((tempT) => {
+			// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+			// here I assumed re would work and thus already assigned the the first teacher
+			re(tempT, Pos, S.r, week, [], S.action, { oldM: m , actList_Length:pivot8 });
+		 });
+		 if (week.activateList.length === pivot8)
+			alert("shit ruffleShuffle will return empty list");
+		 week.activateList = util.ruffleShuffle(week.activateList, pivot8);
+		 break;
+		default:
+		 alert("impossible");
+		 break;
+	}
+ };
+
 export const someHowPutHimAt = (
 	m: number,
 	teacher: string,
@@ -169,91 +255,7 @@ export const someHowPutHimAt = (
 	 Class.l[x][y].Options.includes(teacher)
 	) {
 	 week.Swaping = true;
-	 const delegate = (
-		teacher: string,
-		Pos: [number, number],
-		m: number,
-		week: IWEEK_GLOBAL_Object
-	 ) => {
-		const situationInt = util.situationInt;
-		const [X, Y] = Pos;
-		const S = util.situation(teacher, Pos, m, week);
-		switch (situationInt(S)) {
-			case 1: // t=='' & r==-1 & a =='shift
-			 console.log("->" + 1);
-			 putHimAt(week, m, teacher, Pos, true);
-			 break;
-			case 2: // t=='' & r!=-1& a =='shift
-			 console.log("->" + 2);
-			 // Pivot
-			 const takeHisPlace = week.allClasses[S.r].l[X][Y].Options;
-			 takeHisPlace.forEach((t) => {
-				// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
-				// here I assumed re would work and thus already assigned the the first teacher
-				re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
-					oldM: m,
-				});
-			 });
-			 break;
-			case 3: // t=='' & r==-1 & a =='cycle'
-			 console.log("->" + 3);
-			 // use re functionality
-			 re(teacher, Pos, m, week, [], S.action);
-			 break;
-			case 4: // t=='' & r!=-1 & a =='cycle'
-			 console.log("->" + 4);
-			 re(teacher, Pos, m, week, [], S.action);
-			 const pivot = week.activateList.length;
-			 const takeHisPlace_4 = week.allClasses[S.r].l[X][Y].Options;
-			 takeHisPlace_4.forEach((t) => {
-				// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
-				// here I assumed re would work and thus already assigned the the first teacher
-				re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
-					oldM: m,
-				});
-			 });
-			 week.activateList = util.ruffleShuffle(week.activateList, pivot);
-			 break;
-			case 5: // t!='' & r==-1 & a =='shift'
-			 console.log("->" + 5);
-			 re(teacher, Pos, m, week, [], S.action );
-			 break;
-			case 6: // t!='' & r!=-1 & a =='shift'
-			 console.log("->" + 6);
-			 re(teacher, Pos, m, week, [], S.action );
-			 const pivo = week.activateList.length;
-			 const takeHisPlace6 = week.allClasses[S.r].l[X][Y].Options;
-			 takeHisPlace6.forEach((t) => {
-				// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
-				// here I assumed re would work and thus already assigned the the first teacher
-				re(t, Pos, S.r, week, [], S.action , { oldM: m });
-			 });
-			 week.activateList = util.ruffleShuffle(week.activateList, pivo);
-			 break;
-			case 7: // t!='' & r==-1 & a =='cycle'
-			 console.log("->" + 7);
-			 re(teacher, Pos, m, week, [], S.action );
-			 break;
-			case 8: // t!='' & r!=-1 & a =='cycle'
-			 console.log("->" + 8);
-			 re(teacher, Pos, m, week, [], S.action );
-			 const pivot8 = week.activateList.length;
-			 const takeHisPlace8 = week.allClasses[S.r].l[X][Y].Options;
-			 console.log("Second re is Starting...");
-			 takeHisPlace8.forEach((tempT) => {
-				// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
-				// here I assumed re would work and thus already assigned the the first teacher
-				re(tempT, Pos, S.r, week, [], S.action, { oldM: m , actList_Length:pivot8 });
-			 });
-			 if (week.activateList.length === pivot8)
-				alert("shit ruffleShuffle will return empty list");
-			 week.activateList = util.ruffleShuffle(week.activateList, pivot8);
-			 break;
-			default:
-			 alert("impossible");
-			 break;
-		}
-	 };
+	 
 
 	 delegate(teacher, Pos, m, week);
 

@@ -10,6 +10,7 @@ import ReactPWAInstallProvider, { useReactPWAInstall } from "react-pwa-install";
 import myLogo from "./Square71x71Logo.scale-200.png";
 import Brightness5Icon from '@material-ui/icons/Brightness5';
 import Brightness3Icon from '@material-ui/icons/Brightness3';
+import { IMyAppBarProps } from "../Interfaces/Interfaces";
 
 
 //import { Banner, StaticBanner } from 'material-ui-banner';
@@ -40,18 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-enum Screen  {ETA , TABLE}
 
-interface IProps {
-    UI:Screen ,
-    switchToTable : (event : any)=> void ,
-    switchToETA : (event : any)=> void ,
-    toggleTheme : (event : any )=>void ,
-    theme : Theme,
-    darkThemed : boolean
-}
 
-export default function MyAppBar(props : IProps) {
+
+export default function MyAppBar(props : IMyAppBarProps) {
   const classes = useStyles();
 
   const { pwaInstall, supported, isInstalled } = useReactPWAInstall();

@@ -1,4 +1,4 @@
-import { IClass , IWEEK_GLOBAL_Object} from "../Components/Week";
+import { IClass , IWEEK_GLOBAL_Object,lCellObj} from "../Interfaces/Interfaces";
 import { IActlistObj } from "./Logic";
 // testing git here
 export const equals  = ( a : number[] , b : number[]) => {
@@ -218,16 +218,24 @@ export const loopOverClass = (f : (i:number,j:number)=>void,n=5,m=7)=>{
 		}        
 	}
 }
-export const newGrid = ():{currentTeacher: string , isCemented:Boolean , Options: string[]}[][]=>{
-	return (
-		[
-			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-			[{currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]} , {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}, {currentTeacher:'',isCemented:false,Options:[]}],
-		  ]
-	);
+
+
+function cel ():lCellObj{
+	return {currentTeacher:'',isCemented:false,Options:[]}
+}
+function seven_cels ():lCellObj[]{
+	const acc = []
+	for (let i = 0 ; i<7 ;i++){
+		acc.push(cel())
+	}
+	return acc
+}
+export const newGrid = ():lCellObj[][]=>{
+	const acc = []
+	for (let i = 0 ; i<5 ; i++){
+		acc.push(seven_cels())
+	}
+	return acc;	
 }
 const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : string } )
 		: {Pos:[number,number] , m : number , teacher : string }  =>{
@@ -250,10 +258,16 @@ const copyInstructions = (objects : {Pos:[number,number] , m : number , teacher 
 	return res;
 }
 const pickAction=(teacher:string ,m : number, week:IWEEK_GLOBAL_Object):actionType=>{
-	if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
-		return "shift"
-	}else{
-		return "cycle"
+	try{
+		if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
+			return "shift"
+		}else{
+			return "cycle"
+		}
+	}
+	catch{
+		alert(`week.allClasses[${m}].teachers[${teacher}] is undefined`)
+		throw "undefined teacher"
 	}
 }
 const situation = (teacher: string, Pos:[number,number] , m :number , week:IWEEK_GLOBAL_Object):{currTeacher:string,action:actionType,r:number}=>{

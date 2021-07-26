@@ -15,10 +15,10 @@ import { Button, Paper } from '@material-ui/core';
 //import FormHelperText from "@material-ui/core/FormHelperText";
 //import FormControl from "@material-ui/core/FormControl";
 //import Select from "@material-ui/core/Select";
-import {IClass,IWEEK_GLOBAL_Object} from './Week';
 import Cell from "./TableCell";
 import { useForceUpdate} from "../Logic/Logic";
 import {Done} from "../Logic/CoreAlgo";
+import { IBasicTableProps } from "../Interfaces/Interfaces";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,15 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export interface IBasicTableProps {
-  School : IClass[],
-  m: number;
-  handleChange : any,
-  cellInitializer : any;
-  headRow: string[],
-  headCol : string[],
-  WEEK_GLOBAL_Object:IWEEK_GLOBAL_Object
-}
+
 
 export function BasicTable(props: IBasicTableProps) {
     const classes = useStyles();
@@ -91,7 +83,7 @@ export function BasicTable(props: IBasicTableProps) {
             })}
           </TableBody>
         </Table>
-        {(props.WEEK_GLOBAL_Object.activateList.length>0)?((props.WEEK_GLOBAL_Object.activateList[0][0].m === props.m)?<table><tr><td>
+        {(props.WEEK_GLOBAL_Object.Swaping)?((props.WEEK_GLOBAL_Object.activateList.length>0)?((props.WEEK_GLOBAL_Object.activateList[0][0].m === props.m)?<table><tr><td>
           <Button onClick={(e : any)=>{if(props.WEEK_GLOBAL_Object.currentSolutionNumber >0) {props.WEEK_GLOBAL_Object.currentSolutionNumber--;tableUpdate();}}}>{"<"}</Button>
           </td> 
           <td>
@@ -100,7 +92,7 @@ export function BasicTable(props: IBasicTableProps) {
             <td>
             <Button onClick={Done(props.School,props.m,props.WEEK_GLOBAL_Object)}>{"Done"}</Button>
             </td>
-            </tr></table>:null):null}
+            </tr></table>:null):<p>No Solutions!</p>):null}
       </TableContainer>
       
     );

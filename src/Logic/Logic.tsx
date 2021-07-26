@@ -1,7 +1,7 @@
 import React from "react";
 import {useState} from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
-import {IClass, IWEEK_GLOBAL_Object } from '../Components/Week';
+import {IClass, IWEEK_GLOBAL_Object } from '../Interfaces/Interfaces';
 import { someHowPutHimAt } from "./CoreAlgo";
 import {  contains , controledPush, createEdgeIN, emptyObjArray, guard, guardPeriodsList,  Key, listMinusAnother, loopOverClass, stringGuard , withoutPos } from "./util";
 export type IActlistObj = {
