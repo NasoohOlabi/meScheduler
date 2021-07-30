@@ -1,6 +1,9 @@
 import { Theme } from "@material-ui/core";
-type PosType = [number,number];
-
+export interface IActlistObj {
+	Pos: [number, number],
+	m: number,
+	teacher: string,
+};
 export interface lCellObj  {
 	currentTeacher:string,
 	isCemented:boolean,
@@ -45,6 +48,7 @@ export interface ICell{
 	data : lCellObj,
 	cellInitializer : any,
 	m:number,
+	teacher : string,
 	handleChange : (event : React.ChangeEvent<{ value: unknown }>) => (void),
 	WEEK_GLOBAL_Object:IWEEK_GLOBAL_Object,
 }
@@ -55,7 +59,7 @@ export interface IWEEK_GLOBAL_Object{
 	forceUpdate: ()=>void,
 	Swaping: boolean,
 	currentSolutionNumber : number,
-	activateList:{Pos:PosType , m : number , teacher : string }[][],
+	activateList:{Pos:[number,number] , m : number , teacher : string }[][],
 	availables : any,
 	HandyAny:any
 }

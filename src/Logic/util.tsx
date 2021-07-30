@@ -199,6 +199,21 @@ export const listMinusAnother = (a : [number,number][] , b :[number,number][]):[
 	}
 	return result;
 }
+export const notInBase_copy = (a : [number,number][] , base :IActlistObj[]):[number,number][]=>{
+	const result: [number,number][] = [];
+	for (let i = 0 ; i<a.length;i++){
+		let notInBase = true;
+		for (let j = 0 ; j<base.length; j++){
+			if (equals(base[j].Pos,a[i])){
+				notInBase = false;
+				break;
+			}
+		}
+		if (notInBase)
+			result.push(a[i]);
+	}
+	return result;
+}
 export const controledPush = (a:IActlistObj[][],sth :IActlistObj[] ,n:number = 50)=>{
 	if(a.length<n){
 		a.push(sth);

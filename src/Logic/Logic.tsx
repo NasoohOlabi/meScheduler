@@ -201,13 +201,21 @@ export const putHimAt = function (
 	m : number,
 	teacher : string ,
 	Pos : [number , number] ,
-	doit : boolean = true ,
+	obj : {doit?: boolean , override? : boolean} = {doit : true , override:false}
 	){
+	const doit = obj.doit || true;
+	const override = obj.override || false;
 	const allClasses = week.allClasses;
 	const [X,Y] = Pos;
 	const teachers = allClasses[m].teachers;
 	if (doit) {
-		if (!teacherHasNoMoreemptyAvailables(teacher,teachers) && allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' && week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1){
+		if (
+			(
+			!teacherHasNoMoreemptyAvailables(teacher,teachers) &&
+			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' &&
+			week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1
+			) || override
+		){
 			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = teacher;
 			teachers[teacher].remPeriods--;
 			teachers[teacher].periodsHere.push(Pos)
@@ -223,7 +231,10 @@ export const putHimAt = function (
 		}
 	}
 	else {
-		if ( allClasses[m].l[Pos[0]][Pos[1]].currentTeacher !== ''){
+		if ( 
+			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher !== ''
+			|| override
+			){
 			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = '';
 			teachers[teacher].remPeriods++;
 			teachers[teacher].periodsHere = withoutPos(teachers[teacher].periodsHere,Pos)
