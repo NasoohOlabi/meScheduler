@@ -15,8 +15,7 @@ import { Button, Paper } from '@material-ui/core';
 //import FormHelperText from "@material-ui/core/FormHelperText";
 //import FormControl from "@material-ui/core/FormControl";
 //import Select from "@material-ui/core/Select";
-import Cell from "./TableCell";
-import { useForceUpdate} from "../Logic/Logic";
+import {Cell} from "./TableCell";
 import {Done} from "../Logic/CoreAlgo";
 import { IBasicTableProps } from "../Interfaces/Interfaces";
 
@@ -40,8 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export function BasicTable(props: IBasicTableProps) {
+    const week = props.WEEK_GLOBAL_Object;
     const classes = useStyles();
-    const tableUpdate = useForceUpdate();
     return (
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
@@ -50,7 +49,7 @@ export function BasicTable(props: IBasicTableProps) {
               <TableCell 
               component="th" 
               scope="row" 
-              onClick={(event)=>{console.log(props.School[props.m]);console.log(props.WEEK_GLOBAL_Object);}}
+              onClick={(event)=>{console.log(props.School[props.m]);console.log(week);}}
               >
                 {" "}
                 {props.School[props.m].Name}{" "}
@@ -73,8 +72,9 @@ export function BasicTable(props: IBasicTableProps) {
                       data = {props.School[props.m].l[index][jndex]} 
                       Pos={[index,jndex]} 
                       m={props.m}
+                      teacher={week.allClasses[props.m].l[index][jndex].currentTeacher}
                       handleChange={props.handleChange([index,jndex] , props.m )} 
-                      WEEK_GLOBAL_Object={props.WEEK_GLOBAL_Object}
+                      WEEK_GLOBAL_Object={week}
                      /> 
                     );
                   })}
@@ -83,14 +83,15 @@ export function BasicTable(props: IBasicTableProps) {
             })}
           </TableBody>
         </Table>
-        {(props.WEEK_GLOBAL_Object.Swaping)?((props.WEEK_GLOBAL_Object.activateList.length>0)?((props.WEEK_GLOBAL_Object.activateList[0][0].m === props.m)?<table><tr><td>
-          <Button onClick={(e : any)=>{if(props.WEEK_GLOBAL_Object.currentSolutionNumber >0) {props.WEEK_GLOBAL_Object.currentSolutionNumber--;tableUpdate();}}}>{"<"}</Button>
+        {(week.Swaping)?((week.activateList.length>0)?((week.activateList[0][0].m === props.m)?<table><tr><td>
+          <Button onClick={(e : any)=>{if(week.currentSolutionNumber >0) {week.currentSolutionNumber--;week.forceUpdate();}}}>{"<"}</Button>
           </td> 
+          <td>{week.currentSolutionNumber}/{week.activateList.length}</td>
           <td>
-            <Button onClick={(e : any)=>{if(props.WEEK_GLOBAL_Object.currentSolutionNumber <props.WEEK_GLOBAL_Object.activateList.length-1 ) {props.WEEK_GLOBAL_Object.currentSolutionNumber++;tableUpdate();}}}>{">"}</Button>
+            <Button onClick={(e : any)=>{if(week.currentSolutionNumber <week.activateList.length-1 ) {week.currentSolutionNumber++;week.forceUpdate();}}}>{">"}</Button>
             </td>
             <td>
-            <Button onClick={Done(props.School,props.m,props.WEEK_GLOBAL_Object)}>{"Done"}</Button>
+            <Button onClick={Done(props.m,week)}>{"Done"}</Button>
             </td>
             </tr></table>:null):<p>No Solutions!</p>):null}
       </TableContainer>

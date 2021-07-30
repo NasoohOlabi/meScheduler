@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: any) =>
 
 
 
-export default function Cell (props : ICell) : JSX.Element{
+export function UnmemCell (props : ICell) : JSX.Element{
 		const classes = useStyles()
 		const week = props.WEEK_GLOBAL_Object;
 		// const classes = useStyles();
@@ -61,6 +61,7 @@ export default function Cell (props : ICell) : JSX.Element{
 								onChange={props.handleChange}
 								onMouseOver = {refreshCell}
 								className = {((highlight)?classes.highlighted:'')}
+								error = {highlight}
 							>
 								{ActList && ActList.map(
 									(teachersName: string,index) => {
@@ -109,7 +110,7 @@ export default function Cell (props : ICell) : JSX.Element{
 };
 									
 
-
+export const Cell = React.memo(UnmemCell)
 
 
 
