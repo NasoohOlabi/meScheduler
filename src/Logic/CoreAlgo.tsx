@@ -1,12 +1,8 @@
-import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
-import { actualOptions, putHimAt } from "./Logic";
-import { util, actionType, withoutPos, equals } from "./util";
+import { IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
+import { putHimAt } from "./Logic";
+import { util, actionType, equals, notInBase_copy } from "./util";
 
-export type IActlistObj = {
-	Pos: [number, number];
-	m: number;
-	teacher: string;
-};
+
 
 // function sleep(milliseconds: number) {
 // 	const date = Date.now();
@@ -29,6 +25,7 @@ function conflicts(base:{ Pos: [number, number]; m: number; teacher: string }[],
 //         base.push(Step)
 //     }
 // }
+
 function re(
 	teacher: string,
 	Pos: [number, number],
@@ -36,18 +33,26 @@ function re(
 	week: IWEEK_GLOBAL_Object,
 	base: { Pos: [number, number]; m: number; teacher: string }[],
 	action: actionType,
-	misc: { depth?: number, oldM?: number ,actList_Length?:number } = {}
+	misc: {  depth?: number, oldM?: number ,actList_Length?:number } = {}
 ) {
 	// put the teacher in and start eating the edges to find your solutions
 	// edges are places to move the current teacher elsewhere
 	// here we work under the assumtion that reason is -1
 	// recursion base condition
     // unpack misc
-	const oldM = (misc.oldM === 0)?0:(misc.oldM || m);
+	let oldM = (misc.oldM === 0)?0:(misc.oldM || m);
 	const depth = misc.depth || 5;
     const ActList_Length_beforeDisRe : number = misc.actList_Length || 0;
-    const Action : actionType = (m !== oldM)?util.situation(teacher, Pos, m, week).action:action;
-    const enoughSolutions = () => week.activateList.length-ActList_Length_beforeDisRe > 5 ;
+    const Action : actionType = (m !== oldM)?(():actionType=>{
+		console.log('pivoted');
+		oldM = m;
+		return util.situation(teacher, Pos, m, week).action
+	})():action;
+	// enough solutions take in to account pivoting and thus we take ~5 steps in each Class
+    const enoughSolutions = () => {
+		const temp1 = week.activateList.length-ActList_Length_beforeDisRe
+		return temp1 > 5
+	} ;
     console.log(
 	 `teacher ${teacher}
      Pos ${JSON.stringify(Pos)}
@@ -62,14 +67,15 @@ function re(
 	);
     
     const step = { Pos, teacher, m };
+	const [X, Y] = Pos;
+	const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
+	const solutions = week.activateList;
     
 	if (depth !== 0 && !enoughSolutions() && !conflicts(base,step)) {
 	 // a safe guard
 	 //short-hands
-	 const solutions = week.activateList;
 	 base.push(step);
-	 const [X, Y] = Pos;
-	 const oldTeacher = week.allClasses[m].l[X][Y].currentTeacher;
+	 week.allClasses[step.m].l[step.Pos[0]][step.Pos[1]].currentTeacher = step.teacher
 	 if (oldTeacher === "") {
 		if (Action === "shift") {
 			// Done
@@ -77,9 +83,9 @@ function re(
 		}
 		// if cycle then this empty slot is useless
 	 } else {
-		const edges: [number, number][] = withoutPos(
+		const edges: [number, number][] = notInBase_copy(
 			week.availables[oldTeacher],
-			Pos
+			base
 		);
 		const requireWork: [number, number][] = edges.filter((Pos1) => {
 			// check if this Pos1 is a valid answer to our problem by repeating the conditions above for starters
@@ -125,10 +131,10 @@ function re(
 			return true;
 		});
 		requirePivoting.forEach((p) => {
-			// const [x,y] = p;
+			const [x,y] = p;
 			if (enoughSolutions()) return false;
 			const s = util.situation(oldTeacher, p, m, week);
-			const teachersToFillTheOtherPlace = actualOptions(p, m, week);
+			const teachersToFillTheOtherPlace = week.allClasses[s.r].l[x][y].Options;
 			teachersToFillTheOtherPlace.forEach((replacementTeacher) => {
 			 re(replacementTeacher, p, s.r, week, base, Action, {
 				depth: depth - 1,
@@ -139,8 +145,11 @@ function re(
 	 }
 	}
 	// remove the a from the base because it is a reference and you don't what to fuck up your recursion
+	week.allClasses[step.m].l[step.Pos[0]][step.Pos[1]].currentTeacher = oldTeacher
 	base.pop();
 }
+
+
 
 const delegate = (
 	teacher: string,
@@ -153,24 +162,54 @@ const delegate = (
 	const S = util.situation(teacher, Pos, m, week);
 	switch (situationInt(S)) {
 		case 1: // t=='' & r==-1 & a =='shift
-		 console.log("->" + 1);
-		 putHimAt(week, m, teacher, Pos, true);
+		console.log("->" + 1);
+		 week.Swaping = false;
+		 putHimAt(week, m, teacher, Pos, {doit:true});
 		 break;
-		case 2: // t=='' & r!=-1& a =='shift
+		 case 2: // t=='' & r!=-1& a =='shift
 		 console.log("->" + 2);
 		 // Pivot
 		 const takeHisPlace = week.allClasses[S.r].l[X][Y].Options;
 		 takeHisPlace.forEach((t) => {
-			// someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
-			// here I assumed re would work and thus already assigned the the first teacher
-			re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
-				oldM: m,
+			 // someHowPutHimAt(m,t,Pos,week) there could be an inf recursion
+			 // here I assumed re would work and thus already assigned the the first teacher
+			 re(t, Pos, S.r, week, [{ Pos, m, teacher }], S.action , {
+				 oldM: m,
+				});
 			});
-		 });
-		 break;
-		case 3: // t=='' & r==-1 & a =='cycle'
-		 console.log("->" + 3);
-		 // use re functionality
+			break;
+			case 3: // t=='' & r==-1 & a =='cycle'
+			console.log("->" + 3);
+			// look for teachers with remPeriods in that class := waiting teachers
+			// go to where teacher is currently and try and if a waiting teacher is available at one of these Positions
+			// then here is a solutions
+			// else if these wheren't enough
+			// edges are the intersections between 
+			// sth like this
+			// 	// I have to look for the teacher with the remaining Periods.
+			// 	// and put him somewhere...
+			// 	// cuz that process would be a shift and shifts only end in a ""
+			// 	const teachers = week.allClasses[m].teachers;
+			// 	const teachersNames = Object.keys(week.allClasses[m].teachers);
+			// 	const waiting = [];
+			// 	for (let ind = 0 ; ind < teachersNames.length ; ind ++){
+			// 		if (teachers[teachersNames[ind]].remPeriods >0){
+			// 			waiting.push(teachersNames[ind])
+			// 		}
+			// 	}
+			// 	waiting.forEach(
+			// 		(waitingTeacher)=>{
+			// 			const edges: [number, number][] = notInBase_copy(
+			// 				week.availables[waitingTeacher],
+			// 				base
+			// 			);
+			// 			edges.forEach(
+			// 				(place)=>{
+			// 					re(waitingTeacher,place,m,week,[],"shift")
+			// 				}
+			// 			)
+			// 		}
+			// 	);
 		 re(teacher, Pos, m, week, [], S.action);
 		 break;
 		case 4: // t=='' & r!=-1 & a =='cycle'
@@ -235,42 +274,30 @@ export const someHowPutHimAt = (
 	week: IWEEK_GLOBAL_Object,
 	freeze: boolean = true
 ): void => {
-	//short hands
-	const allClasses = week.allClasses;
-	const Class = allClasses[m];
-	const [x, y] = Pos;
 	/*
-				* discription*
+	* discription*
 	for each teacher available here in the original list in this cell
 	for each pos in the shared postihions
 	if the other teacher is in a pos in the shared one's just do a simple switch or promt for choice
 	this should be enough?!
 	?!
 	*/
-	if (Class.l[x][y].currentTeacher === "") {
-	 putHimAt(week, m, teacher, Pos, true);
-	 return;
-	} else if (
-	 Class.l[x][y].currentTeacher !== teacher &&
-	 Class.l[x][y].Options.includes(teacher)
-	) {
-	 week.Swaping = true;
-	 
+	//short hands
+	week.Swaping = true;
+	delegate(teacher, Pos, m, week);
 
-	 delegate(teacher, Pos, m, week);
-
-	 if (!freeze) {
-		Done(allClasses, m, week)({});
-	 }
+	if (!freeze) {
+		Done(m, week)({});
+	}
 
 	 week.forceUpdate();
-	}
+	
 };
 export const Done = (
-	School: IClass[],
 	m: number,
 	week: IWEEK_GLOBAL_Object
 ) => {
+	const School = week.allClasses;
 	return (e: any) => {
 	 const sol = week.activateList[week.currentSolutionNumber];
 	 if (sol === undefined) {
@@ -280,10 +307,10 @@ export const Done = (
 		if (sol[i].teacher === "") {
 			putHimAt(
 			 week,
-			 m,
+			 sol[i].m,
 			 School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,
 			 sol[i].Pos,
-			 false
+			 {doit:false}
 			);
 		}
 	 }
@@ -292,17 +319,17 @@ export const Done = (
 			if (School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher !== "") {
 			 putHimAt(
 				week,
-				m,
+				sol[i].m,
 				School[m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,
 				sol[i].Pos,
-				false
+				{doit:false,override:true}
 			 );
 			}
 		}
 	 }
 	 for (let i = 0; i < sol.length; i++) {
 		if (!(sol[i].teacher === "")) {
-			putHimAt(week, m, sol[i].teacher, sol[i].Pos);
+			putHimAt(week, sol[i].m, sol[i].teacher, sol[i].Pos,{override:true});
 		}
 	 }
 
