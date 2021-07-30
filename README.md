@@ -1,5 +1,5 @@
 # meScheduler
-A School Scheduler and my first react app. trying to implement non-direct approach to support big schcool with more than 4 classes
+A School Scheduler and my first react app. trying to implement non-direct approach to support big school with more than 4 classes
 
 ## description ##
 Well it's a mess right now the test case is hard-coded and I'm trying to solve it in a non-direct (recursively).
@@ -9,4 +9,4 @@ And what's great about this method is that it already implement an editing algor
 
 
 ### Demo ###
-https://meschedule-64bda.web.app/
+https://nasooholabi.github.io/meScheduler/
