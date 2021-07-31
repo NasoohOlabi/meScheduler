@@ -86,15 +86,12 @@ export function UnmemCell (props : ICell) : JSX.Element{
 		}
 
 		if(week.Swaping){
-			for(let i = 0 ; i< week.activateList.length; i++){
-				for(let j= 0 ; j<week.activateList[i].length;j++){
-					if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){
-						if( week.currentSolutionNumber === i){             
-							return(
-								cell(true,week.activateList[i][j].teacher,true)
-							);
-						}
-					}
+			const i = week.currentSolutionNumber;
+			for(let j= 0 ; j<week.activateList[i].length;j++){
+				if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){          
+					return(
+						cell(true,week.activateList[i][j].teacher,true)
+					);
 				}
 			}
 			return (

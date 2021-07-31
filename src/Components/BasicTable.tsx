@@ -86,13 +86,23 @@ export function BasicTable(props: IBasicTableProps) {
         {(week.Swaping)?((week.activateList.length>0)?((week.activateList[0][0].m === props.m)?<table><tr><td>
           <Button onClick={(e : any)=>{if(week.currentSolutionNumber >0) {week.currentSolutionNumber--;week.forceUpdate();}}}>{"<"}</Button>
           </td> 
-          <td>{week.currentSolutionNumber}/{week.activateList.length}</td>
+          <td>{week.currentSolutionNumber+1}/{week.activateList.length}</td>
           <td>
             <Button onClick={(e : any)=>{if(week.currentSolutionNumber <week.activateList.length-1 ) {week.currentSolutionNumber++;week.forceUpdate();}}}>{">"}</Button>
             </td>
             <td>
             <Button onClick={Done(props.m,week)}>{"Done"}</Button>
             </td>
+            <td>
+              Effected Classes : {week.activateList[week.currentSolutionNumber].reduce(
+                (acc,item)=>{
+                  if (!acc.includes(''+item.m)){
+                    return acc+`${item.m} `
+                  }
+                  else
+                    return acc + ''
+                }
+                ,'')}</td>
             </tr></table>:null):<p>No Solutions!</p>):null}
       </TableContainer>
       
