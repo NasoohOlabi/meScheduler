@@ -17,7 +17,8 @@ import { Button, Paper } from '@material-ui/core';
 //import Select from "@material-ui/core/Select";
 import {Cell} from "./TableCell";
 import {Done} from "../Logic/CoreAlgo";
-import { IBasicTableProps } from "../Interfaces/Interfaces";
+import {useForceUpdate} from "../Logic/Logic";
+import { IBasicTableProps , IActlistObj , ITableFooter} from "../Interfaces/Interfaces";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +37,86 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-
+function TableFooter (props: ITableFooter ) {
+  const week = props.WEEK_GLOBAL_Object;
+  const ms : number[] = [];
+  if (week.activateList[week.currentSolutionNumber])
+  week.activateList[week.currentSolutionNumber].forEach((step)=>{
+    let in_ms = false;
+    for(let i = 0 ; i < ms.length ; i++){
+      if(ms[i] === step.m){
+        in_ms = true;
+        break;
+      }
+    }
+    if ( !in_ms ){
+      ms.push(step.m);
+    }
+  });
+  const tableFooterfn = useForceUpdate();
+  React.useEffect(()=>{
+    props.tableFooterInitializer( tableFooterfn );
+  },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  []
+  );
+  return (<div>{(week.Swaping)?((week.activateList.length>0)?((ms.includes(props.m))?<table><tr><td>
+    <Button onClick={
+      (e : any)=>{
+        if(week.currentSolutionNumber >0) {
+          week.currentSolutionNumber--;
+          // week.forceUpdate();
+          const sol1 = week.activateList[week.currentSolutionNumber - 1];
+          const sol2 = week.activateList[week.currentSolutionNumber];
+          sol1.forEach((step : IActlistObj)=>{
+            week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
+          })
+          sol2.forEach((step : IActlistObj)=>{
+            week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
+          })
+          week.tableFooterRefresher.forEach((tfr : any)=>{
+            tfr();
+          })
+        }
+      }
+    }>{"<"}</Button>
+    </td> 
+    <td>{week.currentSolutionNumber+1}/{week.activateList.length}</td>
+    <td>
+      <Button onClick={
+        (e : any)=>{
+          if(week.currentSolutionNumber <week.activateList.length-1 ) {
+            week.currentSolutionNumber++;
+            const sol1 = week.activateList[week.currentSolutionNumber - 1];
+            const sol2 = week.activateList[week.currentSolutionNumber];
+            sol1.forEach((step : IActlistObj)=>{
+              week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
+            })
+            sol2.forEach((step : IActlistObj)=>{
+              week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
+            })
+            week.tableFooterRefresher.forEach((tfr : any)=>{
+              tfr();
+            })
+          }
+        }
+      }>{">"}</Button>
+      </td>
+      <td>
+      <Button onClick={Done(props.m,week)}>Done</Button>
+      </td>
+      <td>
+        Effected Classes : {week.activateList[week.currentSolutionNumber].reduce(
+          (acc,item)=>{
+            if (!acc.includes(''+week.allClasses[item.m].Name)){
+              return acc+`${week.allClasses[item.m].Name} `
+            }
+            else
+              return acc + ''
+          }
+          ,'')}</td>
+      </tr></table>:null):<p>No Solutions! <Button onClick={Done(props.m,week)}>OK</Button></p>):null}</div>);
+}
 
 export function BasicTable(props: IBasicTableProps) {
     const week = props.WEEK_GLOBAL_Object;
@@ -83,27 +163,7 @@ export function BasicTable(props: IBasicTableProps) {
             })}
           </TableBody>
         </Table>
-        {(week.Swaping)?((week.activateList.length>0)?((week.activateList[0][0].m === props.m)?<table><tr><td>
-          <Button onClick={(e : any)=>{if(week.currentSolutionNumber >0) {week.currentSolutionNumber--;week.forceUpdate();}}}>{"<"}</Button>
-          </td> 
-          <td>{week.currentSolutionNumber+1}/{week.activateList.length}</td>
-          <td>
-            <Button onClick={(e : any)=>{if(week.currentSolutionNumber <week.activateList.length-1 ) {week.currentSolutionNumber++;week.forceUpdate();}}}>{">"}</Button>
-            </td>
-            <td>
-            <Button onClick={Done(props.m,week)}>{"Done"}</Button>
-            </td>
-            <td>
-              Effected Classes : {week.activateList[week.currentSolutionNumber].reduce(
-                (acc,item)=>{
-                  if (!acc.includes(''+item.m)){
-                    return acc+`${item.m} `
-                  }
-                  else
-                    return acc + ''
-                }
-                ,'')}</td>
-            </tr></table>:null):<p>No Solutions!</p>):null}
+        <TableFooter m={props.m} WEEK_GLOBAL_Object={week} tableFooterInitializer={props.tableFooterInitializer} />
       </TableContainer>
       
     );

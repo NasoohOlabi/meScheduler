@@ -1,14 +1,10 @@
 import React from "react";
 import {useState} from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
-import {IClass, IWEEK_GLOBAL_Object } from '../Interfaces/Interfaces';
+import {IActlistObj, IClass, IWEEK_GLOBAL_Object } from '../Interfaces/Interfaces';
 import { someHowPutHimAt } from "./CoreAlgo";
 import {  contains , controledPush, createEdgeIN, emptyObjArray, guard, guardPeriodsList,  Key, listMinusAnother, loopOverClass, stringGuard , withoutPos } from "./util";
-export type IActlistObj = {
-	Pos : [number,number],
-	m : number,
-	teacher : string
-}
+
 
 // const isPos = (p : any)=>{
 //     return (typeof p.push !== 'undefined' && p.length ===2 && typeof p[1]==="number" && typeof p[0] === 'number')
@@ -154,6 +150,8 @@ export function actualOptions(
 // ------------------------------------------------------------------------------------------------------------------
 
 export const teacherHasNoMoreemptyAvailables = (teacher : string , teachersList : any) : boolean=>{
+	if (teachersList[teacher] === undefined)
+		console.log(`teachersList[${teacher}] = undefined`,teachersList)
 	return teachersList[teacher].remPeriods < 1
 };
 

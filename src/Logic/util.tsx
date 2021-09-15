@@ -1,6 +1,8 @@
-import { IClass , IWEEK_GLOBAL_Object,lCellObj} from "../Interfaces/Interfaces";
-import { IActlistObj } from "./Logic";
+import { IActlistObj, IClass , IWEEK_GLOBAL_Object,lCellObj} from "../Interfaces/Interfaces";
+
 // testing git here
+
+
 export const equals  = ( a : number[] , b : number[]) => {
 	if (a.length === b.length){
 	  for (let i = 0 ; i<a.length ; i++){
@@ -179,15 +181,13 @@ export const stringGuard = ( arg : unknown) : string=>{
 export const castPosList =(l:any):[number,number][]=>{
 	return ((l !== undefined)? l : [] );
 }
-export const getHisActPeriods = (Class : IClass,teacher:string)=>{
+const getHisActPeriods = (Class : IClass,teacher:string) : [number,number][]=>{
 	let result : [number,number][] = [];
-	for (let i = 0 ; i<Class.l.length;i++){
-		for (let j = 0 ; j<Class.l[0].length;j++){
-			if(Class.l[i][j].currentTeacher === teacher){
-				result.push([i,j]);
-			}
+	loopOverClass((i,j)=>{
+		if(Class.l[i][j].currentTeacher === teacher){
+			result.push([i,j]);
 		}
-	}
+	});
 	return result
 }
 export const listMinusAnother = (a : [number,number][] , b :[number,number][]):[number,number][]=>{
@@ -199,19 +199,21 @@ export const listMinusAnother = (a : [number,number][] , b :[number,number][]):[
 	}
 	return result;
 }
-export const notInBase_copy = (a : [number,number][] , base :IActlistObj[]):[number,number][]=>{
+export const notInBase_copy = (a : [number,number][], m : number , base :IActlistObj[]):[number,number][]=>{
 	const result: [number,number][] = [];
-	for (let i = 0 ; i<a.length;i++){
-		let notInBase = true;
-		for (let j = 0 ; j<base.length; j++){
-			if (equals(base[j].Pos,a[i])){
-				notInBase = false;
-				break;
+	a.forEach(
+		(Pos)=>{
+			let notInBase = true;
+			for (let j = 0 ; j<base.length; j++){
+				if (equals(base[j].Pos,Pos) && base[j].m === m){
+					notInBase = false;
+					break;
+				}
 			}
+			if (notInBase)
+				result.push(Pos);
 		}
-		if (notInBase)
-			result.push(a[i]);
-	}
+	);
 	return result;
 }
 export const controledPush = (a:IActlistObj[][],sth :IActlistObj[] ,n:number = 50)=>{
@@ -252,7 +254,7 @@ export const newGrid = ():lCellObj[][]=>{
 	}
 	return acc;	
 }
-const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : string } )
+const copyInstruction = ( obj : IActlistObj )
 		: {Pos:[number,number] , m : number , teacher : string }  =>{
 			const res = Object();
 			res.Pos = [];
@@ -262,7 +264,7 @@ const copyInstruction = ( obj : {Pos:[number,number] , m : number , teacher : st
 			res.teacher = obj.teacher;
 			return res
 		}
-const copyInstructions = (objects : {Pos:[number,number] , m : number , teacher : string }[])
+const copyInstructions = (objects : IActlistObj[])
 : {Pos:[number,number] , m : number , teacher : string }[] =>{
 	const res : any = []
 	objects.forEach(
@@ -282,6 +284,7 @@ const pickAction=(teacher:string ,m : number, week:IWEEK_GLOBAL_Object):actionTy
 	}
 	catch{
 		alert(`week.allClasses[${m}].teachers[${teacher}] is undefined`)
+		// eslint-disable-next-line no-throw-literal
 		throw "undefined teacher"
 	}
 }
@@ -345,13 +348,25 @@ function ruffleShuffle (arr: {Pos:[number,number] , m : number , teacher : strin
 	}
 	return res;
 }
-
 export type actionType = "shift" | "cycle"
+function stepMatch (a : IActlistObj , wild : IActlistObj | undefined) : boolean{
+	if(wild === undefined) return false
+	const skipTeacherMatching = wild.teacher === "*";
+	const skipPosMatching = equals(wild.Pos, [-1,-1]);
+	return (
+		(a.Pos === wild.Pos || skipPosMatching)&&
+		(a.teacher === wild.teacher || skipTeacherMatching)&&
+		(a.m === wild.m)
+		);
+}
 export const util = {
 	copyInstructions,
 	copyInstruction,
 	pickAction,
 	situation,
 	situationInt,
-	ruffleShuffle
+	ruffleShuffle,
+	stepMatch,
+	getHisActPeriods,
+	removed
 }

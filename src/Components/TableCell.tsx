@@ -87,7 +87,7 @@ export function UnmemCell (props : ICell) : JSX.Element{
 
 		if(week.Swaping){
 			const i = week.currentSolutionNumber;
-			for(let j= 0 ; j<week.activateList[i].length;j++){
+			for(let j= 0 ; week.activateList[i] && j<week.activateList[i].length;j++){
 				if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){          
 					return(
 						cell(true,week.activateList[i][j].teacher,true)
