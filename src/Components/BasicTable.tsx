@@ -66,11 +66,13 @@ function TableFooter (props: ITableFooter ) {
         if(week.currentSolutionNumber >0) {
           week.currentSolutionNumber--;
           // week.forceUpdate();
-          const sol1 = week.activateList[week.currentSolutionNumber - 1];
+          const sol1 = week.activateList[week.currentSolutionNumber + 1];
           const sol2 = week.activateList[week.currentSolutionNumber];
+          if (sol1)
           sol1.forEach((step : IActlistObj)=>{
             week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
           })
+          if (sol2)
           sol2.forEach((step : IActlistObj)=>{
             week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
           })
@@ -89,9 +91,11 @@ function TableFooter (props: ITableFooter ) {
             week.currentSolutionNumber++;
             const sol1 = week.activateList[week.currentSolutionNumber - 1];
             const sol2 = week.activateList[week.currentSolutionNumber];
+            if (sol1)
             sol1.forEach((step : IActlistObj)=>{
               week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
             })
+            if (sol2)
             sol2.forEach((step : IActlistObj)=>{
               week.refreshTable[step.m][step.Pos[0]][step.Pos[1]]()
             })

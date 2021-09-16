@@ -103,21 +103,20 @@ export function randomFiller(week:IWEEK_GLOBAL_Object){
 	const teachersGuild = week.teachersGuild;
 	// random filler
 
-	allClasses.forEach((Class,m)=>{
-		for(let i = 0 ; i < Class.l.length ; i++){
-			for(let j = 0 ; j<Class.l[i].length ; j++){
-				if(Class.l[i][j].Options.length !== 0){
-					const aOptions : string[] = actualOptions([i,j],m,week);
-					if (aOptions.length > 0){
-						const teacher = aOptions[Math.floor(Math.random() * aOptions.length)];    
-						putHimAt(week,m,teacher,[i,j]);
-						autoFill(allClasses,m,teachersGuild,week);
-						noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
-					}
+	for (let m = allClasses.length -1 ; m >=0 ; m--){
+		const Class = allClasses[m];
+		loopOverClass((i:number,j:number)=>{
+			if(Class.l[i][j].Options.length !== 0){
+				const aOptions : string[] = actualOptions([i,j],m,week);
+				if (aOptions.length > 0){
+					const teacher = aOptions[Math.floor(Math.random() * aOptions.length)];    
+					putHimAt(week,m,teacher,[i,j]);
+					autoFill(allClasses,m,teachersGuild,week);
+					noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
 				}
 			}
-		}
-	})
+		})
+	}
 }
 export function useForceUpdate(){
 

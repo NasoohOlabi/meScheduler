@@ -25,8 +25,10 @@ function preStrictConflicts(base:IActlistObj[],Step:{ Pos: [number, number]; m: 
 	return false;
 }
 
+const MAX_CALLS = 5;
+
 function enoughSolutions (offset : number | undefined , week:IWEEK_GLOBAL_Object) : boolean{
-	return ( week.activateList.length - (offset||0) ) > 5;
+	return ( week.activateList.length - (offset||0) ) > MAX_CALLS;
 }
 
 /**
@@ -41,10 +43,10 @@ function pre(
 	misc: IMisc = {}
 ){
 	if (misc.depth === 0)	return;
-	const depth = misc.depth || 5;
+	const depth = misc.depth || MAX_CALLS;
 	if (misc.Pivots === undefined)
-		misc.Pivots = new PivotsCallStack(5);
-	const pivots : PivotsCallStack = misc.Pivots || new PivotsCallStack(5);
+		misc.Pivots = new PivotsCallStack(MAX_CALLS);
+	const pivots : PivotsCallStack = misc.Pivots || new PivotsCallStack(MAX_CALLS);
 	const step = { Pos, teacher, m };
 	const solutions = week.activateList;
 	if (depth !== 0 && !enoughSolutions(misc.actList_Length,week) && !conflicts(base,step)) {
@@ -117,12 +119,12 @@ function re(
 	misc: IMisc = {},
 ) {
 	if (misc.depth === 0)	return;
-	const depth = misc.depth || 5;
+	const depth = misc.depth || MAX_CALLS;
 	const cycleCloser : number = (misc.baseLength === undefined)?0:misc.baseLength;
 	misc.depth = depth;
 	if (misc.Pivots === undefined)
-		misc.Pivots = new PivotsCallStack(5);
-	const pivots : PivotsCallStack = misc.Pivots || new PivotsCallStack(5);
+		misc.Pivots = new PivotsCallStack(MAX_CALLS);
+	const pivots : PivotsCallStack = misc.Pivots || new PivotsCallStack(MAX_CALLS);
 	if (enoughSolutions(misc.actList_Length,week)) return;
 	const step = { Pos, teacher, m };
 	const [X, Y] = Pos;
@@ -247,7 +249,7 @@ const delegate = (
 		case 4: // t==='' & r!==-1 & a ==='cycle'
 			console.log("->" + 4);
 			pre(teacher, Pos, m, week, [] , 
-				{Pivots: new PivotsCallStack(5,
+				{Pivots: new PivotsCallStack(MAX_CALLS,
 					(base:IActlistObj[])=>{
 						pivotTo(S.r,Pos,base,week,{actList_Length:week.activateList.length});
 					}
@@ -259,7 +261,7 @@ const delegate = (
 			break;
 		case 6: // t!=='' & r!==-1 & a ==='shift'
 			console.log("->" + 6);
-			re(teacher, Pos, m, week, [], S.action , {Pivots : new PivotsCallStack(5,(base : IActlistObj[])=>{
+			re(teacher, Pos, m, week, [], S.action , {Pivots : new PivotsCallStack(MAX_CALLS,(base : IActlistObj[])=>{
 				pivotTo(S.r,Pos,base,week,{actList_Length : week.activateList.length});
 			})});
 			break;
@@ -269,7 +271,7 @@ const delegate = (
 			break;
 		case 8: // t!=='' & r!==-1 & a ==='cycle'
 			console.log("->" + 8);
-			re(teacher, Pos, m, week, [], S.action , {Pivots : new PivotsCallStack(5,(base : IActlistObj[])=>{
+			re(teacher, Pos, m, week, [], S.action , {Pivots : new PivotsCallStack(MAX_CALLS,(base : IActlistObj[])=>{
 				pivotTo(S.r,Pos,base,week,{actList_Length : week.activateList.length});
 			})});
 			break;
@@ -280,7 +282,11 @@ const delegate = (
 };
 function pivotTo(m:number, Pos : [number,number], base : IActlistObj[] ,week : IWEEK_GLOBAL_Object, misc : IMisc = {}){
 	const [X,Y] = Pos;
-	if (misc.depth === 1 ) return; // re needs at least two steps to empty a Pos
+	// if (misc.depth === 1 ) return; // re needs at least two steps to empty a Pos
+	// number of pivots is limited by the stack 
+	// so stack_limit * 5 is still a decent limit
+	// instead of just 5
+	misc.depth = 5;
 	util.removed(week.allClasses[m].l[X][Y].Options, week.allClasses[m].l[X][Y].currentTeacher).forEach((replacementTeacher : string)=>{
 		// the wrong action seems to be getting throw
 		const s = util.situation(replacementTeacher,Pos,m,week);

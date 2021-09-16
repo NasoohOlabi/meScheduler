@@ -1,6 +1,6 @@
 import React from "react";
 import "../App.css";
-import {useForceUpdate,actualOptions} from "../Logic/Logic";
+import {useForceUpdate} from "../Logic/Logic";
 import {equals} from "../Logic/util";
 import TableCell from "@material-ui/core/TableCell";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -32,7 +32,10 @@ export function UnmemCell (props : ICell) : JSX.Element{
 		const classes = useStyles()
 		const week = props.WEEK_GLOBAL_Object;
 		// const classes = useStyles();
-
+		// const [More , setMore] = React.useState(false);
+		// const tug = ()=>{
+		// 	setMore(!More);
+		// }
 		const refreshCell = useForceUpdate();
 		React.useEffect(()=>{
 			props.cellInitializer( refreshCell);
@@ -43,11 +46,12 @@ export function UnmemCell (props : ICell) : JSX.Element{
 
 		const cell = (D:boolean , show:string,highlight = false) :JSX.Element=>{
 			let ActList : string[] =[];
-			if (show===''){
-				ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object,"filtered");
-			}else{
+			// if (show==='' && !More){
+			// 	ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object,"filtered");
+			// }
+			// else{
 				ActList = props.WEEK_GLOBAL_Object.allClasses[props.m].l[props.Pos[0]][props.Pos[1]].Options;
-			}
+			// }
 			// console.log(ActList);
 			return(
 				<TableCell align="center">
@@ -84,7 +88,7 @@ export function UnmemCell (props : ICell) : JSX.Element{
 				cell(true,props.data.currentTeacher)
 			);
 		}
-
+		
 		if(week.Swaping){
 			const i = week.currentSolutionNumber;
 			for(let j= 0 ; week.activateList[i] && j<week.activateList[i].length;j++){
@@ -105,7 +109,7 @@ export function UnmemCell (props : ICell) : JSX.Element{
 		}
 
 };
-									
+
 
 export const Cell = React.memo(UnmemCell)
 
@@ -114,6 +118,7 @@ export const Cell = React.memo(UnmemCell)
 
 
 
+// {/* <MenuItem>{(!More)?<Button onClick={tug}>More</Button>:<Button onClick={tug}>Less</Button>}</MenuItem> */}
 
 
 
