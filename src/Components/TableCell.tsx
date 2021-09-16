@@ -1,124 +1,124 @@
 import React from "react";
 import "../App.css";
-import {useForceUpdate,actualOptions} from "../Logic/Logic";
+import {useForceUpdate} from "../Logic/Logic";
 import {equals} from "../Logic/util";
 import TableCell from "@material-ui/core/TableCell";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import {IWEEK_GLOBAL_Object} from './Week';
-// import { createStyles, makeStyles } from "@material-ui/core";
+import { ICell } from "../Interfaces/Interfaces";
+import { createStyles, makeStyles } from "@material-ui/core";
 
 
-// const useStyles = makeStyles((theme: any) =>
-//   createStyles({
-//     formControl: {
-//       margin: theme.spacing(1),
-//       minWidth: 120,
-//     },
-//     selectEmpty: {
-//       marginTop: theme.spacing(2),
-//     },
-//   }),
-// );
-
-interface ICell{
-    Pos : [number , number],
-    data : {currentTeacher: string , isCemented:Boolean , Options: string[]},
-    cellInitializer : any,
-    m:number,
-    handleChange : (event : React.ChangeEvent<{ value: unknown }>) => (void),
-    WEEK_GLOBAL_Object:IWEEK_GLOBAL_Object,
-}
-
-export default function Cell (props : ICell) : JSX.Element{
-    
-    const week = props.WEEK_GLOBAL_Object;
-    // const classes = useStyles();
-
-    const refreshCell = useForceUpdate();
-    React.useEffect(()=>{
-      props.cellInitializer( refreshCell);
+const useStyles = makeStyles((theme: any) =>
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-    );
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+	highlighted:{
+		font : theme.secondary
+	}
+  }),
+);
 
-    const cell = (D:boolean , show:string) :JSX.Element=>{
-      let ActList : string[] =[];
-      if (show===''){
-        ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object);
-      }else{
-        ActList = [show].concat(actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object));
-      }
-      // console.log(ActList);
-      return(
-        <TableCell align="center">
-            <FormControl>
-              <InputLabel id="demo-simple-select-label"></InputLabel>
-              <Select
-                disabled ={D}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={show}
-                onChange={props.handleChange}
-                onMouseOver = {refreshCell}
-              >
-                {ActList && ActList.map(
-                  (teachersName: string,index) => {
-                    return (
-                      <MenuItem value={teachersName} key = {index}>
-                        {teachersName}
-                      </MenuItem>
-                    );
-                  }
-                )
-                }
-              </Select>
-            </FormControl>
-        </TableCell>
-      );
-    }
 
-    if(props.data.isCemented){
-      return (
-        cell(true,props.data.currentTeacher)
-      );
-    }
 
-    if(week.Swaping){
-      for(let i = 0 ; i< week.activateList.length; i++){
-        for(let j= 0 ; j<week.activateList[i].length;j++){
-          if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){
-            if( week.currentSolutionNumber === i){             
-              return(
-                cell(true,week.activateList[i][j].teacher)
-              );
-            }
-          }
-        }
-      }
-      return (
-        cell(true,props.data.currentTeacher)
-      );
-    }
-    else{
-      return (
-        cell(false,props.data.currentTeacher)
-      );
-    }
+export function UnmemCell (props : ICell) : JSX.Element{
+		const classes = useStyles()
+		const week = props.WEEK_GLOBAL_Object;
+		// const classes = useStyles();
+		// const [More , setMore] = React.useState(false);
+		// const tug = ()=>{
+		// 	setMore(!More);
+		// }
+		const refreshCell = useForceUpdate();
+		React.useEffect(()=>{
+			props.cellInitializer( refreshCell);
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+		);
+
+		const cell = (D:boolean , show:string,highlight = false) :JSX.Element=>{
+			let ActList : string[] =[];
+			// if (show==='' && !More){
+			// 	ActList = actualOptions(props.Pos,props.m,props.WEEK_GLOBAL_Object,"filtered");
+			// }
+			// else{
+				ActList = props.WEEK_GLOBAL_Object.allClasses[props.m].l[props.Pos[0]][props.Pos[1]].Options;
+			// }
+			// console.log(ActList);
+			return(
+				<TableCell align="center">
+						<FormControl>
+							<InputLabel id="demo-simple-select-label"></InputLabel>
+							<Select
+								disabled ={D}
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={show}
+								onChange={props.handleChange}
+								onMouseOver = {refreshCell}
+								className = {((highlight)?classes.highlighted:'')}
+								error = {highlight}
+							>
+								{ActList && ActList.map(
+									(teachersName: string,index) => {
+										return (
+											<MenuItem value={teachersName} key = {index}>
+												{teachersName}
+											</MenuItem>
+										);
+									}
+								)
+								}
+							</Select>
+						</FormControl>
+				</TableCell>
+			);
+		}
+
+		if(props.data.isCemented){
+			return (
+				cell(true,props.data.currentTeacher)
+			);
+		}
+		
+		if(week.Swaping){
+			const i = week.currentSolutionNumber;
+			for(let j= 0 ; week.activateList[i] && j<week.activateList[i].length;j++){
+				if (equals(props.Pos , week.activateList[i][j].Pos) && props.m === week.activateList[i][j].m){          
+					return(
+						cell(true,week.activateList[i][j].teacher,true)
+					);
+				}
+			}
+			return (
+				cell(true,props.data.currentTeacher)
+			);
+		}
+		else{
+			return (
+				cell(false,props.data.currentTeacher)
+			);
+		}
 
 };
-                  
+
+
+export const Cell = React.memo(UnmemCell)
 
 
 
 
 
 
-
-
+// {/* <MenuItem>{(!More)?<Button onClick={tug}>More</Button>:<Button onClick={tug}>Less</Button>}</MenuItem> */}
 
 
 

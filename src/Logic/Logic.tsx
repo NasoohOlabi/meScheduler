@@ -1,14 +1,10 @@
 import React from "react";
 import {useState} from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
-import {IClass, IWEEK_GLOBAL_Object } from '../Components/Week';
+import {IActlistObj, IClass, IWEEK_GLOBAL_Object } from '../Interfaces/Interfaces';
 import { someHowPutHimAt } from "./CoreAlgo";
 import {  contains , controledPush, createEdgeIN, emptyObjArray, guard, guardPeriodsList,  Key, listMinusAnother, loopOverClass, stringGuard , withoutPos } from "./util";
-export type IActlistObj = {
-	Pos : [number,number],
-	m : number,
-	teacher : string
-}
+
 
 // const isPos = (p : any)=>{
 //     return (typeof p.push !== 'undefined' && p.length ===2 && typeof p[1]==="number" && typeof p[0] === 'number')
@@ -59,15 +55,15 @@ export function fill(week:IWEEK_GLOBAL_Object) {
 	const teachersGuild = week.teachersGuild
 	const allClasses : IClass[] = week.allClasses
 	let table : any = emptyObjArray(allClasses.length);
-	allClasses.forEach((Class,i)=>{
-		for (let x = 0; x < Class.l.length; x++) {
-			for (let y = 0; y < Class.l[x].length; y++) {
+	allClasses.forEach((Class,m)=>{
+		loopOverClass(
+			(x,y)=>{
 				// scanning the teachers in the class
 				Object.keys(Class.teachers).forEach((teacher)=>{
-					let [periods , PosList]= [Class.teachers[teacher].remPeriods,Class.teachers[teacher].emptyAvailables];
+					let [periods , PosList]=[Class.teachers[teacher].remPeriods,Class.teachers[teacher].emptyAvailables];
 					if( contains(availables[teacher],[x,y]) && periods>0) {
 						Class.l[x][y].Options.forEach((teacherAtThisPos)=>{
-							createEdgeIN(table[i],teacher,teacherAtThisPos,[x,y],teachersGuild);
+							createEdgeIN(table[m],teacher,teacherAtThisPos,[x,y],teachersGuild);
 						});
 						Class.l[x][y].Options.push(teacher);
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -75,9 +71,9 @@ export function fill(week:IWEEK_GLOBAL_Object) {
 					}
 				});
 			}
-		}
-		CementNoOtherOptionButToPutHere(allClasses , i , teachersGuild , week);
-		Class.laps = table[i];
+		);
+		CementNoOtherOptionButToPutHere(allClasses , m , teachersGuild , week);
+		Class.laps = table[m];
 	});
 };
 export function teacherScheduleInit(week : IWEEK_GLOBAL_Object , availables : any){
@@ -88,13 +84,13 @@ export function teacherScheduleInit(week : IWEEK_GLOBAL_Object , availables : an
 			availables[teacher].forEach(
 				(Pos : [number,number])=>{
 					const [X,Y] = Pos;
-					week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)] = 0
+					week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)] = -1
 				}
 			);
 			loopOverClass(
 				(i,j)=>{
-					if(week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] !== 0){
-						week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] =-1
+					if(week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] !== -1){
+						week.HandyAny.teacherSchedule[teacher][ (i*10 + j) ] =Number.NEGATIVE_INFINITY;
 					}
 				}
 			);
@@ -107,21 +103,20 @@ export function randomFiller(week:IWEEK_GLOBAL_Object){
 	const teachersGuild = week.teachersGuild;
 	// random filler
 
-	allClasses.forEach((Class,m)=>{
-		for(let i = 0 ; i < Class.l.length ; i++){
-			for(let j = 0 ; j<Class.l[i].length ; j++){
-				if(Class.l[i][j].Options.length !== 0){
-					const aOptions : string[] = actualOptions([i,j],m,week);
-					if (aOptions[0] !== undefined){
-						const teacher = aOptions[0];    
-						putHimAt(week,m,teacher,[i,j]);
-						autoFill(allClasses,m,teachersGuild,week);
-						noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
-					}
+	for (let m = allClasses.length -1 ; m >=0 ; m--){
+		const Class = allClasses[m];
+		loopOverClass((i:number,j:number)=>{
+			if(Class.l[i][j].Options.length !== 0){
+				const aOptions : string[] = actualOptions([i,j],m,week);
+				if (aOptions.length > 0){
+					const teacher = aOptions[Math.floor(Math.random() * aOptions.length)];    
+					putHimAt(week,m,teacher,[i,j]);
+					autoFill(allClasses,m,teachersGuild,week);
+					noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
 				}
 			}
-		}
-	})
+		})
+	}
 }
 export function useForceUpdate(){
 
@@ -129,14 +124,19 @@ export function useForceUpdate(){
 	const [value, setValue] = useState(0); // integer state
 	return () => setValue(value => value + 1); // update the state to force render
 };
-export function actualOptions(Pos : [number,number],m : number, week : IWEEK_GLOBAL_Object){
+export function actualOptions(
+		Pos : [number,number],
+		m : number,
+		week : IWEEK_GLOBAL_Object,
+		command : "unfiltered"|"filtered" = "unfiltered"
+	){
 	const[X,Y] = Pos;
 	const options = week.allClasses[m].l[X][Y].Options;
 	const res = options.filter((teacher)=>{
-		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===0 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
+		return ( week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1 && week.allClasses[m].teachers[teacher].remPeriods > 0 );
 	  })
-	if ( res.length === 0 ){
-		return options;
+	if (command === "filtered" && res.length === 0){
+		return options
 	}
 	return res;
 }
@@ -149,6 +149,8 @@ export function actualOptions(Pos : [number,number],m : number, week : IWEEK_GLO
 // ------------------------------------------------------------------------------------------------------------------
 
 export const teacherHasNoMoreemptyAvailables = (teacher : string , teachersList : any) : boolean=>{
+	if (teachersList[teacher] === undefined)
+		console.log(`teachersList[${teacher}] = undefined`,teachersList)
 	return teachersList[teacher].remPeriods < 1
 };
 
@@ -196,14 +198,21 @@ export const putHimAt = function (
 	m : number,
 	teacher : string ,
 	Pos : [number , number] ,
-	doit : boolean = true ,
-	stateIsChangeing = true
+	obj : {doit?: boolean , override? : boolean} = {doit : true , override:false}
 	){
+	const doit = obj.doit || true;
+	const override = obj.override || false;
 	const allClasses = week.allClasses;
 	const [X,Y] = Pos;
 	const teachers = allClasses[m].teachers;
 	if (doit) {
-		if (!teacherHasNoMoreemptyAvailables(teacher,teachers) && allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' && week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===0){
+		if (
+			(
+			!teacherHasNoMoreemptyAvailables(teacher,teachers) &&
+			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' &&
+			week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1
+			) || override
+		){
 			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = teacher;
 			teachers[teacher].remPeriods--;
 			teachers[teacher].periodsHere.push(Pos)
@@ -219,12 +228,14 @@ export const putHimAt = function (
 		}
 	}
 	else {
-		if ( allClasses[m].l[Pos[0]][Pos[1]].currentTeacher !== ''){
+		if ( 
+			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher !== ''
+			|| override
+			){
 			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = '';
 			teachers[teacher].remPeriods++;
 			teachers[teacher].periodsHere = withoutPos(teachers[teacher].periodsHere,Pos)
 			// allClasses[m].l[Pos[0]][Pos[1]].Options = removed(allClasses[m].l[Pos[0]][Pos[1]].Options,teacher);
-			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y)+'' ] = 0;
 			Object.keys(teachers).forEach(
 				(teacher)=>{
 					if ( contains(week.availables[teacher] , Pos) ){
@@ -232,9 +243,8 @@ export const putHimAt = function (
 					}
 				}
 			);
-			// positionFilled(Pos , allClasses[m]);
+			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = -1;
 		}
-		
 		if (week.refreshTable !== undefined){
 			week.refreshTable[m][Pos[0]][Pos[1]]();
 		}
@@ -277,7 +287,7 @@ const autoFill = function(
 			for ( let y = 0 ; y < School[m].l[x].length ; y++){
 				if ( School[m].l[x][y].Options.length === 1 && School[m].l[x][y].currentTeacher === '' ){
 				//do the change
-				someHowPutHimAt(School , m , School[m].l[x][y].Options[0] , [x,y] ,teachersGuild, week );
+				someHowPutHimAt(m , School[m].l[x][y].Options[0] , [x,y] , week );
 				
 				//alert(`here in [${x},${y}] calling with ${School[i].l[x][y].Options[0]}  who ${(teacherHasNoMoreemptyAvailables(School[i].l[x][y].Options[0] ,School[i].teachers)?'has NOOOOO more':'has more')}`);
 				//go back to the start to see if your changes affected what you have already checked
@@ -299,7 +309,8 @@ const autoFill = function(
 export const SwitchEventHander = (Pos : [ number , number], School : IClass[] , m : number, teachersGuild: string[], week:IWEEK_GLOBAL_Object ) => { 
 	return(event: React.ChangeEvent<{ value: unknown }>) =>{
 		let teacher : string = stringGuard(event.target.value);  
-		someHowPutHimAt(School,m,teacher,Pos,teachersGuild, week);
+		console.clear();
+		someHowPutHimAt(m,teacher,Pos, week);
 		//clean teacher name from other places
 		//auto fill when only one name remain in a place
 		autoFill(School,m,teachersGuild,week);

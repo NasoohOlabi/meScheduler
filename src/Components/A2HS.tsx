@@ -1,13 +1,12 @@
 import { useReactPWAInstall } from "react-pwa-install";
 import myLogo from "./Square71x71Logo.scale-200.png";
 import { Button } from '@material-ui/core';
+import { I_installButtonProps } from "../Interfaces/Interfaces";
 //import { Banner, StaticBanner } from 'material-ui-banner';
 
-interface IProps{
-  color? : any , className ?: any
-}
 
-export function InstallButton(props : IProps) : JSX.Element {
+
+export function InstallButton(props : I_installButtonProps) : JSX.Element {
     const { pwaInstall, supported, isInstalled } = useReactPWAInstall();
    
     const handleClick = () => {

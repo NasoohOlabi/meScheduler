@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import {BasicTable} from "./BasicTable";
 import {fill,SwitchEventHander,useForceUpdate,teacherScheduleInit,randomFiller} from '../Logic/Logic';
 import {emptyNumMatrix,newGrid} from '../Logic/util';
-
+import {IClass , IWEEK_GLOBAL_Object} from '../Interfaces/Interfaces'
 //import greenlet from 'greenlet'
 
 
@@ -26,12 +26,7 @@ var day = {
   "-1": "All Day",
   "All Day": -1,
 };
-export interface IClass {
-  l: {currentTeacher: string , isCemented:Boolean , Options: string[]}[][];
-  Name: string;
-  teachers: any;
-  laps:any;
-}
+
 const teachersGuild : string[]= [
   'Rahaf Kayal',
   'Anas Shaban',
@@ -1537,6 +1532,15 @@ const headRow = [
 ];
 const headCol = [day[0], day[1], day[2], day[3], day[4]];
 
+const addPeriods = (allClasses : IClass[])=>{
+  allClasses.forEach((clas : IClass)=>{
+    Object.keys(clas.teachers).forEach(
+      (teacher)=>{
+        clas.teachers[teacher].Periods = clas.teachers[teacher].remPeriods;
+      }
+    );
+  })
+}
 
 
 // let init = greenlet( async () => {
@@ -1546,26 +1550,15 @@ const headCol = [day[0], day[1], day[2], day[3], day[4]];
 //   //p.then((value : any)=>{[allClasses, availables]=value})
 // });
 
-export interface IWEEK_GLOBAL_Object{
-  allClasses : IClass[],
-  teachersGuild: string[] ,
-  refreshTable: (()=>void)[][][],
-  forceUpdate: ()=>void,
-  Swaping: boolean,
-  currentSolutionNumber : number,
-  activateList:{Pos:[number,number] , m : number , teacher : string }[][],
-  availables : any,
-  HandyAny:any
-}
 
-export function WeekView(): JSX.Element {
+
+export function WeekView( theme :any ): JSX.Element {
   const classes = useStyles();
   const forceUpdate = useForceUpdate();
   const School = React.useRef(allClasses);
   //initializing with nums works because you can't triger the switchEventHandler unless all Cells has mounted thus refreshTable becomes a (()=>void)[][][]
   const refreshTable = React.useRef(emptyNumMatrix(allClasses.length,allClasses[0].l.length,allClasses[0].l[0].length)).current;
-  const WEEK_GLOBAL_Object : IWEEK_GLOBAL_Object = React.useRef({allClasses, teachersGuild , refreshTable , forceUpdate , Swaping:false ,currentSolutionNumber : 0, activateList : [],availables, HandyAny:{} }).current;
-
+  const WEEK_GLOBAL_Object : IWEEK_GLOBAL_Object = React.useRef({allClasses, teachersGuild , refreshTable , forceUpdate , Swaping:false ,currentSolutionNumber : 0, activateList : [],tableFooterRefresher : [] ,availables, HandyAny:{} }).current;
   const handleChange = ( School : IClass[])=>{
     return (Pos : [ number , number] , m : number)=>{
       return SwitchEventHander(Pos , School  , m , teachersGuild, WEEK_GLOBAL_Object);
@@ -1579,12 +1572,16 @@ export function WeekView(): JSX.Element {
       }
     }
   }
+  const initTableFooter = (m:number)=>{
+    return (tableFooterfn : any)=>{
+      WEEK_GLOBAL_Object.tableFooterRefresher[m] = tableFooterfn;
+    }
+  }
   // const updateMatrix (allClasses.length)*(class.l.length)*(class.l[0].length)
 
   useEffect ( ()=>{
-    
-    //(async ()=>{await init()})(); 
     console.clear();
+    addPeriods(WEEK_GLOBAL_Object.allClasses);
     teacherScheduleInit(WEEK_GLOBAL_Object , availables);
     fill(WEEK_GLOBAL_Object);
     randomFiller(WEEK_GLOBAL_Object);
@@ -1602,11 +1599,13 @@ export function WeekView(): JSX.Element {
             return (
               <Paper key ={i} className={classes.paper}>
                 <BasicTable 
+                  // theme = {props.theme}
                   School = {School.current} 
                   m={i}
                   headCol={headCol} 
                   headRow={headRow}
                   cellInitializer = {initCell(i)}
+                  tableFooterInitializer = {initTableFooter(i)}
                   handleChange = {handleChange(School.current)}
                   WEEK_GLOBAL_Object = {WEEK_GLOBAL_Object}
                 />

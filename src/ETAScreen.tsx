@@ -1,15 +1,9 @@
 import { Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import './App.css';
+import { TimeRemainingState } from './Interfaces/Interfaces';
 
-interface TimeRemainingState {
-  whatToSayIndex:number,
-  total:number,
-  days:number,
-  hours:number,
-  minutes:number,
-  seconds:number
-}
+
 // const HiastSchedule : number [] = [
 //   900 , 1015 , 1025, 1140 , 1150, 1305 , 1350 , 1505 , 1515 , 1630
 // ]

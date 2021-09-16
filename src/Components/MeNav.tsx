@@ -5,14 +5,10 @@ import '../App.css';
 import { InstallButton } from './A2HS';
 import { AppBar , Typography , Toolbar} from '@material-ui/core';
 import classes from '*.module.css';
+import { INavProps } from '../Interfaces/Interfaces';
 
-enum Screen  {ETA , TABLE}
 
-interface INavProps {
-  UI:Screen ,
-  switchToTable : (event : any)=> void ,
-  switchToETA : (event : any)=> void 
-}
+
 
 
 
