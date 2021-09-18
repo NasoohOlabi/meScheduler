@@ -44,7 +44,18 @@ export type callNodeType = {
 	m: number,
 	callTo : 'pre'|'re'|'pivotTo'|'nothing',
 	parent : callNodeType | undefined | null,
-	pivotArgs? : {next_m : number, nextNode? : callNodeType, noRoot? : boolean},
+	pivotArgs? : {
+		next_m : number,
+		/**
+		 * @type callNodeType with Parent preferably undefined
+		 */
+		AfterReChainNode? : callNodeType,
+		beforeReChainNode : callNodeType | null,
+		/**
+		 * To reduce calls to pivotTo that could potencially lock the queue
+		 */
+		gen?: number,
+	},
 	cycleClosingParentName? : string,
 	Action? : actionType,
 	week : IWEEK_GLOBAL_Object,
@@ -54,8 +65,9 @@ export type NodeProcessor = (vertix : callNodeType)=>void
 
 export class argumentsQueue {
 	queue : Queue<callNodeType> = new Queue<callNodeType>();
-	_max: number = 120;
+	_max: number = 500;
 	_accepting : boolean = true;
+	_stats = {preCalls:0,reCalls:0,pivotToCalls:0};
 	Empty(): boolean {
 		return this.queue.Empty();
 	}
@@ -74,21 +86,37 @@ export class argumentsQueue {
 	  this.queue.dequeue();
 	}
 	unlock():void {
-		this._accepting = true;
+		if(this._accepting)
+			console.log(`Max wasn't reached!`)
+		else{
+			console.log(`Max was reached ;( `)
+			console.log(this);
+			this._accepting = true;
+		}
+		console.log({...this._stats , total:this._stats.preCalls+this._stats.reCalls+this._stats.pivotToCalls , stoped_at:this.queue.length()});
+		this._stats = {preCalls:0,reCalls:0,pivotToCalls:0};
+	}
+	eraseAll(){
+		while(this.notEmpty()){
+			this.dequeue();
+		}
 	}
 	callFront(re_fn: NodeProcessor, pre_fn: NodeProcessor, pivot_fn: NodeProcessor):void{
 		const vertix = this.queue.front();
 		if(vertix.callTo === 'pre'){
+				this._stats.preCalls++;
 				pre_fn(vertix)
 		}else if (vertix.callTo === 're'){
-			if (vertix.Action !== undefined)
+			if (vertix.Action !== undefined){
+				this._stats.reCalls++;
 				re_fn(vertix)
-			else
+			}else
 				// eslint-disable-next-line no-throw-literal
 				throw {...vertix , message : "Action not specified for re call"}
 		}
 		else if (vertix.callTo === 'pivotTo'){
 			if (vertix.pivotArgs !== undefined){
+				this._stats.pivotToCalls++;
 				pivot_fn(vertix);
 			}
 			else {
