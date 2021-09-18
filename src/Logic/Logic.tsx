@@ -313,10 +313,10 @@ export const SwitchEventHander = (Pos : [ number , number], School : IClass[] , 
 		someHowPutHimAt(m,teacher,Pos, week);
 		//clean teacher name from other places
 		//auto fill when only one name remain in a place
-		autoFill(School,m,teachersGuild,week);
+		// autoFill(School,m,teachersGuild,week);
 		//must be put here algorithm
 		//I have to see if 
-		noOtherOptionButToPutHere(School , m , teachersGuild, week);    
+		// noOtherOptionButToPutHere(School , m , teachersGuild, week);    
 	}
 }
 

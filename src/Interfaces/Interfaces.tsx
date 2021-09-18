@@ -1,4 +1,13 @@
+/* eslint-disable no-throw-literal */
 import { Theme } from "@material-ui/core";
+import { actionType } from "../Logic/util";
+
+/**
+ * obj : {
+ * Pos: [number, number],
+ * m: number,	
+ * teacher: string}
+ */
 export interface IActlistObj {
 	Pos: [number, number],
 	m: number,
@@ -25,91 +34,82 @@ export class Queue<T> {
 		return this._store[0];
 	}
 }
-export class PivotsQueue {
-	_store : Queue<(base:IActlistObj[])=>void> = new Queue<(base:IActlistObj[])=>void>();
-	_max!: number;
-	PivotsQueue(max : number){
-		this._max = max;
-	}
+/**
+ * PivotParent.stackLength is the number of pivots we are waiting to resolve once they do we'll consider this a solution
+ * in other word the number of pointers keeping the obj alive!
+ */
+export type callNodeType = {
+	teacher: string,
+	Pos: [number, number],
+	m: number,
+	callTo : 'pre'|'re'|'pivotTo'|'nothing',
+	parent : callNodeType | undefined | null,
+	pivotArgs? : {next_m : number, nextNode? : callNodeType, noRoot? : boolean},
+	cycleClosingParentName? : string,
+	Action? : actionType,
+	week : IWEEK_GLOBAL_Object,
+	Pivots : callNodeType[],
+}
+export type NodeProcessor = (vertix : callNodeType)=>void
+
+export class argumentsQueue {
+	queue : Queue<callNodeType> = new Queue<callNodeType>();
+	_max: number = 120;
+	_accepting : boolean = true;
 	Empty(): boolean {
-		return this._store.Empty();
+		return this.queue.Empty();
 	}
 	notEmpty(): boolean {
 		return !this.Empty();
 	}
-	enqueue(val: (base:IActlistObj[])=>void ) : boolean {
-		if (this._store.length() < this._max){
-			this._store.enqueue(val);
+	enqueue(val: callNodeType) : boolean {
+		if (this._accepting && this.queue.length() < this._max){
+			this.queue.enqueue(val);
 			return true;
 		}
+		this._accepting = false;
 		return false;
 	}
 	dequeue(): void {
-	  this._store.dequeue();
+	  this.queue.dequeue();
 	}
-	run(base : IActlistObj[]):void {
-		const front = this._store.front();
-		this._store.dequeue();
-		front(base)
-		this._store.enqueue(front);
+	unlock():void {
+		this._accepting = true;
+	}
+	callFront(re_fn: NodeProcessor, pre_fn: NodeProcessor, pivot_fn: NodeProcessor):void{
+		const vertix = this.queue.front();
+		if(vertix.callTo === 'pre'){
+				pre_fn(vertix)
+		}else if (vertix.callTo === 're'){
+			if (vertix.Action !== undefined)
+				re_fn(vertix)
+			else
+				// eslint-disable-next-line no-throw-literal
+				throw {...vertix , message : "Action not specified for re call"}
+		}
+		else if (vertix.callTo === 'pivotTo'){
+			if (vertix.pivotArgs !== undefined){
+				pivot_fn(vertix);
+			}
+			else {
+				throw {...vertix , message : "callTo pivotTo with missing pivotArgs"}
+			}
+		}
 	}
 }
-export class PivotsCallStack{
-	_store : ((base:IActlistObj[])=>void)[] = [];
-	_max!: number;
-	_accepting : boolean = true;
-	_index : number = -1;
-	constructor (...args: any[]){
-		if (args.length === 1){
-			this._max = args[0];
-		}
-		else if (args.length === 2){
-			this._max = args[0];
-			this.push(args[1]);
-		}
-	}
-	Empty(): boolean {
-		return  this._index === -1;
-	}
-	notEmpty(): boolean {
-		return !this.Empty();
-	}
-	push(val: (base:IActlistObj[])=>void ) : boolean {
-		if (this._store.length < this._max && this._accepting){
-			this._store.push(val);
-			this._index ++;
-			return true;
-		}
-		return false;
-	}
-	_unlock () : void{
-		this._index ++;
-		if (this._index +1 === this._store.length)
-			this._accepting = true;
-	}
-	pop(): void {
-		if (this._accepting){
-			this._store.pop();
-			this._index--;
-		}else{
-			this._index--;
-		}
-	}
-	run(base : IActlistObj[]):void {
-		if (this.Empty()) return;
-		this._accepting = false;
-		const front = this._store[this._index];
-		this.pop();
-		front(base);
-		this._unlock();
-	}
-}
+
+/**
+ * { depth?: number,
+ * actList_Length?:number,
+ * Pivots?: PivotsCallStack,
+ * baseLength? : number}
+ */
 export interface IMisc { 
 	depth?: number,
 	actList_Length?:number ,
-	Pivots?: PivotsCallStack,
+	Pivots?: callNodeType[],
 	baseLength? : number,
-};
+}
 export interface lCellObj  {
 	currentTeacher:string,
 	isCemented:boolean,
