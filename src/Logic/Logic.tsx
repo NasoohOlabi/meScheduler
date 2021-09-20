@@ -110,7 +110,7 @@ export function randomFiller(week:IWEEK_GLOBAL_Object){
 				const aOptions : string[] = actualOptions([i,j],m,week);
 				if (aOptions.length > 0){
 					const teacher = aOptions[Math.floor(Math.random() * aOptions.length)];    
-					putHimAt(week,m,teacher,[i,j]);
+					putHimAt(week,m,teacher,[i,j],'put');
 					autoFill(allClasses,m,teachersGuild,week);
 					noOtherOptionButToPutHere(allClasses , m , teachersGuild, week);
 				}
@@ -198,22 +198,19 @@ export const putHimAt = function (
 	m : number,
 	teacher : string ,
 	Pos : [number , number] ,
-	obj : {doit?: boolean , override? : boolean} = {doit : true , override:false}
+	op : 'put'|'remove'
 	){
-	const doit = obj.doit || true;
-	const override = obj.override || false;
+	const doit = (op === 'put');
 	const allClasses = week.allClasses;
 	const [X,Y] = Pos;
 	const teachers = allClasses[m].teachers;
 	if (doit) {
 		if (
-			(
 			!teacherHasNoMoreemptyAvailables(teacher,teachers) &&
-			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher === '' &&
+			allClasses[m].l[X][Y].currentTeacher === '' &&
 			week.HandyAny.teacherSchedule[teacher][(X*10)+Y]===-1
-			) || override
 		){
-			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = teacher;
+			allClasses[m].l[X][Y].currentTeacher = teacher;
 			teachers[teacher].remPeriods--;
 			teachers[teacher].periodsHere.push(Pos)
 			Object.keys(teachers).forEach(
@@ -224,18 +221,18 @@ export const putHimAt = function (
 			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = m;
 		}
 		if (week.refreshTable !== undefined){
-			week.refreshTable[m][Pos[0]][Pos[1]]();
+			week.refreshTable[m][X][Y]();
 		}
 	}
 	else {
 		if ( 
-			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher !== ''
-			|| override
+			allClasses[m].l[X][Y].currentTeacher !== ''
 			){
-			allClasses[m].l[Pos[0]][Pos[1]].currentTeacher = '';
-			teachers[teacher].remPeriods++;
-			teachers[teacher].periodsHere = withoutPos(teachers[teacher].periodsHere,Pos)
-			// allClasses[m].l[Pos[0]][Pos[1]].Options = removed(allClasses[m].l[Pos[0]][Pos[1]].Options,teacher);
+			const theTeacherBeingRemoved = allClasses[m].l[X][Y].currentTeacher;
+			allClasses[m].l[X][Y].currentTeacher = '';
+			teachers[theTeacherBeingRemoved].remPeriods++;
+			teachers[theTeacherBeingRemoved].periodsHere = withoutPos(teachers[teacher].periodsHere,Pos)
+			// allClasses[m].l[X][Y].Options = removed(allClasses[m].l[X][Y].Options,teacher);
 			Object.keys(teachers).forEach(
 				(teacher)=>{
 					if ( contains(week.availables[teacher] , Pos) ){
@@ -243,10 +240,10 @@ export const putHimAt = function (
 					}
 				}
 			);
-			week.HandyAny.teacherSchedule[teacher][ (X*10 + Y) ] = -1;
+			week.HandyAny.teacherSchedule[theTeacherBeingRemoved][ (X*10 + Y) ] = -1;
 		}
 		if (week.refreshTable !== undefined){
-			week.refreshTable[m][Pos[0]][Pos[1]]();
+			week.refreshTable[m][X][Y]();
 		}
 	} 
 
@@ -258,7 +255,7 @@ export const CementNoOtherOptionButToPutHere  = (School : IClass[],m :number , t
 		if ( periods === PosList?.length){
 			const GuardedPosList = guardPeriodsList(PosList);
 			GuardedPosList.forEach((Pos)=>{
-				putHimAt(week,m, teacher ,Pos );
+				putHimAt(week,m, teacher ,Pos, 'put' );
 				Class.l[Pos[0]][Pos[1]].isCemented = true;
 			});
 		}
@@ -271,7 +268,7 @@ export const noOtherOptionButToPutHere  = (School : IClass[],m :number , teacher
 		if ( periods === PosList?.length){
 			const GuardedPosList = guardPeriodsList(PosList);
 			GuardedPosList.forEach((Pos)=>{
-				putHimAt(week,m, teacher ,Pos);
+				putHimAt(week,m, teacher ,Pos,'put');
 			});
 		}
 	});

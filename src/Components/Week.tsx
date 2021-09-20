@@ -2,12 +2,13 @@
 import React,{useEffect, } from "react";
 import "../App.css";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import { Paper } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 import Grid from "@material-ui/core/Grid";
 import {BasicTable} from "./BasicTable";
 import {fill,SwitchEventHander,useForceUpdate,teacherScheduleInit,randomFiller} from '../Logic/Logic';
-import {emptyNumMatrix,newGrid} from '../Logic/util';
+import {emptyNumMatrix,loopOverClass,newGrid} from '../Logic/util';
 import {IClass , IWEEK_GLOBAL_Object} from '../Interfaces/Interfaces'
+import { someHowPutHimAt } from "../Logic/CoreAlgo";
 //import greenlet from 'greenlet'
 
 
@@ -1593,6 +1594,26 @@ export function WeekView( theme :any ): JSX.Element {
 
   return (
     <div className={classes.root}>
+      <Button onClick={()=>{
+        WEEK_GLOBAL_Object.allClasses.forEach((Class :IClass,m :number)=>{
+          loopOverClass((u:number,v:number)=>{
+            const teachers = Class.l[u][v].Options.sort((a, b) => 0.5 - Math.random())
+            let ind = 0;
+            while (Class.l[u][v].currentTeacher ==='' && ind < teachers.length){
+              const teacher = Class.l[u][v].Options[ind]
+              someHowPutHimAt(
+                m,
+                teacher,
+                [u,v],
+                WEEK_GLOBAL_Object,
+                false
+              )
+              ind++;
+            }
+          })
+        });
+        console.log(`I did my best!!!!`)
+      }}>fast Forward</Button>
       <Grid container spacing={0}>
         <Grid item xs={12}>
           {allClasses.map((Class,i) => {

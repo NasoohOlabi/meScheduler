@@ -6,6 +6,14 @@ import { util, equals, loopOverClass } from "./util";
 function conflicts (...args : [callNodeType] | [IActlistObj[],{ Pos: [number, number]; m: number; teacher: string }]){
 	if (args.length === 1){
 		const vertix = args[0];
+		for (let i = 0 ; i < vertix.Pivots.length ; i++){
+			if (equals(vertix.Pivots[i].Pos,vertix.Pos) && vertix.Pivots[i].m === vertix.m){
+				return true;  
+			}
+			else if (vertix.Pivots[i].teacher === vertix.teacher && equals(vertix.Pivots[i].Pos,vertix.Pos)){
+				return true;
+			}
+		}
 		let tmp : callNodeType | null;
 		if (vertix.parent !== undefined)
 			tmp = vertix.parent;
@@ -67,7 +75,7 @@ const q : argumentsQueue = new argumentsQueue();
 function enoughSolutions (week:IWEEK_GLOBAL_Object) : boolean{
 	return week.activateList.length  > MAX_CALLS;
 }
-function takeOneOffTheStack (vertix : callNodeType){
+export function takeOneOffTheStack (vertix : callNodeType){
 	const debt = {
 		...vertix.Pivots[vertix.Pivots.length-1],
 		parent: vertix,
@@ -85,25 +93,24 @@ function pivotTo(vertix : callNodeType){
 	// should schedule the re calles to the queue
 	if (vertix.pivotArgs === undefined){
 		throw {...vertix , message : 'call to pivotTo with missing pivotArgs'}
-	}else{
-		const gen = (vertix.pivotArgs.gen||0)+1;
+	}
+	else if (!conflicts(vertix)){
+		// const gen = (vertix.pivotArgs.gen||0)+1;
+		const gen = (vertix.pivotArgs.gen === undefined)?0:vertix.pivotArgs.gen+1;
 		const m = vertix.pivotArgs.next_m;
 		const nextNode  = vertix.pivotArgs.AfterReChainNode;
 		const [X,Y] = vertix.Pos;
 		const augmentedParent = vertix.pivotArgs.beforeReChainNode;
-		const precedent : callNodeType = (augmentedParent === null)?vertix:augmentedParent;
+		const NewStack = (vertix.pivotArgs.beforeReChainNode === null)?[...vertix.Pivots]:[...vertix.pivotArgs.beforeReChainNode.Pivots];
+		if (nextNode !== undefined)
+			NewStack.push(nextNode);
 		// const teachers = util.removed(vertix.week.allClasses[m].l[X][Y].Options, vertix.week.allClasses[m].l[X][Y].currentTeacher);
 		const teachers = vertix.week.allClasses[m].l[X][Y].Options;
 		const requirePivoting = teachers.filter((replacementTeacher : string)=>{
 			if (replacementTeacher === vertix.week.allClasses[m].l[X][Y].currentTeacher) return false;
 			const s = util.situation(replacementTeacher,vertix.Pos,m,vertix.week);
-			if (s.r === -1){
-				if (nextNode !== undefined){
-					q.enqueue({callTo:'re',parent:augmentedParent,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...precedent.Pivots , nextNode]})
-				}
-				else{
-					q.enqueue({callTo:'re',parent:augmentedParent,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...precedent.Pivots]})
-				}
+			if (s.r === -1 || (replacementTeacher === vertix.teacher && s.r === vertix.m)){
+				q.enqueue({callTo:'re',parent:augmentedParent,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...NewStack]})
 				return false;
 			}else if (s.r ===vertix.m){
 				return false;
@@ -114,43 +121,26 @@ function pivotTo(vertix : callNodeType){
 		requirePivoting.sort((a, b) => 0.5 - Math.random()).slice(0,Math.ceil(requirePivoting.length/gen));
 		requirePivoting.forEach((replacementTeacher):void=>{
 			const s = util.situation(replacementTeacher,vertix.Pos,m,vertix.week);
-			if (nextNode !== undefined){
 				// 		pivotTo(s.r,vertix,{callTo:'re',parent:augmentedParent,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:s.currTeacher,Action:s.action,Pivots:[...vertix.Pivots , nextNode]},noRoot)
-						q.enqueue({
-							...vertix,
-							callTo:'pivotTo',
-							pivotArgs:{
-								next_m: s.r,
-								AfterReChainNode:{callTo:'re',parent:undefined,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...precedent.Pivots , nextNode]},
-								beforeReChainNode: augmentedParent,
-								gen
-							}
-						});
-					}
-					else{
-				// 		pivotTo(s.r,vertix,{callTo:'re',parent:augmentedParent,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:s.currTeacher,Action:s.action,Pivots:vertix.Pivots},noRoot)
-						q.enqueue({
-							...vertix,
-							callTo:'pivotTo',
-							pivotArgs:{
-								next_m: s.r,
-								AfterReChainNode: {
-									callTo:'re',parent:undefined,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...precedent.Pivots]
-								},
-								beforeReChainNode:augmentedParent,
-								gen
-							}
-						})
-					}
+			q.enqueue({
+				...vertix,
+				Pivots: [...NewStack],// if augmentedParent is null [] would have got to the next gen
+				callTo:'pivotTo',
+				pivotArgs:{
+					next_m: s.r,
+					AfterReChainNode:{callTo:'re',parent:undefined,teacher:replacementTeacher,Pos:vertix.Pos,m,week:vertix.week,cycleClosingParentName:replacementTeacher,Action:s.action,Pivots:[...NewStack]},
+					beforeReChainNode: augmentedParent,
+					gen
+				}
+			});
 		});
 	}
-	// if non of the teachers worked then do sth
 }
 /**
  * back track and return the path to the root
  * @param vertix leaf
  */
-function backtrack (vertix : callNodeType) : IActlistObj[]{
+export function backtrack (vertix : callNodeType) : IActlistObj[]{
 	let tmp : callNodeType | null= vertix;
 	const solution : IActlistObj[] = [];
 	while(tmp !== null){
@@ -187,7 +177,7 @@ function pre(vertix : callNodeType){
 						m,week,
 						callTo:'nothing',
 						parent:vertix,
-						Pivots:vertix.Pivots
+						Pivots:[...vertix.Pivots]
 					}
 					if (preStrictConflicts(newNode))
 						return;
@@ -260,6 +250,7 @@ function re(vertix : callNodeType) {
 	const week = vertix.week;
 	const teacher = vertix.teacher;
 	const solutions = week.activateList;
+	const Pivots = [...vertix.Pivots]
 	const S = util.situation(teacher,Pos,m,week);
 	const oldTeacher = S.currTeacher;
 	if (vertix.teacher === oldTeacher) return;
@@ -282,7 +273,7 @@ function re(vertix : callNodeType) {
 			!conflicts(vertix)
 		){
 			if (vertix.Pivots.length ===0){
-				const solution : IActlistObj[] = backtrack(vertix);
+				const solution = backtrack(vertix);
 				solutions.push(util.copyInstructions(solution));
 			}
 			else{
@@ -315,7 +306,7 @@ function re(vertix : callNodeType) {
 			edges.forEach((p):void => {
 				const s = util.situation(oldTeacher,p,m,week);
 				const newNode : callNodeType = {
-					teacher:oldTeacher,Pos: p,m,Pivots:vertix.Pivots,week,parent:vertix,callTo:'nothing',
+					teacher:oldTeacher,Pos: p,m,Pivots,week,parent:vertix,callTo:'nothing',
 					cycleClosingParentName : vertix.cycleClosingParentName,Action
 				}
 				if (
@@ -366,7 +357,7 @@ function re(vertix : callNodeType) {
 						pivotArgs:{
 							next_m:s.r,
 							beforeReChainNode: vertix,
-							AfterReChainNode:{
+							AfterReChainNode:{//<- re calls check if the called for is it self a solution
 								...newNode,
 								callTo:'re',
 								parent: undefined
@@ -394,7 +385,7 @@ const delegate = (
 		case 1: // t==='' & r===-1 & a ==='shift'
 			console.log("->" + 1);
 			week.Swaping = false;
-			putHimAt(week, m, teacher, Pos, {doit:true});
+			putHimAt(week, m, teacher, Pos, 'put');
 			break;
 		case 2: // t==='' & r!==-1 & a ==='shift'
 			console.log("->" + 2);
@@ -474,6 +465,10 @@ const delegate = (
 			break;
 	}
 	while(q.notEmpty() && !enoughSolutions(week)){
+		// const short = q.queue.front();
+		// if( equals(short.Pos,Pos) && short.m===m ){
+		// 	console.log('butt')
+		// }
 		q.callFront(re,pre, pivotTo);
 		q.dequeue();
 	}
@@ -571,6 +566,18 @@ export const someHowPutHimAt = (
 				});
 				console.log('allz good validated!!');
 			})
+			loopOverClass((i:number,j:number)=>{
+				for (let mi = 0 ; mi < week.allClasses.length ; mi++){
+					let dict : any = {};
+					if (dict[week.allClasses[mi].l[i][j].currentTeacher] !== undefined){
+						console.log(`${week.allClasses[mi].l[i][j].currentTeacher} is at two places at once ${mi} and ${dict[week.allClasses[mi].l[i][j].currentTeacher]}`)
+						throw 'damit'	
+					}
+					else{
+						dict[week.allClasses[mi].l[i][j].currentTeacher] = mi;
+					}
+				}
+			})
 		}
 		week.HandyAny.runTests = ()=>{
 			console.log(week.activateList[week.currentSolutionNumber].map((item)=>JSON.stringify(item)));
@@ -589,7 +596,6 @@ export const Done = (
 	m: number,
 	week: IWEEK_GLOBAL_Object
 ) => {
-	const School = week.allClasses;
 	return (e: any) => {
 	const sol = week.activateList[week.currentSolutionNumber];
 	if (sol === undefined) {
@@ -600,36 +606,25 @@ export const Done = (
 		return;
 	}
 	for (let i = 0; i < sol.length; i++) {
-		if (sol[i].teacher === "") {
 			putHimAt(
 			week,
 			sol[i].m,
-			School[sol[i].m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,
+			sol[i].teacher,
 			sol[i].Pos,
-			{doit:false}
+			'remove'
 			);
-		}
 	}
 	for (let i = 0; i < sol.length; i++) {
-		if (!(sol[i].teacher === "")) {
-			if (School[sol[i].m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher !== "") {
-			putHimAt(
-				week,
-				sol[i].m,
-				School[sol[i].m].l[sol[i].Pos[0]][sol[i].Pos[1]].currentTeacher,
-				sol[i].Pos,
-				{doit:false,override:true}
-			);
-			}
-		}
-	}
-	for (let i = 0; i < sol.length; i++) {
-		if (!(sol[i].teacher === "")) {
-			putHimAt(week, sol[i].m, sol[i].teacher, sol[i].Pos,{override:true});
-		}
+		putHimAt(
+			week,
+			sol[i].m,
+			sol[i].teacher,
+			sol[i].Pos,
+			'put'
+		);
 	}
 
-	week.HandyAny.runTests();
+	week.HandyAny.test();
 	week.Swaping = false;
 	week.activateList = [];
 	week.currentSolutionNumber = 0;

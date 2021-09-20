@@ -1,6 +1,7 @@
 /* eslint-disable no-throw-literal */
 import { Theme } from "@material-ui/core";
-import { actionType } from "../Logic/util";
+import { backtrack, takeOneOffTheStack } from "../Logic/CoreAlgo";
+import { actionType, util } from "../Logic/util";
 
 /**
  * obj : {
@@ -65,7 +66,7 @@ export type NodeProcessor = (vertix : callNodeType)=>void
 
 export class argumentsQueue {
 	queue : Queue<callNodeType> = new Queue<callNodeType>();
-	_max: number = 500;
+	_max: number = 256000;
 	_accepting : boolean = true;
 	_stats = {preCalls:0,reCalls:0,pivotToCalls:0};
 	Empty(): boolean {
@@ -93,7 +94,9 @@ export class argumentsQueue {
 			console.log(this);
 			this._accepting = true;
 		}
-		console.log({...this._stats , total:this._stats.preCalls+this._stats.reCalls+this._stats.pivotToCalls , stoped_at:this.queue.length()});
+		const total = this._stats.preCalls+this._stats.reCalls+this._stats.pivotToCalls;
+		const obj = {...this._stats , total , stoped_at:this.queue.length(), sched:total + this.queue.length() };
+		console.log(JSON.stringify(obj));
 		this._stats = {preCalls:0,reCalls:0,pivotToCalls:0};
 	}
 	eraseAll(){
@@ -121,6 +124,15 @@ export class argumentsQueue {
 			}
 			else {
 				throw {...vertix , message : "callTo pivotTo with missing pivotArgs"}
+			}
+		}
+		else if (vertix.callTo === 'nothing'){
+			if (vertix.Pivots.length !== 0){
+				takeOneOffTheStack(vertix)
+			}
+			else{
+				const solution = backtrack(vertix);
+				vertix.week.activateList.push(util.copyInstructions(solution));
 			}
 		}
 	}
