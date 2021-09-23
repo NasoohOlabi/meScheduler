@@ -139,8 +139,7 @@ var grade7class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade7class2: IClass = {
 	l: newGrid(),
@@ -216,8 +215,7 @@ var grade7class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade8class1: IClass = {
 	l: newGrid(),
@@ -299,8 +297,7 @@ var grade8class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade8class2: IClass = {
 	l: newGrid(),
@@ -382,8 +379,7 @@ var grade8class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade9class1: IClass = {
 	l: newGrid(),
@@ -455,8 +451,7 @@ var grade9class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade9class2: IClass = {
 	l: newGrid(),
@@ -528,8 +523,7 @@ var grade9class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade10class1: IClass = {
 	l: newGrid(),
@@ -606,8 +600,7 @@ var grade10class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade10class2: IClass = {
 	l: newGrid(),
@@ -684,8 +677,7 @@ var grade10class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade11class1: IClass = {
 	l: newGrid(),
@@ -767,8 +759,7 @@ var grade11class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade11class2: IClass = {
 	l: newGrid(),
@@ -850,8 +841,7 @@ var grade11class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 var grade12class1: IClass = {
 	l: newGrid(),
@@ -913,8 +903,7 @@ var grade12class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	},
-	laps: 0,
+	}
 };
 export var allClasses = [
 	grade7class1,

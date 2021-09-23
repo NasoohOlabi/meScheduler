@@ -234,5 +234,4 @@ export interface IClass {
 	l: lCellObj[][];
 	Name: string;
 	teachers: any;
-	laps: any;
 }
