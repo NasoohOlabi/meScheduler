@@ -3,10 +3,10 @@ import {
 	IWEEK_GLOBAL_Object,
 	IActlistObj,
 	callNodeType,
-	argumentsQueue,
+	argumentsQueue
 } from "../Interfaces/Interfaces";
 import { putHimAt } from "./Logic";
-import { util, equals, loopOverClass } from "./util";
+import { util, equals } from "./util";
 
 function conflicts(
 	...args:
@@ -15,6 +15,9 @@ function conflicts(
 ) {
 	if (args.length === 1) {
 		const vertix = args[0];
+		if(vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]].isCemented){
+			return true;
+		}
 		for (let i = 0; i < vertix.Pivots.length; i++) {
 			if (
 				equals(vertix.Pivots[i].Pos, vertix.Pos) &&
@@ -75,6 +78,9 @@ function conflicts(
 
 function preStrictConflicts(vertix: callNodeType) {
 	let tmp: callNodeType | null;
+	if (vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]].isCemented){
+		return true;
+	}
 	if (vertix.parent !== undefined) tmp = vertix.parent;
 	else throw { ...vertix, message: `Parent is undefined` };
 	while (tmp !== null) {
@@ -89,7 +95,7 @@ function preStrictConflicts(vertix: callNodeType) {
 }
 
 const MAX_CALLS = 5;
-const q: argumentsQueue = new argumentsQueue();
+let q: argumentsQueue = new argumentsQueue();
 
 function enoughSolutions(week: IWEEK_GLOBAL_Object): boolean {
 	return week.activateList.length > MAX_CALLS;
@@ -113,9 +119,7 @@ function pivotTo(vertix: callNodeType) {
 	if (vertix.pivotArgs === undefined) {
 		throw { ...vertix, message: "call to pivotTo with missing pivotArgs" };
 	} else if (!conflicts(vertix)) {
-		// const gen = (vertix.pivotArgs.gen||0)+1;
-		const gen =
-			vertix.pivotArgs.gen === undefined ? 1 : vertix.pivotArgs.gen + 1;
+		const gen: number = (vertix.pivotArgs.gen===undefined)?1:vertix.pivotArgs.gen+1;
 		const m = vertix.pivotArgs.next_m;
 		const nextNode = vertix.pivotArgs.AfterReChainNode;
 		const [X, Y] = vertix.Pos;
@@ -126,8 +130,8 @@ function pivotTo(vertix: callNodeType) {
 				: [...vertix.pivotArgs.beforeReChainNode.Pivots];
 		if (nextNode !== undefined) NewStack.push(nextNode);
 		// const teachers = util.removed(vertix.week.allClasses[m].l[X][Y].Options, vertix.week.allClasses[m].l[X][Y].currentTeacher);
-		const teachers = vertix.week.allClasses[m].l[X][Y].Options;
-		const requirePivoting = teachers.filter((replacementTeacher: string) => {
+		const replacementTeachers = vertix.week.allClasses[m].l[X][Y].Options;
+		const requirePivoting = replacementTeachers.filter((replacementTeacher: string) => {
 			if (
 				replacementTeacher === vertix.week.allClasses[m].l[X][Y].currentTeacher
 			)
@@ -135,7 +139,7 @@ function pivotTo(vertix: callNodeType) {
 			const s = util.situation(replacementTeacher, vertix.Pos, m, vertix.week);
 			if (
 				s.r === -1 ||
-				(replacementTeacher === vertix.teacher && s.r === vertix.m)
+				(replacementTeacher === vertix.week.allClasses[vertix.m].l[X][Y].currentTeacher && s.r === vertix.m)
 			) {
 				q.enqueue({
 					callTo: "re",
@@ -153,34 +157,38 @@ function pivotTo(vertix: callNodeType) {
 				return false;
 			} else return true;
 		});
-		// sample a random decreasing number of elements with each generation
-		requirePivoting
-			.sort((a, b) => 0.5 - Math.random())
-			.slice(0, Math.ceil(requirePivoting.length / gen));
-		requirePivoting.forEach((replacementTeacher): void => {
-			const s = util.situation(replacementTeacher, vertix.Pos, m, vertix.week);
-			q.enqueue({
-				...vertix,
-				Pivots: [...NewStack], // if augmentedParent is null [] would have got to the next gen
-				callTo: "pivotTo",
-				pivotArgs: {
-					next_m: s.r,
-					AfterReChainNode: {
-						callTo: "re",
-						parent: undefined,
-						teacher: replacementTeacher,
-						Pos: vertix.Pos,
-						m,
-						week: vertix.week,
-						cycleClosingParentName: replacementTeacher,
-						Action: s.action,
-						Pivots: [...NewStack],
+		if ( (replacementTeachers.length-1)-requirePivoting.length >= 2 )// doesn't require pivoting .length >=2
+			return;
+		else{
+			// sample a random decreasing number of elements with each generation
+			requirePivoting
+				.sort((a, b) => 0.5 - Math.random())
+				.slice(0, Math.ceil(requirePivoting.length/gen));
+			requirePivoting.forEach((replacementTeacher): void => {
+				const s = util.situation(replacementTeacher, vertix.Pos, m, vertix.week);
+				pivotTo({
+					...vertix,
+					Pivots: [...NewStack], // if augmentedParent is null [] would have got to the next gen
+					callTo: "pivotTo",
+					pivotArgs: {
+						next_m: s.r,
+						AfterReChainNode: {
+							callTo: "re",
+							parent: undefined,
+							teacher: replacementTeacher,
+							Pos: vertix.Pos,
+							m,
+							week: vertix.week,
+							cycleClosingParentName: replacementTeacher,
+							Action: s.action,
+							Pivots: [...NewStack],
+						},
+						beforeReChainNode: augmentedParent,
+						gen
 					},
-					beforeReChainNode: augmentedParent,
-					gen,
-				},
+				});
 			});
-		});
+		}
 	}
 }
 /**
@@ -209,11 +217,12 @@ function pre(vertix: callNodeType) {
 	const m = vertix.m;
 	const week = vertix.week;
 	const solutions = week.activateList;
-
 	if (!conflicts(vertix)) {
 		const edges: [number, number][] =
 			week.allClasses[m].teachers[teacher].periodsHere ||
 			util.getHisActPeriods(week.allClasses[m], teacher);
+		const q_lenBefore = q.length();
+		const localQueue = new argumentsQueue();
 		edges.forEach((edge) => {
 			const [edgeX, edgeY] = edge;
 			const teachers = week.allClasses[m].l[edgeX][edgeY].Options;
@@ -241,8 +250,7 @@ function pre(vertix: callNodeType) {
 					newNode.callTo = "pre";
 					q.enqueue(newNode);
 				} else if (s.action === "cycle" && s.r !== -1) {
-					// pivotTo(s.r,vertix,{callTo:'pre',parent:undefined ,teacher:t,Pos:edge,m,week,Pivots:vertix.Pivots})
-					q.enqueue({
+					localQueue.enqueue({
 						...newNode,
 						callTo: "pivotTo",
 						pivotArgs: {
@@ -256,16 +264,7 @@ function pre(vertix: callNodeType) {
 						},
 					});
 				} else if (s.action === "shift" && s.r !== -1) {
-					// pivotTo(s.r,edge,base,week,{...misc})
-					// pivotTo(s.r,vertix)
-					// pivotTo({
-					// 	...newNode,
-					// 	callTo: 'pivotTo',
-					// 	pivotArgs:{
-					// 		next_m:s.r,
-					// 	},
-					// })
-					q.enqueue({
+					localQueue.enqueue({
 						...newNode,
 						callTo: "pivotTo",
 						pivotArgs: {
@@ -277,6 +276,14 @@ function pre(vertix: callNodeType) {
 				}
 			});
 		});
+		const q_lenAfter = q.length();
+		if ((q_lenAfter - q_lenBefore) < 3){
+			while(localQueue.notEmpty()){
+				// q.enqueue(localQueue.front())
+				localQueue.callFront(re,pre,pivotTo)
+				localQueue.dequeue()
+			}
+		}
 	}
 }
 /**
@@ -309,6 +316,9 @@ function re(vertix: callNodeType) {
 			);
 		}
 	};
+	const localQueue = new argumentsQueue();
+	const q_lenBefore = q.length();
+	const madePivots: number = Pivots.length;
 	if (!conflicts(vertix)) {
 		if (
 			((Action === "shift" && S.currTeacher === "") ||
@@ -373,7 +383,7 @@ function re(vertix: callNodeType) {
 							callTo: "re",
 						});
 					} else {
-						q.enqueue({
+						localQueue.enqueue({
 							...newNode,
 							callTo: "pivotTo",
 							pivotArgs: {
@@ -392,6 +402,15 @@ function re(vertix: callNodeType) {
 			});
 		}
 	}
+	const q_lenAfter = q.length();
+	if ((q_lenAfter - q_lenBefore) < 3 && madePivots < 3){
+		while(localQueue.notEmpty()){
+			// q.enqueue(localQueue.front())
+			localQueue.callFront(re,pre,pivotTo)
+			localQueue.dequeue()
+		}
+	}
+
 }
 const delegate = (
 	teacher: string,
@@ -422,8 +441,6 @@ const delegate = (
 		case 2: // t==='' & r!==-1 & a ==='shift'
 			console.log("->" + 2);
 			// Pivot
-			// pivotTo(S.r,Pos,[{Pos,m,teacher}],week);
-			// pivotTo(S.r,rootVertix);
 			q.enqueue({
 				...rootVertix,
 				pivotArgs: { next_m: S.r, beforeReChainNode: rootVertix },
@@ -437,13 +454,6 @@ const delegate = (
 			break;
 		case 4: // t==='' & r!==-1 & a ==='cycle'
 			console.log("->" + 4);
-			// pre(teacher, Pos, m, week, [] ,
-			// 	{Pivots: new PivotsCallStack(MAX_CALLS,
-			// 		(base:IActlistObj[])=>{
-			// 			pivotTo(S.r,Pos,base,week,{actList_Length:week.activateList.length});
-			// 		}
-			// )});
-			// pivotTo(S.r,rootVertix,{...rootVertix , callTo:'pre'},true)
 			q.enqueue({
 				...rootVertix,
 				callTo: "pivotTo",
@@ -477,7 +487,6 @@ const delegate = (
 			break;
 		case 7: // t!=='' & r===-1 & a ==='cycle'
 			console.log("->" + 7);
-			// re(teacher, Pos, m, week, [], S.action );
 			q.enqueue({
 				...rootVertix,
 				callTo: "re",
@@ -487,10 +496,6 @@ const delegate = (
 			break;
 		case 8: // t!=='' & r!==-1 & a ==='cycle'
 			console.log("->" + 8);
-			// re(teacher, Pos, m, week, [], S.action , {Pivots : new PivotsCallStack(MAX_CALLS,(base : IActlistObj[])=>{
-			// 	pivotTo(S.r,Pos,base,week,{actList_Length : week.activateList.length});
-			// })});
-			// pivotTo(S.r,rootVertix,{...rootVertix,callTo:'re', Action: S.action},true)
 			q.enqueue({
 				...rootVertix,
 				callTo: "pivotTo",
@@ -509,10 +514,6 @@ const delegate = (
 			break;
 	}
 	while (q.notEmpty() && !enoughSolutions(week)) {
-		// const short = q.queue.front();
-		// if( equals(short.Pos,Pos) && short.m===m ){
-		// 	console.log('butt')
-		// }
 		q.callFront(re, pre, pivotTo);
 		q.dequeue();
 	}
@@ -537,107 +538,107 @@ export const someHowPutHimAt = (
 	*/
 	//short hands
 	week.Swaping = true;
-	week.HandyAny.beforeAction = [];
-	for (let i = 0; i < week.allClasses.length; i++) {
-		let acc = 0;
-		// Object.keys(week.allClasses[i].teachers).forEach(
-		// 	(teacher)=>{
-		// 	  acc = acc + week.allClasses[i].teachers[teacher].remPeriods;
-		// 	}
-		//   );
-		loopOverClass((u, v) => {
-			if (week.allClasses[i].l[u][v].currentTeacher === "") acc += 1;
-		});
-		week.HandyAny.beforeAction.push(acc);
-	}
-	week.HandyAny.test = () => {
-		if (week.HandyAny.beforeAction.length !== 0) {
-			console.log(week.HandyAny.beforeAction);
-		} else {
-			console.log("nothing");
-		}
-		week.HandyAny.beforeAction = [];
-		for (let i = 0; i < week.allClasses.length; i++) {
-			let acc = 0;
-			// Object.keys(week.allClasses[i].teachers).forEach(
-			// 	(teacher)=>{
-			// 	  acc = acc + week.allClasses[i].teachers[teacher].remPeriods;
-			// 	}
-			//   );
-			loopOverClass((u, v) => {
-				if (week.allClasses[i].l[u][v].currentTeacher === "") acc += 1;
-			});
-			week.HandyAny.beforeAction.push(acc);
-		}
-		console.log("became");
-		console.log(week.HandyAny.beforeAction);
-	};
-  console.time('delegate')
+	// week.HandyAny.beforeAction = [];
+	// for (let i = 0; i < week.allClasses.length; i++) {
+	// 	let acc = 0;
+	// 	// Object.keys(week.allClasses[i].teachers).forEach(
+	// 	// 	(teacher)=>{
+	// 	// 	  acc = acc + week.allClasses[i].teachers[teacher].remPeriods;
+	// 	// 	}
+	// 	//   );
+	// 	loopOverClass((u, v) => {
+	// 		if (week.allClasses[i].l[u][v].currentTeacher === "") acc += 1;
+	// 	});
+	// 	week.HandyAny.beforeAction.push(acc);
+	// }
+	// week.HandyAny.test = () => {
+	// 	if (week.HandyAny.beforeAction.length !== 0) {
+	// 		console.log(week.HandyAny.beforeAction);
+	// 	} else {
+	// 		console.log("nothing");
+	// 	}
+	// 	week.HandyAny.beforeAction = [];
+	// 	for (let i = 0; i < week.allClasses.length; i++) {
+	// 		let acc = 0;
+	// 		// Object.keys(week.allClasses[i].teachers).forEach(
+	// 		// 	(teacher)=>{
+	// 		// 	  acc = acc + week.allClasses[i].teachers[teacher].remPeriods;
+	// 		// 	}
+	// 		//   );
+	// 		loopOverClass((u, v) => {
+	// 			if (week.allClasses[i].l[u][v].currentTeacher === "") acc += 1;
+	// 		});
+	// 		week.HandyAny.beforeAction.push(acc);
+	// 	}
+	// 	console.log("became");
+	// 	console.log(week.HandyAny.beforeAction);
+	// };
+//   console.time('delegate')
 	delegate(teacher, Pos, m, week);
-  console.timeEnd('delegate')
-	if (week.activateList.length > 0) {
-		const ms: number[] = [];
-		week.activateList[week.currentSolutionNumber].forEach((step) => {
-			let in_ms = false;
-			for (let i = 0; i < ms.length; i++) {
-				if (ms[i] === step.m) {
-					in_ms = true;
-					break;
-				}
-			}
-			if (!in_ms) {
-				ms.push(step.m);
-			}
-		});
-		week.HandyAny.validate = (week: IWEEK_GLOBAL_Object) => {
-			ms.forEach((m) => {
-				let dict: any = {};
-				const Class = week.allClasses[m];
-				loopOverClass((i, j) => {
-					const t = Class.l[i][j].currentTeacher;
-					if (dict[t] === undefined) {
-						dict[t] = 1;
-					} else {
-						dict[t] += 1;
-					}
-				});
-				Object.keys(dict).forEach((key) => {
-					if (key !== "" && dict[key] > Class.teachers[key].Periods) {
-						console.log(`m : ${m} and the teacher is ${key}`);
-						// eslint-disable-next-line no-throw-literal
-						throw "shit";
-					}
-				});
-				console.log("allz good validated!!");
-			});
-			loopOverClass((i: number, j: number) => {
-				for (let mi = 0; mi < week.allClasses.length; mi++) {
-					let dict: any = {};
-					if (dict[week.allClasses[mi].l[i][j].currentTeacher] !== undefined) {
-						console.log(
-							`${
-								week.allClasses[mi].l[i][j].currentTeacher
-							} is at two places at once ${mi} and ${
-								dict[week.allClasses[mi].l[i][j].currentTeacher]
-							}`
-						);
-						throw "damit";
-					} else {
-						dict[week.allClasses[mi].l[i][j].currentTeacher] = mi;
-					}
-				}
-			});
-		};
-		week.HandyAny.runTests = () => {
-			console.log(
-				week.activateList[week.currentSolutionNumber].map((item) =>
-					JSON.stringify(item)
-				)
-			);
-			week.HandyAny.test();
-			week.HandyAny.validate(week);
-		};
-	}
+//   console.timeEnd('delegate')
+	// if (week.activateList.length > 0) {
+	// 	const ms: number[] = [];
+	// 	week.activateList[week.currentSolutionNumber].forEach((step) => {
+	// 		let in_ms = false;
+	// 		for (let i = 0; i < ms.length; i++) {
+	// 			if (ms[i] === step.m) {
+	// 				in_ms = true;
+	// 				break;
+	// 			}
+	// 		}
+	// 		if (!in_ms) {
+	// 			ms.push(step.m);
+	// 		}
+	// 	});
+	// 	week.HandyAny.validate = (week: IWEEK_GLOBAL_Object) => {
+	// 		ms.forEach((m) => {
+	// 			let dict: any = {};
+	// 			const Class = week.allClasses[m];
+	// 			loopOverClass((i, j) => {
+	// 				const t = Class.l[i][j].currentTeacher;
+	// 				if (dict[t] === undefined) {
+	// 					dict[t] = 1;
+	// 				} else {
+	// 					dict[t] += 1;
+	// 				}
+	// 			});
+	// 			Object.keys(dict).forEach((key) => {
+	// 				if (key !== "" && dict[key] > Class.teachers[key].Periods) {
+	// 					console.log(`m : ${m} and the teacher is ${key}`);
+	// 					// eslint-disable-next-line no-throw-literal
+	// 					throw "shit";
+	// 				}
+	// 			});
+	// 			console.log("allz good validated!!");
+	// 		});
+	// 		loopOverClass((i: number, j: number) => {
+	// 			for (let mi = 0; mi < week.allClasses.length; mi++) {
+	// 				let dict: any = {};
+	// 				if (dict[week.allClasses[mi].l[i][j].currentTeacher] !== undefined) {
+	// 					console.log(
+	// 						`${
+	// 							week.allClasses[mi].l[i][j].currentTeacher
+	// 						} is at two places at once ${mi} and ${
+	// 							dict[week.allClasses[mi].l[i][j].currentTeacher]
+	// 						}`
+	// 					);
+	// 					throw "damit";
+	// 				} else {
+	// 					dict[week.allClasses[mi].l[i][j].currentTeacher] = mi;
+	// 				}
+	// 			}
+	// 		});
+	// 	};
+	// 	week.HandyAny.runTests = () => {
+	// 		console.log(
+	// 			week.activateList[week.currentSolutionNumber].map((item) =>
+	// 				JSON.stringify(item)
+	// 			)
+	// 		);
+	// 		week.HandyAny.test();
+	// 		week.HandyAny.validate(week);
+	// 	};
+	// }
 	if (!freeze) {
 		Done(m, week)({});
 	}
@@ -661,7 +662,6 @@ export const Done = (m: number, week: IWEEK_GLOBAL_Object) => {
 			putHimAt(week, sol[i].m, sol[i].teacher, sol[i].Pos, "put");
 		}
 
-		week.HandyAny.test();
 		week.Swaping = false;
 		week.activateList = [];
 		week.currentSolutionNumber = 0;
