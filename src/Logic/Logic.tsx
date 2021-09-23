@@ -3,20 +3,14 @@ import React from "react";
 import { useState } from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
 import {
-	IActlistObj,
 	IClass,
 	IWEEK_GLOBAL_Object,
 } from "../Interfaces/Interfaces";
 import { someHowPutHimAt } from "./CoreAlgo";
 import {
 	contains,
-	controledPush,
-	createEdgeIN,
-	emptyObjArray,
 	guard,
 	guardPeriodsList,
-	Key,
-	listMinusAnother,
 	loopOverClass,
 	stringGuard,
 	withoutPos,
@@ -26,7 +20,6 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 	const availables = week.availables;
 	const teachersGuild = week.teachersGuild;
 	const allClasses: IClass[] = week.allClasses;
-	let table: any = emptyObjArray(allClasses.length);
 	allClasses.forEach((Class, m) => {
 		loopOverClass((x, y) => {
 			// scanning the teachers in the class
@@ -36,15 +29,6 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 					Class.teachers[teacher].emptyAvailables,
 				];
 				if (contains(availables[teacher], [x, y]) && periods > 0) {
-					Class.l[x][y].Options.forEach((teacherAtThisPos) => {
-						createEdgeIN(
-							table[m],
-							teacher,
-							teacherAtThisPos,
-							[x, y],
-							teachersGuild
-						);
-					});
 					Class.l[x][y].Options.push(teacher);
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					PosList = guard(PosList, [x, y]);
@@ -52,7 +36,6 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 			});
 		});
 		CementNoOtherOptionButToPutHere(allClasses, m, teachersGuild, week);
-		Class.laps = table[m];
 	});
 }
 export function teacherScheduleInit(
@@ -324,56 +307,56 @@ export const SwitchEventHander = (
 	};
 };
 
-export const threeTeachersOptionsList = (
-	teacher: string,
-	oldTeacher: string,
-	oldTeacherAvailables: [number, number][],
-	m: number,
-	Pos: [number, number],
-	week: IWEEK_GLOBAL_Object
-): IActlistObj[][] => {
-	//const week = week;
-	const allClasses = week.allClasses;
-	const teachersGuild = week.teachersGuild;
-	const [x, y] = Pos;
-	const Class = allClasses[m];
-	// Pos where we can put old teacher in but not the new
-	const opthree: [number, number][] = listMinusAnother(
-		oldTeacherAvailables,
-		Class.laps[Key(teacher, oldTeacher, teachersGuild)]
-	);
-	let result: IActlistObj[][] = [];
-	opthree.forEach((rPos) => {
-		const middleTeachers: string[] = Class.l[rPos[0]][rPos[1]].Options;
-		if (middleTeachers !== undefined) {
-			middleTeachers.forEach((middleTeacher: string) => {
-				if (
-					contains(Class.laps[Key(teacher, middleTeacher, teachersGuild)], [
-						x,
-						y,
-					])
-				) {
-					// intersection between oldteacher and middle teacher and lets call it -> N
-					const N = Class.laps[Key(oldTeacher, middleTeacher, teachersGuild)];
-					if (N !== undefined) {
-						N.forEach((pos: [number, number]) => {
-							if (Class.l[pos[0]][pos[1]].currentTeacher === middleTeacher) {
-								controledPush(result, [
-									{ teacher, Pos: [x, y], m },
-									{ teacher: oldTeacher, Pos: pos, m },
-									{ teacher: middleTeacher, Pos: rPos, m },
-								]);
-							}
-						});
-					}
-				}
-			});
-		} else {
-			alert(`Class.l[${rPos[0]}][${rPos[1]}] + ${Class.l[rPos[0]][rPos[1]]}`);
-		}
-	});
-	return result;
-};
+// export const threeTeachersOptionsList = (
+// 	teacher: string,
+// 	oldTeacher: string,
+// 	oldTeacherAvailables: [number, number][],
+// 	m: number,
+// 	Pos: [number, number],
+// 	week: IWEEK_GLOBAL_Object
+// ): IActlistObj[][] => {
+// 	//const week = week;
+// 	const allClasses = week.allClasses;
+// 	const teachersGuild = week.teachersGuild;
+// 	const [x, y] = Pos;
+// 	const Class = allClasses[m];
+// 	// Pos where we can put old teacher in but not the new
+// 	const opthree: [number, number][] = listMinusAnother(
+// 		oldTeacherAvailables,
+// 		Class.laps[Key(teacher, oldTeacher, teachersGuild)]
+// 	);
+// 	let result: IActlistObj[][] = [];
+// 	opthree.forEach((rPos) => {
+// 		const middleTeachers: string[] = Class.l[rPos[0]][rPos[1]].Options;
+// 		if (middleTeachers !== undefined) {
+// 			middleTeachers.forEach((middleTeacher: string) => {
+// 				if (
+// 					contains(Class.laps[Key(teacher, middleTeacher, teachersGuild)], [
+// 						x,
+// 						y,
+// 					])
+// 				) {
+// 					// intersection between oldteacher and middle teacher and lets call it -> N
+// 					const N = Class.laps[Key(oldTeacher, middleTeacher, teachersGuild)];
+// 					if (N !== undefined) {
+// 						N.forEach((pos: [number, number]) => {
+// 							if (Class.l[pos[0]][pos[1]].currentTeacher === middleTeacher) {
+// 								controledPush(result, [
+// 									{ teacher, Pos: [x, y], m },
+// 									{ teacher: oldTeacher, Pos: pos, m },
+// 									{ teacher: middleTeacher, Pos: rPos, m },
+// 								]);
+// 							}
+// 						});
+// 					}
+// 				}
+// 			});
+// 		} else {
+// 			alert(`Class.l[${rPos[0]}][${rPos[1]}] + ${Class.l[rPos[0]][rPos[1]]}`);
+// 		}
+// 	});
+// 	return result;
+// };
 
 // this is a tripple swap
 // intersection( sth [Key (teacher1 , teacher2 )] , sth [Key (teacher3 , teacher2 )] , sth [Key (teacher1 , teacher3 )])
