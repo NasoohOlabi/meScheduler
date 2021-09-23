@@ -1563,7 +1563,7 @@ export function WeekView(theme: any): JSX.Element {
 		activateList: [],
 		tableFooterRefresher: [],
 		availables,
-		HandyAny: {},
+    teacherSchedule: {}
 	}).current;
 	const handleChange = (School: IClass[]) => {
 		return (Pos: [number, number], m: number) => {

@@ -1,53 +1,56 @@
-import { IActlistObj, IClass , IWEEK_GLOBAL_Object,lCellObj} from "../Interfaces/Interfaces";
+/* eslint-disable no-throw-literal */
+import {
+	IActlistObj,
+	IClass,
+	IWEEK_GLOBAL_Object,
+	lCellObj,
+} from "../Interfaces/Interfaces";
 
 // testing git here
 
-
-export const equals  = ( a : number[] , b : number[]) => {
-	if (a.length === b.length){
-	  for (let i = 0 ; i<a.length ; i++){
-		if (!(a[i]===b[i])) {
-		  return false;
+export const equals = (a: number[], b: number[]) => {
+	if (a.length === b.length) {
+		for (let i = 0; i < a.length; i++) {
+			if (!(a[i] === b[i])) {
+				return false;
+			}
 		}
-	  }
-	  return true;
-	}
-	else {
-	  return false;
-	}
-}
-export const contains  = ( a : number[][] ,Pos : [number , number]) => {
-
-	for (let i = 0 ; i<a.length ; i++){
-	if (equals(a[i] , Pos)) {
 		return true;
+	} else {
+		return false;
 	}
+};
+export const contains = (a: [number, number][], Pos: [number, number]) => {
+	for (let i = 0; i < a.length; i++) {
+		if (equals(a[i], Pos)) {
+			return true;
+		}
 	}
 	return false;
-
-}
-export const guard = (a : any , Pos:[number,number] ) : [number,number][]=>{
-	if (a === undefined){
-		let b : [number,number][] = [Pos,];
+};
+export const guard = (a: any, Pos: [number, number]): [number, number][] => {
+	if (a === undefined) {
+		let b: [number, number][] = [Pos];
 		return b;
-	}
-	else{
-		a.push(Pos)
+	} else {
+		a.push(Pos);
 		return a;
 	}
-}
-export const guardRemove = (a : any , Pos:[number,number] ) : [number,number][]=>{
-if (a === undefined){
-	let b : [number,number][] = [Pos,];
-	return b;
-}
-else{
-	a = a.filter((item:any) => !equals(item , Pos));
-	return a;
-}
 };
-export const guardPeriodsList = (l : any) : [number,number][]=>{
-return l;
+export const guardRemove = (
+	a: any,
+	Pos: [number, number]
+): [number, number][] => {
+	if (a === undefined) {
+		let b: [number, number][] = [Pos];
+		return b;
+	} else {
+		a = a.filter((item: any) => !equals(item, Pos));
+		return a;
+	}
+};
+export const guardPeriodsList = (l: any): [number, number][] => {
+	return l;
 };
 // const positionFilled = (Pos : [number,number] , Class : IClass)=>{
 //     for (let i = 0 ; i < Class.teachers.length ; i++){
@@ -56,7 +59,6 @@ return l;
 //         }
 //     }
 // };
-
 
 // for (let i = 0 ; i<Class.teachers.length ; i++){
 //   if( Class.teachers[i][1] === Class.teachers[i][2]?.length){
@@ -69,13 +71,13 @@ return l;
 //     }
 //   }
 // }
-export const withoutPos =( lst : [number,number][] , Pos : [number,number])=>{
-	return lst.filter(  p=>!equals(Pos,p) )
-}
-export const removed = ( S : string[] , s : string) => {
-	return (S.slice(0,S.indexOf(s)).concat(S.slice(S.indexOf(s)+1)));
+export const withoutPos = (lst: [number, number][], Pos: [number, number]) => {
+	return lst.filter((p) => !equals(Pos, p));
+};
+export const removed = (S: string[], s: string) => {
+	return S.slice(0, S.indexOf(s)).concat(S.slice(S.indexOf(s) + 1));
 	//return S.splice(S.indexOf(s),0,data);
-}
+};
 // export async function AsyncFill() {
 //     try{
 //         await fill();
@@ -85,7 +87,7 @@ export const removed = ( S : string[] , s : string) => {
 //     }catch(err){
 //         console.log(err);
 //     }
-	
+
 // }
 
 // export function asyncFill( allClasses : IClass[] , availables : any) {
@@ -114,250 +116,299 @@ export const removed = ( S : string[] , s : string) => {
 //         //resolve([allClasses,availables]);
 //     }});
 // };
-export const Key = (s1 : string , s2 : string , teachersGuild : string[])=>{
+export const Key = (s1: string, s2: string, teachersGuild: string[]) => {
 	const i1 = teachersGuild.indexOf(s1);
 	const i2 = teachersGuild.indexOf(s2);
-	const s : string = (i1>i2)? ( i1.toString() + 'x' + i2.toString() ) : ( i2.toString() + 'x' + i1.toString() ); 
+	const s: string =
+		i1 > i2
+			? i1.toString() + "x" + i2.toString()
+			: i2.toString() + "x" + i1.toString();
 	return s;
-}
-export const defineOrPush = (table : any , hash : string , Pos: [number,number])=>{
-	if(table[hash] === undefined){
-		table[hash] = [Pos,];
-	} 
-	else{
+};
+export const defineOrPush = (
+	table: any,
+	hash: string,
+	Pos: [number, number]
+) => {
+	if (table[hash] === undefined) {
+		table[hash] = [Pos];
+	} else {
 		table[hash].push(Pos);
 	}
-}
-export const createEdgeIN = (table:any , s1 : string , s2 : string , Pos : [number, number] , teachersGuild : string[])=>{
+};
+export const createEdgeIN = (
+	table: any,
+	s1: string,
+	s2: string,
+	Pos: [number, number],
+	teachersGuild: string[]
+) => {
 	// table[indes s1 , index s2] = pos
-	let hash = Key(s1,s2,teachersGuild);
-	defineOrPush(table,hash,Pos);
+	let hash = Key(s1, s2, teachersGuild);
+	defineOrPush(table, hash, Pos);
 	// table[i2][i1].push(Pos);
+};
 
-}
-
-export const emptyObjArray = (n:number)=>{
+export const emptyObjArray = (n: number) => {
 	let g = [];
-	for (let i = 0 ; i<n ; i++){
+	for (let i = 0; i < n; i++) {
 		g.push({});
 	}
 
-	return g
-}
+	return g;
+};
 
-export const emptyNumMatrix = (x:number,y:number,z:number)=>{
-	let g : any= [];
-	for (let i = 0 ; i<x ; i++){
+export const emptyNumMatrix = (x: number, y: number, z: number) => {
+	let g: any = [];
+	for (let i = 0; i < x; i++) {
 		g.push([]);
-		for(let j = 0 ; j<y;j++){
+		for (let j = 0; j < y; j++) {
 			g[i].push([]);
-			for(let k = 0 ; k < z ; k++){
+			for (let k = 0; k < z; k++) {
 				g[i][j].push(0);
 			}
 		}
 	}
-	return g
-}
+	return g;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function periods(list : [string , number][] , teacher : string){
-	for (let i = 0 ; i< list.length ; i++){
-	if ( list[i][0] === teacher ){
-		return list[i][1];
-	}
+export function periods(list: [string, number][], teacher: string) {
+	for (let i = 0; i < list.length; i++) {
+		if (list[i][0] === teacher) {
+			return list[i][1];
+		}
 	}
 	return 0;
 }
 
-export const stringGuard = ( arg : unknown) : string=>{
-	if (typeof arg === "string"){
+export const stringGuard = (arg: unknown): string => {
+	if (typeof arg === "string") {
 		return arg;
-	}
-	else{
-		return '';
+	} else {
+		return "";
 		//do sth
 	}
-}
-export const castPosList =(l:any):[number,number][]=>{
-	return ((l !== undefined)? l : [] );
-}
-const getHisActPeriods = (Class : IClass,teacher:string) : [number,number][]=>{
-	let result : [number,number][] = [];
-	loopOverClass((i,j)=>{
-		if(Class.l[i][j].currentTeacher === teacher){
-			result.push([i,j]);
+};
+export const castPosList = (l: any): [number, number][] => {
+	return l !== undefined ? l : [];
+};
+const getHisActPeriods = (
+	Class: IClass,
+	teacher: string
+): [number, number][] => {
+	let result: [number, number][] = [];
+	loopOverClass((i, j) => {
+		if (Class.l[i][j].currentTeacher === teacher) {
+			result.push([i, j]);
 		}
 	});
-	return result
-}
-export const listMinusAnother = (a : [number,number][] , b :[number,number][]):[number,number][]=>{
-	const result: [number,number][] = [];
-	for (let i = 0 ; i<a.length;i++){
-		if(!contains(b,a[i])){
+	return result;
+};
+export const listMinusAnother = (
+	a: [number, number][],
+	b: [number, number][]
+): [number, number][] => {
+	const result: [number, number][] = [];
+	for (let i = 0; i < a.length; i++) {
+		if (!contains(b, a[i])) {
 			result.push(a[i]);
 		}
 	}
 	return result;
-}
-export const notInBase_copy = (a : [number,number][], m : number , base :IActlistObj[]):[number,number][]=>{
-	const result: [number,number][] = [];
-	a.forEach(
-		(Pos)=>{
-			let notInBase = true;
-			for (let j = 0 ; j<base.length; j++){
-				if (equals(base[j].Pos,Pos) && base[j].m === m){
-					notInBase = false;
-					break;
-				}
+};
+export const notInBase_copy = (
+	a: [number, number][],
+	m: number,
+	base: IActlistObj[]
+): [number, number][] => {
+	const result: [number, number][] = [];
+	a.forEach((Pos) => {
+		let notInBase = true;
+		for (let j = 0; j < base.length; j++) {
+			if (equals(base[j].Pos, Pos) && base[j].m === m) {
+				notInBase = false;
+				break;
 			}
-			if (notInBase)
-				result.push(Pos);
 		}
-	);
+		if (notInBase) result.push(Pos);
+	});
 	return result;
-}
-export const controledPush = (a:IActlistObj[][],sth :IActlistObj[] ,n:number = 50)=>{
-	if(a.length<n){
+};
+export const controledPush = (
+	a: IActlistObj[][],
+	sth: IActlistObj[],
+	n: number = 50
+) => {
+	if (a.length < n) {
 		a.push(sth);
 	}
-}
-export const controledAdd = (a:IActlistObj[][],sth : IActlistObj[][]  ,n:number = 50)=>{
-	if(a.length<n){
-		for (let i = 0  ; i < sth.length ; i++){
-			a.push(sth[i])
+};
+export const controledAdd = (
+	a: IActlistObj[][],
+	sth: IActlistObj[][],
+	n: number = 50
+) => {
+	if (a.length < n) {
+		for (let i = 0; i < sth.length; i++) {
+			a.push(sth[i]);
 		}
 	}
-}
-export const loopOverClass = (f : (i:number,j:number)=>void,n=5,m=7)=>{
-	for(let i = 0 ; i<n ; i++ ){
-		for(let j = 0 ; j<m ; j++ ){
-			f(i,j);
-		}        
+};
+export const loopOverClass = (
+	f: (i: number, j: number) => void,
+	n = 5,
+	m = 7
+) => {
+	for (let i = 0; i < n; i++) {
+		for (let j = 0; j < m; j++) {
+			f(i, j);
+		}
 	}
-}
+};
 
-
-function cel ():lCellObj{
-	return {currentTeacher:'',isCemented:false,Options:[]}
+function cel(): lCellObj {
+	return { currentTeacher: "", isCemented: false, Options: [] };
 }
-function seven_cels ():lCellObj[]{
-	const acc = []
-	for (let i = 0 ; i<7 ;i++){
-		acc.push(cel())
+function seven_cels(): lCellObj[] {
+	const acc = [];
+	for (let i = 0; i < 7; i++) {
+		acc.push(cel());
 	}
-	return acc
+	return acc;
 }
-export const newGrid = ():lCellObj[][]=>{
-	const acc = []
-	for (let i = 0 ; i<5 ; i++){
-		acc.push(seven_cels())
+export const newGrid = (): lCellObj[][] => {
+	const acc = [];
+	for (let i = 0; i < 5; i++) {
+		acc.push(seven_cels());
 	}
-	return acc;	
-}
-const copyInstruction = ( obj : IActlistObj )
-		: {Pos:[number,number] , m : number , teacher : string }  =>{
-			const res = Object();
-			res.Pos = [];
-			res.Pos.push(obj.Pos[0]);
-			res.Pos.push(obj.Pos[1]);
-			res.m = obj.m;
-			res.teacher = obj.teacher;
-			return res
-		}
-const copyInstructions = (objects : IActlistObj[])
-: {Pos:[number,number] , m : number , teacher : string }[] =>{
-	const res : any = []
-	objects.forEach(
-		(object)=>{
-			res.push(copyInstruction(object));
-		}
-	);
+	return acc;
+};
+const copyInstruction = (
+	obj: IActlistObj
+): { Pos: [number, number]; m: number; teacher: string } => {
+	const res = Object();
+	res.Pos = [];
+	res.Pos.push(obj.Pos[0]);
+	res.Pos.push(obj.Pos[1]);
+	res.m = obj.m;
+	res.teacher = obj.teacher;
 	return res;
-}
-const pickAction=(teacher:string ,m : number, week:IWEEK_GLOBAL_Object):actionType=>{
-	try{
-		if (week.allClasses[m].teachers[teacher].remPeriods >0 ){
-			return "shift"
-		}else{
-			return "cycle"
+};
+const copyInstructions = (
+	objects: IActlistObj[]
+): { Pos: [number, number]; m: number; teacher: string }[] => {
+	const res: any = [];
+	objects.forEach((object) => {
+		res.push(copyInstruction(object));
+	});
+	return res;
+};
+const pickAction = (
+	teacher: string,
+	m: number,
+	week: IWEEK_GLOBAL_Object
+): actionType => {
+	try {
+		if (week.allClasses[m].teachers[teacher].remPeriods > 0) {
+			return "shift";
+		} else {
+			return "cycle";
 		}
-	}
-	catch{
-		alert(`week.allClasses[${m}].teachers[${teacher}] is undefined`)
+	} catch {
+		alert(`week.allClasses[${m}].teachers[${teacher}] is undefined`);
 		// eslint-disable-next-line no-throw-literal
-		throw "undefined teacher"
+		throw "undefined teacher";
 	}
-}
-const situation = (teacher: string, Pos:[number,number] , m :number , week:IWEEK_GLOBAL_Object):{currTeacher:string,action:actionType,r:number}=>{
-	const ot = week.allClasses[m].l[Pos[0]][Pos[1]].currentTeacher;
-	const a = pickAction(teacher,m,week);
-	const r = week.HandyAny.teacherSchedule[teacher][(Pos[0]*10) +Pos[1]] 
-	return {currTeacher:ot,action:a,r}
-}
-function situationInt( s : {currTeacher:string,action:actionType,r:number} ){
-	const {currTeacher:t,action:a,r} = s;
-	if(t === ''){
-		if(a === 'shift'){
-			if(r === -1){
+};
+const situation = (
+	teacher: string,
+	Pos: [number, number],
+	m: number,
+	week: IWEEK_GLOBAL_Object
+): { currTeacher: string; action: actionType; r: number } => {
+	const [x, y] = Pos;
+	const ot = week.allClasses[m].l[x][y].currentTeacher;
+	const a = pickAction(teacher, m, week);
+	const tmp = week.teacherSchedule[teacher][x][y];
+	if (tmp !== null) {
+		const r: number = tmp;
+		return { currTeacher: ot, action: a, r };
+	} else {
+		throw {
+			teacher,
+			Pos,
+			m,
+			week,
+			message:
+				"Trying to get the situation for an imposible case of teacher not in the school in the first case his schedule reads null! ",
+		};
+	}
+};
+function situationInt(s: {
+	currTeacher: string;
+	action: actionType;
+	r: number;
+}) {
+	const { currTeacher: t, action: a, r } = s;
+	if (t === "") {
+		if (a === "shift") {
+			if (r === -1) {
 				return 1;
-			}
-			else{
+			} else {
 				return 2;
 			}
-		}
-		else{
-			if(r === -1){
+		} else {
+			if (r === -1) {
 				return 3;
-			}
-			else{
+			} else {
 				return 4;
 			}
 		}
-	}
-	else{
-		if(a === 'shift'){
-			if(r === -1){
+	} else {
+		if (a === "shift") {
+			if (r === -1) {
 				return 5;
-			}
-			else{
+			} else {
 				return 6;
 			}
-		}
-		else{
-			if(r === -1){
+		} else {
+			if (r === -1) {
 				return 7;
-			}
-			else{
+			} else {
 				return 8;
 			}
 		}
 	}
 }
 
-function ruffleShuffle (arr: {Pos:[number,number] , m : number , teacher : string }[][],pivot : number):{Pos:[number,number] , m : number , teacher : string }[][]{
+function ruffleShuffle(
+	arr: { Pos: [number, number]; m: number; teacher: string }[][],
+	pivot: number
+): { Pos: [number, number]; m: number; teacher: string }[][] {
 	// a = [0,1,2,3,4,5,6]
 	// b = [0,1,2,3,4,5,6]
-	if(pivot>arr.length ||pivot<0){
-		alert("Fuck!! went wrong. ruffleShuffle returned empty list")
+	if (pivot > arr.length || pivot < 0) {
+		alert("Fuck!! went wrong. ruffleShuffle returned empty list");
 	}
 	const res = [];
-	for (let i = 0 ; i<pivot ;i++){
-		for(let j = pivot; j<arr.length;j++){
-			res.push(arr[i].concat(arr[j]))
+	for (let i = 0; i < pivot; i++) {
+		for (let j = pivot; j < arr.length; j++) {
+			res.push(arr[i].concat(arr[j]));
 		}
 	}
 	return res;
 }
-export type actionType = "shift" | "cycle"
-function stepMatch (a : IActlistObj , wild : IActlistObj | undefined) : boolean{
-	if(wild === undefined) return false
+export type actionType = "shift" | "cycle";
+function stepMatch(a: IActlistObj, wild: IActlistObj | undefined): boolean {
+	if (wild === undefined) return false;
 	const skipTeacherMatching = wild.teacher === "*";
-	const skipPosMatching = equals(wild.Pos, [-1,-1]);
+	const skipPosMatching = equals(wild.Pos, [-1, -1]);
 	return (
-		(a.Pos === wild.Pos || skipPosMatching)&&
-		(a.teacher === wild.teacher || skipTeacherMatching)&&
-		(a.m === wild.m)
-		);
+		(a.Pos === wild.Pos || skipPosMatching) &&
+		(a.teacher === wild.teacher || skipTeacherMatching) &&
+		a.m === wild.m
+	);
 }
 export const util = {
 	copyInstructions,
@@ -368,5 +419,5 @@ export const util = {
 	ruffleShuffle,
 	stepMatch,
 	getHisActPeriods,
-	removed
-}
+	removed,
+};

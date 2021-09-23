@@ -15,7 +15,8 @@ import {
 	stringGuard,
 	withoutPos,
 } from "./util";
-
+const NUM_OF_DAYS = 5;
+const NUM_OF_PERIODS_PER_DAY = 7;
 export function fill(week: IWEEK_GLOBAL_Object) {
 	const availables = week.availables;
 	const teachersGuild = week.teachersGuild;
@@ -38,22 +39,17 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 		CementNoOtherOptionButToPutHere(allClasses, m, teachersGuild, week);
 	});
 }
+
 export function teacherScheduleInit(
 	week: IWEEK_GLOBAL_Object,
 	availables: any
 ) {
-	week.HandyAny.teacherSchedule = {};
+	week.teacherSchedule = {};
 	week.teachersGuild.forEach((teacher) => {
-		week.HandyAny.teacherSchedule[teacher] = {};
+		week.teacherSchedule[teacher] = [...Array(NUM_OF_DAYS)].map(e=>Array(NUM_OF_PERIODS_PER_DAY).fill(null));
 		availables[teacher].forEach((Pos: [number, number]) => {
 			const [X, Y] = Pos;
-			week.HandyAny.teacherSchedule[teacher][X * 10 + Y] = -1;
-		});
-		loopOverClass((i, j) => {
-			if (week.HandyAny.teacherSchedule[teacher][i * 10 + j] !== -1) {
-				week.HandyAny.teacherSchedule[teacher][i * 10 + j] =
-					Number.NEGATIVE_INFINITY;
-			}
+			week.teacherSchedule[teacher][X][Y] = -1;
 		});
 	});
 }
@@ -93,7 +89,7 @@ export function actualOptions(
 	const options = week.allClasses[m].l[X][Y].Options;
 	const res = options.filter((teacher) => {
 		return (
-			week.HandyAny.teacherSchedule[teacher][X * 10 + Y] === -1 &&
+			week.teacherSchedule[teacher][X][Y] === -1 &&
 			week.allClasses[m].teachers[teacher].remPeriods > 0
 		);
 	});
@@ -172,7 +168,7 @@ export const putHimAt = function (
 		if (
 			!teacherHasNoMoreemptyAvailables(teacher, teachers) &&
 			allClasses[m].l[X][Y].currentTeacher === "" &&
-			week.HandyAny.teacherSchedule[teacher][X * 10 + Y] === -1
+			week.teacherSchedule[teacher][X][Y] === -1
 		) {
 			allClasses[m].l[X][Y].currentTeacher = teacher;
 			teachers[teacher].remPeriods--;
@@ -183,7 +179,7 @@ export const putHimAt = function (
 					Pos
 				);
 			});
-			week.HandyAny.teacherSchedule[teacher][X * 10 + Y] = m;
+			week.teacherSchedule[teacher][X][Y] = m;
 			if (week.refreshTable !== undefined) {
 				week.refreshTable[m][X][Y]();
 			}
@@ -207,7 +203,7 @@ export const putHimAt = function (
 					teachers[t].emptyAvailables.push(Pos);
 				}
 			});
-			week.HandyAny.teacherSchedule[theTeacherBeingRemoved][X * 10 + Y] = -1;
+			week.teacherSchedule[theTeacherBeingRemoved][X][Y] = -1;
 			if (week.refreshTable !== undefined) {
 				week.refreshTable[m][X][Y]();
 			}

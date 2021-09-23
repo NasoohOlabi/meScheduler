@@ -218,6 +218,12 @@ export interface ICell {
 	handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
+export interface ITeacherSchedule {
+	[details: string] : (number|null)[][];
+}
+export interface IAvailables {
+	[details: string] : [number,number][];
+}
 export interface IWEEK_GLOBAL_Object {
 	allClasses: IClass[];
 	teachersGuild: string[];
@@ -227,8 +233,8 @@ export interface IWEEK_GLOBAL_Object {
 	Swaping: boolean;
 	currentSolutionNumber: number;
 	activateList: { Pos: [number, number]; m: number; teacher: string }[][];
-	availables: any;
-	HandyAny: any;
+	availables: IAvailables;
+	teacherSchedule: ITeacherSchedule;
 }
 export interface IClass {
 	l: lCellObj[][];
