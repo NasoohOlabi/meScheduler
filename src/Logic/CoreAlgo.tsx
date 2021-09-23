@@ -643,7 +643,7 @@ export const someHowPutHimAt = (
 		Done(m, week)({});
 	}
 
-	week.forceUpdate();
+	week.forceUpdate && week.forceUpdate();
 };
 export const Done = (m: number, week: IWEEK_GLOBAL_Object) => {
 	return (e: any) => {
@@ -652,7 +652,7 @@ export const Done = (m: number, week: IWEEK_GLOBAL_Object) => {
 			week.Swaping = false;
 			week.activateList = [];
 			week.currentSolutionNumber = 0;
-			week.forceUpdate();
+			week.forceUpdate && week.forceUpdate();
 			return;
 		}
 		for (let i = 0; i < sol.length; i++) {
@@ -665,7 +665,7 @@ export const Done = (m: number, week: IWEEK_GLOBAL_Object) => {
 		week.Swaping = false;
 		week.activateList = [];
 		week.currentSolutionNumber = 0;
-		week.forceUpdate();
+		week.forceUpdate && week.forceUpdate();
 	};
 };
 

@@ -11,11 +11,14 @@ import {
 	useForceUpdate,
 	teacherScheduleInit,
 	randomFiller,
+	fastForward,
 } from "../Logic/Logic";
-import { emptyNumMatrix, loopOverClass, newGrid } from "../Logic/util";
+import { emptyNumMatrix, newGrid } from "../Logic/util";
 import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
-import { someHowPutHimAt } from "../Logic/CoreAlgo";
-//import greenlet from 'greenlet'
+
+// Not the worker-loader! syntax to keep Webpack happy
+import PrimeWorker from "worker-loader!./worker/worker";
+
 
 var day = {
 	Sunday: 0,
@@ -139,7 +142,7 @@ var grade7class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade7class2: IClass = {
 	l: newGrid(),
@@ -215,7 +218,7 @@ var grade7class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade8class1: IClass = {
 	l: newGrid(),
@@ -297,7 +300,7 @@ var grade8class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade8class2: IClass = {
 	l: newGrid(),
@@ -379,7 +382,7 @@ var grade8class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade9class1: IClass = {
 	l: newGrid(),
@@ -451,7 +454,7 @@ var grade9class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade9class2: IClass = {
 	l: newGrid(),
@@ -523,7 +526,7 @@ var grade9class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade10class1: IClass = {
 	l: newGrid(),
@@ -600,7 +603,7 @@ var grade10class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade10class2: IClass = {
 	l: newGrid(),
@@ -677,7 +680,7 @@ var grade10class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade11class1: IClass = {
 	l: newGrid(),
@@ -759,7 +762,7 @@ var grade11class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade11class2: IClass = {
 	l: newGrid(),
@@ -841,7 +844,7 @@ var grade11class2: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 var grade12class1: IClass = {
 	l: newGrid(),
@@ -903,7 +906,7 @@ var grade12class1: IClass = {
 			periodsHere: [],
 			emptyAvailables: [],
 		},
-	}
+	},
 };
 export var allClasses = [
 	grade7class1,
@@ -1553,7 +1556,7 @@ export function WeekView(theme: any): JSX.Element {
 			allClasses[0].l[0].length
 		)
 	).current;
-	const WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object = React.useRef({
+	let WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object = React.useRef({
 		allClasses,
 		teachersGuild,
 		refreshTable,
@@ -1563,7 +1566,7 @@ export function WeekView(theme: any): JSX.Element {
 		activateList: [],
 		tableFooterRefresher: [],
 		availables,
-    teacherSchedule: {}
+		teacherSchedule: {},
 	}).current;
 	const handleChange = (School: IClass[]) => {
 		return (Pos: [number, number], m: number) => {
@@ -1580,13 +1583,15 @@ export function WeekView(theme: any): JSX.Element {
 	const initCell = (m: number) => {
 		return (Pos: [number, number]) => {
 			return (cellRefresher: any) => {
-				WEEK_GLOBAL_Object.refreshTable[m][Pos[0]][Pos[1]] = cellRefresher;
+        if(WEEK_GLOBAL_Object.refreshTable!== undefined)
+				  WEEK_GLOBAL_Object.refreshTable[m][Pos[0]][Pos[1]] = cellRefresher;
 			};
 		};
 	};
 	const initTableFooter = (m: number) => {
 		return (tableFooterfn: any) => {
-			WEEK_GLOBAL_Object.tableFooterRefresher[m] = tableFooterfn;
+      if(WEEK_GLOBAL_Object.tableFooterRefresher!== undefined)
+  			WEEK_GLOBAL_Object.tableFooterRefresher[m] = tableFooterfn;
 		};
 	};
 	// const updateMatrix (allClasses.length)*(class.l.length)*(class.l[0].length)
@@ -1602,40 +1607,12 @@ export function WeekView(theme: any): JSX.Element {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
-
-	return (
+  
+  return (
 		<div className={classes.root}>
 			<Button
-				onClick={() => {
-					console.time("fast");
-					WEEK_GLOBAL_Object.allClasses.forEach((Class: IClass, m: number) => {
-						const empties: [number, number][] = [];
-						loopOverClass((u: number, v: number) => {
-							if (
-								Class.l[u][v].currentTeacher !== "" ||
-								Class.l[u][v].isCemented
-							)
-								return;
-							else empties.push([u, v]);
-						});
-						empties.forEach((Pos: [number, number]) => {
-							const [u, v] = Pos;
-							const teachers = Class.l[u][v].Options.sort(
-								(a, b) => 0.5 - Math.random()
-							);
-							let ind = 0;
-							while (
-								Class.l[u][v].currentTeacher === "" &&
-								ind < teachers.length
-							) {
-								const teacher = Class.l[u][v].Options[ind];
-								someHowPutHimAt(m, teacher, [u, v], WEEK_GLOBAL_Object, false);
-								ind++;
-							}
-						});
-					});
-					console.log(`I did my best!!!!`);
-					console.timeEnd("fast");
+				onClick={(e) => {
+					fastForward(WEEK_GLOBAL_Object);
 				}}
 			>
 				fast Forward
@@ -1647,6 +1624,38 @@ export function WeekView(theme: any): JSX.Element {
 				}}
 			>
 				randomFiller
+			</Button>
+			<Button
+				onClick={(e) => {
+					if (window.Worker) {
+						// const myWorker = new Worker("./worker/worker.ts");
+						const myWorker = new PrimeWorker();
+						
+						myWorker.postMessage({
+							...WEEK_GLOBAL_Object,
+							refreshTable: undefined,
+							forceUpdate: undefined,
+							tableFooterRefresher: undefined,
+						});
+						
+						console.log("working on it");
+						
+						myWorker.onmessage = function (e) {
+							WEEK_GLOBAL_Object = {
+								...e.data,
+								refreshTable: WEEK_GLOBAL_Object.refreshTable,
+								forceUpdate: WEEK_GLOBAL_Object.forceUpdate,
+								tableFooterRefresher: WEEK_GLOBAL_Object.tableFooterRefresher,
+							};
+							console.log("Message received from worker");
+						};
+						
+					} else {
+						console.log("Your browser doesn't support web workers.");
+					}
+				}}
+			>
+				Worker Grand fill
 			</Button>
 			<Grid container spacing={0}>
 				<Grid item xs={12}>

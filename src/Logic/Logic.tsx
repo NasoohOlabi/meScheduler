@@ -302,7 +302,36 @@ export const SwitchEventHander = (
 		// noOtherOptionButToPutHere(School , m , teachersGuild, week);
 	};
 };
-
+export const fastForward = (week: IWEEK_GLOBAL_Object) => {
+	console.time("fast");
+	week.allClasses.forEach((Class: IClass, m: number) => {
+		const empties: [number, number][] = [];
+		loopOverClass((u: number, v: number) => {
+			if (
+				Class.l[u][v].currentTeacher !== "" ||
+				Class.l[u][v].isCemented
+			)
+				return;
+			else empties.push([u, v]);
+		});
+		empties.forEach((Pos: [number, number]) => {
+			const [u, v] = Pos;
+			const teachers = Class.l[u][v].Options.sort(
+				(a, b) => 0.5 - Math.random()
+			);
+			let ind = 0;
+			while (
+				Class.l[u][v].currentTeacher === "" &&
+				ind < teachers.length
+			) {
+				const teacher = Class.l[u][v].Options[ind];
+				someHowPutHimAt(m, teacher, [u, v], week, false);
+				ind++;
+			}
+		});
+	});
+	console.timeEnd("fast");
+}
 // export const threeTeachersOptionsList = (
 // 	teacher: string,
 // 	oldTeacher: string,

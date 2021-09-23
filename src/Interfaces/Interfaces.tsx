@@ -227,9 +227,9 @@ export interface IAvailables {
 export interface IWEEK_GLOBAL_Object {
 	allClasses: IClass[];
 	teachersGuild: string[];
-	refreshTable: (() => void)[][][];
-	tableFooterRefresher: (() => void)[];
-	forceUpdate: () => void;
+	refreshTable: (() => void)[][][] | undefined;
+	tableFooterRefresher: (() => void)[] | undefined;
+	forceUpdate: () => void | undefined;
 	Swaping: boolean;
 	currentSolutionNumber: number;
 	activateList: { Pos: [number, number]; m: number; teacher: string }[][];
