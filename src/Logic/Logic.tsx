@@ -53,10 +53,8 @@ export function teacherScheduleInit(
 		});
 	});
 }
-export function randomFiller(week: IWEEK_GLOBAL_Object) {
+export async function randomFiller(week: IWEEK_GLOBAL_Object) {
 	const allClasses = week.allClasses;
-	// random filler
-
 	for (let m = allClasses.length - 1; m >= 0; m--) {
 		const Class = allClasses[m];
 		loopOverClass((i: number, j: number) => {
@@ -285,7 +283,6 @@ export const noOtherOptionButToPutHere = (
 // };
 export const SwitchEventHander = (
 	Pos: [number, number],
-	School: IClass[],
 	m: number,
 	teachersGuild: string[],
 	week: IWEEK_GLOBAL_Object
@@ -302,7 +299,7 @@ export const SwitchEventHander = (
 		// noOtherOptionButToPutHere(School , m , teachersGuild, week);
 	};
 };
-export const fastForward = (week: IWEEK_GLOBAL_Object) => {
+export const fastForward = async (week: IWEEK_GLOBAL_Object) => {
 	console.time("fast");
 	week.allClasses.forEach((Class: IClass, m: number) => {
 		const empties: [number, number][] = [];

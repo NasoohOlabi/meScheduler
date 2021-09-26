@@ -183,12 +183,12 @@ export function BasicTable(props: IBasicTableProps) {
 							component="th"
 							scope="row"
 							onClick={(event) => {
-								console.log(props.School[props.m]);
+								console.log(week.allClasses[props.m]);
 								console.log(week);
 							}}
 						>
 							{" "}
-							{props.School[props.m].Name}{" "}
+							{week.allClasses[props.m].Name}{" "}
 						</TableCell>
 						{props.headRow.map((x, c) => {
 							return (
@@ -207,12 +207,12 @@ export function BasicTable(props: IBasicTableProps) {
 									{" "}
 									{day}{" "}
 								</TableCell>
-								{props.School[props.m].l[index].map((d, jndex) => {
+								{week.allClasses[props.m].l[index].map((d, jndex) => {
 									return (
 										<Cell
 											key={`${[index, jndex]}`}
 											cellInitializer={props.cellInitializer([index, jndex])}
-											data={props.School[props.m].l[index][jndex]}
+											data={week.allClasses[props.m].l[index][jndex]}
 											Pos={[index, jndex]}
 											m={props.m}
 											teacher={

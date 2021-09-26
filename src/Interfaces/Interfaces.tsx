@@ -178,7 +178,6 @@ export interface I_installButtonProps {
 	className?: any;
 }
 export interface IBasicTableProps {
-	School: IClass[];
 	m: number;
 	handleChange: any;
 	cellInitializer: any;
