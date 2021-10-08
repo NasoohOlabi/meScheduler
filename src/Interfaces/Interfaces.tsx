@@ -2,15 +2,17 @@
 import { Theme } from "@material-ui/core";
 import { backtrack, takeOneOffTheStack } from "../Logic/CoreAlgo";
 import { actionType, util } from "../Logic/util";
+import { PosType, refreshTableType, tableFooterRefresherType } from "../types";
+import ClassObj, { NUM_OF_DAYS, NUM_OF_PERIODS_PER_DAY } from "./ClassObj";
 
 /**
  * obj : {
- * Pos: [number, number],
+ * Pos: PosType,
  * m: number,
  * teacher: string}
  */
 export interface IActlistObj {
-	Pos: [number, number];
+	Pos: PosType;
 	m: number;
 	teacher: string;
 }
@@ -41,7 +43,7 @@ export class Queue<T> {
  */
 export type callNodeType = {
 	teacher: string;
-	Pos: [number, number];
+	Pos: PosType;
 	m: number;
 	callTo: "pre" | "re" | "pivotTo" | "nothing";
 	parent: callNodeType | undefined | null;
@@ -134,7 +136,10 @@ export class argumentsQueue {
 				this._stats.pivotToCalls++;
 				pivot_fn(vertix);
 			} else {
-				throw { ...vertix, message: "callTo pivotTo with missing pivotArgs" };
+				throw {
+					...vertix,
+					message: "callTo pivotTo with missing pivotArgs",
+				};
 			}
 		} else if (vertix.callTo === "nothing") {
 			console.warn(`considering nothing a solution : `, vertix);
@@ -191,25 +196,29 @@ export interface ITableFooter {
 	tableFooterInitializer: any;
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
-enum Screen {
+export enum Screen {
 	ETA,
 	TABLE,
+	DATAPARSER,
 }
 export interface INavProps {
 	UI: Screen;
 	switchToTable: (event: any) => void;
 	switchToETA: (event: any) => void;
+	switchToDataParser: (event: any) => void;
 }
 export interface IMyAppBarProps {
 	UI: Screen;
 	switchToTable: (event: any) => void;
 	switchToETA: (event: any) => void;
+	switchToDataParser: (event: any) => void;
 	toggleTheme: (event: any) => void;
+	toggleLang: (event: any) => void;
 	theme: Theme;
 	darkThemed: boolean;
 }
 export interface ICell {
-	Pos: [number, number];
+	Pos: PosType;
 	data: lCellObj;
 	cellInitializer: any;
 	m: number;
@@ -218,25 +227,67 @@ export interface ICell {
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
 export interface ITeacherSchedule {
-	[details: string] : (number|null)[][];
+	[index: string]: (number | null)[][];
 }
 export interface IAvailables {
-	[details: string] : [number,number][];
+	[index: string]: PosType[];
+}
+export interface IClassTeachers {
+	[index: string]: ClassTeacherData;
 }
 export interface IWEEK_GLOBAL_Object {
-	allClasses: IClass[];
+	allClasses: ClassObj[];
 	teachersGuild: string[];
-	refreshTable: (() => void)[][][] | undefined;
-	tableFooterRefresher: (() => void)[] | undefined;
-	forceUpdate: () => void | undefined;
+	refreshTable?: (() => void)[][][];
+	tableFooterRefresher?: (() => void)[];
+	forceUpdate?: () => void;
 	Swaping: boolean;
 	currentSolutionNumber: number;
-	activateList: { Pos: [number, number]; m: number; teacher: string }[][];
+	activateList: { Pos: PosType; m: number; teacher: string }[][];
 	availables: IAvailables;
 	teacherSchedule: ITeacherSchedule;
+}
+export class WeekObj implements IWEEK_GLOBAL_Object {
+	allClasses: ClassObj[] = [];
+	teachersGuild: string[] = [];
+	activateList: IActlistObj[][] = [];
+	availables: IAvailables = {};
+	refreshTable: refreshTableType = [];
+	tableFooterRefresher: tableFooterRefresherType = [];
+	teacherSchedule: ITeacherSchedule = {};
+	forceUpdate: () => void = () => {};
+	Swaping = false;
+	currentSolutionNumber = 0;
+	public addClass() {
+		const cls = new ClassObj();
+		this.allClasses.push(cls);
+		this.refreshTable.push(cls.refreshTable());
+		this.tableFooterRefresher.push(() => {});
+	}
+	public addTeacher(ind: number, m: number, teacher: string, Periods: number) {
+		this.teachersGuild[ind] = teacher;
+		this.allClasses[m].addTeacher(teacher, Periods);
+	}
+	public teacherScheduleInit() {
+		this.teachersGuild.forEach((teacher) => {
+			this.teacherSchedule[teacher] = [...Array(NUM_OF_DAYS)].map((e) =>
+				Array(NUM_OF_PERIODS_PER_DAY).fill(null)
+			);
+			this.availables[teacher].forEach(([X, Y]: PosType) => {
+				this.teacherSchedule[teacher][X][Y] = -1;
+			});
+		});
+	}
 }
 export interface IClass {
 	l: lCellObj[][];
 	Name: string;
-	teachers: any;
+	teachers: IClassTeachers;
+}
+
+export interface ClassTeacherData {
+	Periods: number;
+	remPeriods: number;
+	periodsHere: PosType[];
+	emptyAvailables: PosType[];
 }

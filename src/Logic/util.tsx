@@ -3,24 +3,15 @@ import {
 	IActlistObj,
 	IClass,
 	IWEEK_GLOBAL_Object,
-	lCellObj,
 } from "../Interfaces/Interfaces";
+import { PosType, TeacherType_nullValue, TeacherType_WildCard } from "../types";
 
 // testing git here
 
-export const equals = (a: number[], b: number[]) => {
-	if (a.length === b.length) {
-		for (let i = 0; i < a.length; i++) {
-			if (!(a[i] === b[i])) {
-				return false;
-			}
-		}
-		return true;
-	} else {
-		return false;
-	}
+export const equals = (a: PosType, b: PosType) => {
+	return a[0] === b[0] && a[1] === b[1];
 };
-export const contains = (a: [number, number][], Pos: [number, number]) => {
+export const contains = (a: PosType[], Pos: PosType) => {
 	for (let i = 0; i < a.length; i++) {
 		if (equals(a[i], Pos)) {
 			return true;
@@ -28,160 +19,12 @@ export const contains = (a: [number, number][], Pos: [number, number]) => {
 	}
 	return false;
 };
-export const guard = (a: any, Pos: [number, number]): [number, number][] => {
-	if (a === undefined) {
-		let b: [number, number][] = [Pos];
-		return b;
-	} else {
-		a.push(Pos);
-		return a;
-	}
-};
-export const guardRemove = (
-	a: any,
-	Pos: [number, number]
-): [number, number][] => {
-	if (a === undefined) {
-		let b: [number, number][] = [Pos];
-		return b;
-	} else {
-		a = a.filter((item: any) => !equals(item, Pos));
-		return a;
-	}
-};
-export const guardPeriodsList = (l: any): [number, number][] => {
-	return l;
-};
-// const positionFilled = (Pos : [number,number] , Class : IClass)=>{
-//     for (let i = 0 ; i < Class.teachers.length ; i++){
-//         if ( contains(guardPeriodsList(Class.teachers[i][2]) , Pos)){
-//         Class.teachers[i][2] = guardRemove(Class.teachers[i][2] , Pos);
-//         }
-//     }
-// };
-
-// for (let i = 0 ; i<Class.teachers.length ; i++){
-//   if( Class.teachers[i][1] === Class.teachers[i][2]?.length){
-//     let teacher : string = Class.teachers[i][0];
-//     let periods : [number,number][] = guardPeriodsList(Class.teachers[i][2]);
-//     for (let j=0 ; j< periods.length ; j++){
-//       if( Class.l[periods[j][0]][periods[j][1]][1].includes(teacher) ) {
-//         someHowPutHimAt(Class , teacher , [periods[j][0],periods[j][1]]);
-//       }
-//     }
-//   }
-// }
-export const withoutPos = (lst: [number, number][], Pos: [number, number]) => {
+export const withoutPos = (lst: PosType[], Pos: PosType) => {
 	return lst.filter((p) => !equals(Pos, p));
 };
 export const removed = (S: string[], s: string) => {
 	return S.slice(0, S.indexOf(s)).concat(S.slice(S.indexOf(s) + 1));
-	//return S.splice(S.indexOf(s),0,data);
 };
-// export async function AsyncFill() {
-//     try{
-//         await fill();
-//         //the loging isn't working
-//         console.log(allClasses);
-//         alert('DONE!');
-//     }catch(err){
-//         console.log(err);
-//     }
-
-// }
-
-// export function asyncFill( allClasses : IClass[] , availables : any) {
-//     console.log("asyncFill is executing...");
-//     return new Promise ((resolve,reject)=>{for (let i = 0; i < allClasses.length; i++) {
-//         console.log("in the new Promsie returned by async...");
-//         // each class
-//         let Class = allClasses[i];
-//         // scanning the grid
-//         for (let x = 0; x < Class.l.length; x++) {
-//         for (let y = 0; y < Class.l[x].length; y++) {
-//             // scanning the teachers in the class
-//             for (let j = 0; j < Class.teachers.length; j++) {
-//             let teacher : string = Class.teachers[j][0];
-//             //is the teacher available at that day
-//             if( contains(availables[teacher],[x,y]) && Class.teachers[j][1]>0) {
-//                 Class.l[x][y][1].push(teacher);
-//                 Class.teachers[j][2] = guard (Class.teachers[j][2] , [x,y]);
-//             }
-//             }
-//             Class.l[x][y].push(Class.l[x][y][1]);
-//         }
-//         }
-//         noOtherOptionButToPutHere(Class);
-//         console.log([allClasses,availables]);
-//         //resolve([allClasses,availables]);
-//     }});
-// };
-export const Key = (s1: string, s2: string, teachersGuild: string[]) => {
-	const i1 = teachersGuild.indexOf(s1);
-	const i2 = teachersGuild.indexOf(s2);
-	const s: string =
-		i1 > i2
-			? i1.toString() + "x" + i2.toString()
-			: i2.toString() + "x" + i1.toString();
-	return s;
-};
-export const defineOrPush = (
-	table: any,
-	hash: string,
-	Pos: [number, number]
-) => {
-	if (table[hash] === undefined) {
-		table[hash] = [Pos];
-	} else {
-		table[hash].push(Pos);
-	}
-};
-export const createEdgeIN = (
-	table: any,
-	s1: string,
-	s2: string,
-	Pos: [number, number],
-	teachersGuild: string[]
-) => {
-	// table[indes s1 , index s2] = pos
-	let hash = Key(s1, s2, teachersGuild);
-	defineOrPush(table, hash, Pos);
-	// table[i2][i1].push(Pos);
-};
-
-export const emptyObjArray = (n: number) => {
-	let g = [];
-	for (let i = 0; i < n; i++) {
-		g.push({});
-	}
-
-	return g;
-};
-
-export const emptyNumMatrix = (x: number, y: number, z: number) => {
-	let g: any = [];
-	for (let i = 0; i < x; i++) {
-		g.push([]);
-		for (let j = 0; j < y; j++) {
-			g[i].push([]);
-			for (let k = 0; k < z; k++) {
-				g[i][j].push(0);
-			}
-		}
-	}
-	return g;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function periods(list: [string, number][], teacher: string) {
-	for (let i = 0; i < list.length; i++) {
-		if (list[i][0] === teacher) {
-			return list[i][1];
-		}
-	}
-	return 0;
-}
-
 export const stringGuard = (arg: unknown): string => {
 	if (typeof arg === "string") {
 		return arg;
@@ -190,14 +33,8 @@ export const stringGuard = (arg: unknown): string => {
 		//do sth
 	}
 };
-export const castPosList = (l: any): [number, number][] => {
-	return l !== undefined ? l : [];
-};
-const getHisActPeriods = (
-	Class: IClass,
-	teacher: string
-): [number, number][] => {
-	let result: [number, number][] = [];
+const getHisActPeriods = (Class: IClass, teacher: string): PosType[] => {
+	let result: PosType[] = [];
 	loopOverClass((i, j) => {
 		if (Class.l[i][j].currentTeacher === teacher) {
 			result.push([i, j]);
@@ -205,11 +42,8 @@ const getHisActPeriods = (
 	});
 	return result;
 };
-export const listMinusAnother = (
-	a: [number, number][],
-	b: [number, number][]
-): [number, number][] => {
-	const result: [number, number][] = [];
+export const listMinusAnother = (a: PosType[], b: PosType[]): PosType[] => {
+	const result: PosType[] = [];
 	for (let i = 0; i < a.length; i++) {
 		if (!contains(b, a[i])) {
 			result.push(a[i]);
@@ -218,11 +52,11 @@ export const listMinusAnother = (
 	return result;
 };
 export const notInBase_copy = (
-	a: [number, number][],
+	a: PosType[],
 	m: number,
 	base: IActlistObj[]
-): [number, number][] => {
-	const result: [number, number][] = [];
+): PosType[] => {
+	const result: PosType[] = [];
 	a.forEach((Pos) => {
 		let notInBase = true;
 		for (let j = 0; j < base.length; j++) {
@@ -235,26 +69,6 @@ export const notInBase_copy = (
 	});
 	return result;
 };
-export const controledPush = (
-	a: IActlistObj[][],
-	sth: IActlistObj[],
-	n: number = 50
-) => {
-	if (a.length < n) {
-		a.push(sth);
-	}
-};
-export const controledAdd = (
-	a: IActlistObj[][],
-	sth: IActlistObj[][],
-	n: number = 50
-) => {
-	if (a.length < n) {
-		for (let i = 0; i < sth.length; i++) {
-			a.push(sth[i]);
-		}
-	}
-};
 export const loopOverClass = (
 	f: (i: number, j: number) => void,
 	n = 5,
@@ -266,27 +80,9 @@ export const loopOverClass = (
 		}
 	}
 };
-
-function cel(): lCellObj {
-	return { currentTeacher: "", isCemented: false, Options: [] };
-}
-function seven_cels(): lCellObj[] {
-	const acc = [];
-	for (let i = 0; i < 7; i++) {
-		acc.push(cel());
-	}
-	return acc;
-}
-export const newGrid = (): lCellObj[][] => {
-	const acc = [];
-	for (let i = 0; i < 5; i++) {
-		acc.push(seven_cels());
-	}
-	return acc;
-};
 const copyInstruction = (
 	obj: IActlistObj
-): { Pos: [number, number]; m: number; teacher: string } => {
+): { Pos: PosType; m: number; teacher: string } => {
 	const res = Object();
 	res.Pos = [];
 	res.Pos.push(obj.Pos[0]);
@@ -297,7 +93,7 @@ const copyInstruction = (
 };
 const copyInstructions = (
 	objects: IActlistObj[]
-): { Pos: [number, number]; m: number; teacher: string }[] => {
+): { Pos: PosType; m: number; teacher: string }[] => {
 	const res: any = [];
 	objects.forEach((object) => {
 		res.push(copyInstruction(object));
@@ -323,7 +119,7 @@ const pickAction = (
 };
 const situation = (
 	teacher: string,
-	Pos: [number, number],
+	Pos: PosType,
 	m: number,
 	week: IWEEK_GLOBAL_Object
 ): { currTeacher: string; action: actionType; r: number } => {
@@ -351,7 +147,7 @@ function situationInt(s: {
 	r: number;
 }) {
 	const { currTeacher: t, action: a, r } = s;
-	if (t === "") {
+	if (t === TeacherType_nullValue) {
 		if (a === "shift") {
 			if (r === -1) {
 				return 1;
@@ -383,9 +179,9 @@ function situationInt(s: {
 }
 
 function ruffleShuffle(
-	arr: { Pos: [number, number]; m: number; teacher: string }[][],
+	arr: { Pos: PosType; m: number; teacher: string }[][],
 	pivot: number
-): { Pos: [number, number]; m: number; teacher: string }[][] {
+): { Pos: PosType; m: number; teacher: string }[][] {
 	// a = [0,1,2,3,4,5,6]
 	// b = [0,1,2,3,4,5,6]
 	if (pivot > arr.length || pivot < 0) {
@@ -402,7 +198,7 @@ function ruffleShuffle(
 export type actionType = "shift" | "cycle";
 function stepMatch(a: IActlistObj, wild: IActlistObj | undefined): boolean {
 	if (wild === undefined) return false;
-	const skipTeacherMatching = wild.teacher === "*";
+	const skipTeacherMatching = wild.teacher === TeacherType_WildCard;
 	const skipPosMatching = equals(wild.Pos, [-1, -1]);
 	return (
 		(a.Pos === wild.Pos || skipPosMatching) &&

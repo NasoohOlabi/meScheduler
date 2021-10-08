@@ -3,19 +3,23 @@ import {
 	IWEEK_GLOBAL_Object,
 	IActlistObj,
 	callNodeType,
-	argumentsQueue
+	argumentsQueue,
 } from "../Interfaces/Interfaces";
+import { PosType, string, TeacherType_nullValue } from "../types";
 import { putHimAt } from "./Logic";
 import { util, equals } from "./util";
 
 function conflicts(
 	...args:
 		| [callNodeType]
-		| [IActlistObj[], { Pos: [number, number]; m: number; teacher: string }]
+		| [IActlistObj[], { Pos: PosType; m: number; teacher: string }]
 ) {
 	if (args.length === 1) {
 		const vertix = args[0];
-		if(vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]].isCemented){
+		if (
+			vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]]
+				.isCemented
+		) {
 			return true;
 		}
 		for (let i = 0; i < vertix.Pivots.length; i++) {
@@ -78,7 +82,10 @@ function conflicts(
 
 function preStrictConflicts(vertix: callNodeType) {
 	let tmp: callNodeType | null;
-	if (vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]].isCemented){
+	if (
+		vertix.week.allClasses[vertix.m].l[vertix.Pos[0]][vertix.Pos[1]]
+			.isCemented
+	) {
 		return true;
 	}
 	if (vertix.parent !== undefined) tmp = vertix.parent;
@@ -119,7 +126,8 @@ function pivotTo(vertix: callNodeType) {
 	if (vertix.pivotArgs === undefined) {
 		throw { ...vertix, message: "call to pivotTo with missing pivotArgs" };
 	} else if (!conflicts(vertix)) {
-		const gen: number = (vertix.pivotArgs.gen===undefined)?1:vertix.pivotArgs.gen+1;
+		const gen: number =
+			vertix.pivotArgs.gen === undefined ? 1 : vertix.pivotArgs.gen + 1;
 		const m = vertix.pivotArgs.next_m;
 		const nextNode = vertix.pivotArgs.AfterReChainNode;
 		const [X, Y] = vertix.Pos;
@@ -131,41 +139,57 @@ function pivotTo(vertix: callNodeType) {
 		if (nextNode !== undefined) NewStack.push(nextNode);
 		// const teachers = util.removed(vertix.week.allClasses[m].l[X][Y].Options, vertix.week.allClasses[m].l[X][Y].currentTeacher);
 		const replacementTeachers = vertix.week.allClasses[m].l[X][Y].Options;
-		const requirePivoting = replacementTeachers.filter((replacementTeacher: string) => {
-			if (
-				replacementTeacher === vertix.week.allClasses[m].l[X][Y].currentTeacher
-			)
-				return false;
-			const s = util.situation(replacementTeacher, vertix.Pos, m, vertix.week);
-			if (
-				s.r === -1 ||
-				(replacementTeacher === vertix.week.allClasses[vertix.m].l[X][Y].currentTeacher && s.r === vertix.m)
-			) {
-				q.enqueue({
-					callTo: "re",
-					parent: augmentedParent,
-					teacher: replacementTeacher,
-					Pos: vertix.Pos,
+		const requirePivoting = replacementTeachers.filter(
+			(replacementTeacher: string) => {
+				if (
+					replacementTeacher ===
+					vertix.week.allClasses[m].l[X][Y].currentTeacher
+				)
+					return false;
+				const s = util.situation(
+					replacementTeacher,
+					vertix.Pos,
 					m,
-					week: vertix.week,
-					cycleClosingParentName: replacementTeacher,
-					Action: s.action,
-					Pivots: [...NewStack],
-				});
-				return false;
-			} else if (s.r === vertix.m) {
-				return false;
-			} else return true;
-		});
-		if ( (replacementTeachers.length-1)-requirePivoting.length >= 2 )// doesn't require pivoting .length >=2
+					vertix.week
+				);
+				if (
+					s.r === -1 ||
+					(replacementTeacher ===
+						vertix.week.allClasses[vertix.m].l[X][Y].currentTeacher &&
+						s.r === vertix.m)
+				) {
+					q.enqueue({
+						callTo: "re",
+						parent: augmentedParent,
+						teacher: replacementTeacher,
+						Pos: vertix.Pos,
+						m,
+						week: vertix.week,
+						cycleClosingParentName: replacementTeacher,
+						Action: s.action,
+						Pivots: [...NewStack],
+					});
+					return false;
+				} else if (s.r === vertix.m) {
+					return false;
+				} else return true;
+			}
+		);
+		if (replacementTeachers.length - 1 - requirePivoting.length >= 2)
+			// doesn't require pivoting .length >=2
 			return;
-		else{
+		else {
 			// sample a random decreasing number of elements with each generation
 			requirePivoting
 				.sort((a, b) => 0.5 - Math.random())
-				.slice(0, Math.ceil(requirePivoting.length/gen));
+				.slice(0, Math.ceil(requirePivoting.length / gen));
 			requirePivoting.forEach((replacementTeacher): void => {
-				const s = util.situation(replacementTeacher, vertix.Pos, m, vertix.week);
+				const s = util.situation(
+					replacementTeacher,
+					vertix.Pos,
+					m,
+					vertix.week
+				);
 				pivotTo({
 					...vertix,
 					Pivots: [...NewStack], // if augmentedParent is null [] would have got to the next gen
@@ -184,7 +208,7 @@ function pivotTo(vertix: callNodeType) {
 							Pivots: [...NewStack],
 						},
 						beforeReChainNode: augmentedParent,
-						gen
+						gen,
 					},
 				});
 			});
@@ -218,7 +242,7 @@ function pre(vertix: callNodeType) {
 	const week = vertix.week;
 	const solutions = week.activateList;
 	if (!conflicts(vertix)) {
-		const edges: [number, number][] =
+		const edges: PosType[] =
 			week.allClasses[m].teachers[teacher].periodsHere ||
 			util.getHisActPeriods(week.allClasses[m], teacher);
 		const q_lenBefore = q.length();
@@ -277,11 +301,11 @@ function pre(vertix: callNodeType) {
 			});
 		});
 		const q_lenAfter = q.length();
-		if ((q_lenAfter - q_lenBefore) < 3){
-			while(localQueue.notEmpty()){
+		if (q_lenAfter - q_lenBefore < 3) {
+			while (localQueue.notEmpty()) {
 				// q.enqueue(localQueue.front())
-				localQueue.callFront(re,pre,pivotTo)
-				localQueue.dequeue()
+				localQueue.callFront(re, pre, pivotTo);
+				localQueue.dequeue();
 			}
 		}
 	}
@@ -321,7 +345,7 @@ function re(vertix: callNodeType) {
 	const madePivots: number = Pivots.length;
 	if (!conflicts(vertix)) {
 		if (
-			((Action === "shift" && S.currTeacher === "") ||
+			((Action === "shift" && S.currTeacher === TeacherType_nullValue) ||
 				cyclingActionSatisfied(S.currTeacher)) &&
 			!conflicts(vertix)
 		) {
@@ -333,9 +357,9 @@ function re(vertix: callNodeType) {
 				takeOneOffTheStack(vertix);
 			}
 		} else {
-			if (oldTeacher === "") return;
-			const edges: [number, number][] = week.availables[oldTeacher].filter(
-				(edge: [number, number]) => {
+			if (oldTeacher === TeacherType_nullValue) return;
+			const edges: PosType[] = week.availables[oldTeacher].filter(
+				(edge: PosType) => {
 					let tmp: callNodeType | null = vertix;
 					while (tmp !== null) {
 						if (equals(tmp.Pos, edge)) return false;
@@ -360,7 +384,8 @@ function re(vertix: callNodeType) {
 					Action,
 				};
 				if (
-					((Action === "shift" && newSituation.currTeacher === "") ||
+					((Action === "shift" &&
+						newSituation.currTeacher === TeacherType_nullValue) ||
 						cyclingActionSatisfied(newSituation.currTeacher)) &&
 					newSituation.r === -1 &&
 					!conflicts(newNode)
@@ -403,18 +428,17 @@ function re(vertix: callNodeType) {
 		}
 	}
 	const q_lenAfter = q.length();
-	if ((q_lenAfter - q_lenBefore) < 3 && madePivots < 3){
-		while(localQueue.notEmpty()){
+	if (q_lenAfter - q_lenBefore < 3 && madePivots < 3) {
+		while (localQueue.notEmpty()) {
 			// q.enqueue(localQueue.front())
-			localQueue.callFront(re,pre,pivotTo)
-			localQueue.dequeue()
+			localQueue.callFront(re, pre, pivotTo);
+			localQueue.dequeue();
 		}
 	}
-
 }
 const delegate = (
 	teacher: string,
-	Pos: [number, number],
+	Pos: PosType,
 	m: number,
 	week: IWEEK_GLOBAL_Object
 ) => {
@@ -480,7 +504,11 @@ const delegate = (
 				callTo: "pivotTo",
 				pivotArgs: {
 					next_m: S.r,
-					AfterReChainNode: { ...rootVertix, callTo: "re", Action: S.action },
+					AfterReChainNode: {
+						...rootVertix,
+						callTo: "re",
+						Action: S.action,
+					},
 					beforeReChainNode: null,
 				},
 			});
@@ -524,7 +552,7 @@ const delegate = (
 export const someHowPutHimAt = (
 	m: number,
 	teacher: string,
-	Pos: [number, number],
+	Pos: PosType,
 	week: IWEEK_GLOBAL_Object,
 	freeze: boolean = true
 ): void => {
@@ -573,9 +601,9 @@ export const someHowPutHimAt = (
 	// 	console.log("became");
 	// 	console.log(week.HandyAny.beforeAction);
 	// };
-//   console.time('delegate')
+	//   console.time('delegate')
 	delegate(teacher, Pos, m, week);
-//   console.timeEnd('delegate')
+	//   console.timeEnd('delegate')
 	// if (week.activateList.length > 0) {
 	// 	const ms: number[] = [];
 	// 	week.activateList[week.currentSolutionNumber].forEach((step) => {

@@ -9,17 +9,15 @@ import {
 	fill,
 	SwitchEventHander,
 	useForceUpdate,
-	teacherScheduleInit,
 	randomFiller,
 	fastForward,
 } from "../Logic/Logic";
-import { emptyNumMatrix } from "../Logic/util";
-import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
-import greenlet from "greenlet";
-import { allClasses, teachersGuild, availables } from "./Data";
+import { WeekObj } from "../Interfaces/Interfaces";
+// import { allClasses } from "./Data";
 import { texts } from "./UiText";
+import { PosType } from "../types";
+import greenlet from "greenlet";
 import { heavyLoad } from "./worker/worker";
-//sth##########################################################################################################
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -36,55 +34,24 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 	})
 );
-
-const addPeriods = (allClasses: IClass[]) => {
-	allClasses.forEach((clas: IClass) => {
-		Object.keys(clas.teachers).forEach((teacher) => {
-			clas.teachers[teacher].Periods = clas.teachers[teacher].remPeriods;
-		});
-	});
-};
-
 const workerize = greenlet(heavyLoad);
 export function WeekView(theme: any): JSX.Element {
 	const classes = useStyles();
 	const forceUpdate = useForceUpdate();
-	//initializing with nums works because you can't triger the switchEventHandler unless all Cells has mounted thus refreshTable becomes a (()=>void)[][][]
-	const refreshTable = React.useRef(
-		emptyNumMatrix(
-			allClasses.length,
-			allClasses[0].l.length,
-			allClasses[0].l[0].length
-		)
-	).current;
-	let WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object = React.useRef({
-		allClasses,
-		teachersGuild,
-		refreshTable,
-		forceUpdate,
-		Swaping: false,
-		currentSolutionNumber: 0,
-		activateList: [],
-		tableFooterRefresher: [],
-		availables,
-		teacherSchedule: {},
-	}).current;
+	let WEEK_GLOBAL_Object: WeekObj = React.useRef(new WeekObj()).current;
+	WEEK_GLOBAL_Object.forceUpdate = forceUpdate;
+
 	const handleChange = () => {
-		return (Pos: [number, number], m: number) => {
-			return SwitchEventHander(
-				Pos,
-				m,
-				teachersGuild,
-				WEEK_GLOBAL_Object
-			);
+		return (Pos: PosType, m: number) => {
+			return SwitchEventHander(Pos, m, WEEK_GLOBAL_Object);
 		};
 	};
-
 	const initCell = (m: number) => {
-		return (Pos: [number, number]) => {
+		return (Pos: PosType) => {
 			return (cellRefresher: any) => {
 				if (WEEK_GLOBAL_Object.refreshTable !== undefined)
-					WEEK_GLOBAL_Object.refreshTable[m][Pos[0]][Pos[1]] = cellRefresher;
+					WEEK_GLOBAL_Object.refreshTable[m][Pos[0]][Pos[1]] =
+						cellRefresher;
 			};
 		};
 	};
@@ -97,8 +64,7 @@ export function WeekView(theme: any): JSX.Element {
 	useEffect(
 		() => {
 			console.clear();
-			addPeriods(WEEK_GLOBAL_Object.allClasses);
-			teacherScheduleInit(WEEK_GLOBAL_Object, availables);
+			WEEK_GLOBAL_Object.teacherScheduleInit();
 			fill(WEEK_GLOBAL_Object);
 			forceUpdate();
 		},
@@ -120,7 +86,7 @@ export function WeekView(theme: any): JSX.Element {
 					forceUpdate();
 				}}
 			>
-				randomFiller
+				{texts.randomFillerButton}
 			</Button>
 			<Button
 				onClick={async (e) => {
@@ -133,12 +99,12 @@ export function WeekView(theme: any): JSX.Element {
 						//     return profile.name
 						// })
 						// console.log(await getName('developit'))
-						const data : any= JSON.stringify({
+						const data: any = JSON.stringify({
 							...WEEK_GLOBAL_Object,
 							refreshTable: undefined,
 							forceUpdate: undefined,
 							tableFooterRefresher: undefined,
-						})
+						});
 						const solved = JSON.parse(await workerize(data));
 						WEEK_GLOBAL_Object.allClasses = solved.allClasses;
 						WEEK_GLOBAL_Object.teacherSchedule = solved.teacherSchedule;
@@ -148,11 +114,12 @@ export function WeekView(theme: any): JSX.Element {
 					}
 				}}
 			>
+				{texts.randomFillerButton}
 				Worker Grand fill
 			</Button>
 			<Grid container spacing={0}>
 				<Grid item xs={12}>
-					{allClasses.map((Class, i) => {
+					{WEEK_GLOBAL_Object.allClasses.map((Class, i) => {
 						return (
 							<Paper key={i} className={classes.paper}>
 								<BasicTable
