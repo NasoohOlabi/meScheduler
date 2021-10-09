@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
 import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
-import { PosType, string, TeacherType_nullValue } from "../types";
+import { PosType, TeacherType_nullValue } from "../types";
 import { someHowPutHimAt } from "./CoreAlgo";
 import { contains, loopOverClass, withoutPos } from "./util";
 export function fill(week: IWEEK_GLOBAL_Object) {

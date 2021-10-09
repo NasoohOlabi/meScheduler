@@ -1,4 +1,4 @@
-import { PosType, string, TeacherType_nullValue } from "../types";
+import { PosType, TeacherType_nullValue } from "../types";
 import { ClassTeacherData, IClass } from "./Interfaces";
 import { IClassTeachers, lCellObj } from "./Interfaces";
 
@@ -26,6 +26,14 @@ export default class ClassObj implements IClass {
 	);
 	Name: string = "";
 	teachers: IClassTeachers = {};
+	constructor(...args: any[]) {
+		if (args && args.length === 1) {
+			const cls: IClass = args[0];
+			this.l = cls.l;
+			this.Name = cls.Name;
+			this.teachers = cls.teachers;
+		}
+	}
 	/**
 	 * refreshTable
 	 */

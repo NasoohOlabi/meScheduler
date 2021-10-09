@@ -5,7 +5,7 @@ import {
 	callNodeType,
 	argumentsQueue,
 } from "../Interfaces/Interfaces";
-import { PosType, string, TeacherType_nullValue } from "../types";
+import { PosType, TeacherType_nullValue } from "../types";
 import { putHimAt } from "./Logic";
 import { util, equals } from "./util";
 

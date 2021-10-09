@@ -1,5 +1,7 @@
 /* eslint-disable no-throw-literal */
 
+import { PosType, TeacherType_nullValue } from "../../types";
+
 export const heavyLoad = async (arg: string) => {
 	const equals = (a: number[], b: number[]) => {
 		if (a.length === b.length) {
@@ -13,7 +15,7 @@ export const heavyLoad = async (arg: string) => {
 			return false;
 		}
 	};
-	const contains = (a: [number, number][], Pos: [number, number]) => {
+	const contains = (a: PosType[], Pos: PosType) => {
 		for (let i = 0; i < a.length; i++) {
 			if (equals(a[i], Pos)) {
 				return true;
@@ -21,74 +23,11 @@ export const heavyLoad = async (arg: string) => {
 		}
 		return false;
 	};
-	// const positionFilled = (Pos : [number,number] , Class : IClass)=>{
-	//     for (let i = 0 ; i < Class.teachers.length ; i++){
-	//         if ( contains(guardPeriodsList(Class.teachers[i][2]) , Pos)){
-	//         Class.teachers[i][2] = guardRemove(Class.teachers[i][2] , Pos);
-	//         }
-	//     }
-	// };
-
-	// for (let i = 0 ; i<Class.teachers.length ; i++){
-	//   if( Class.teachers[i][1] === Class.teachers[i][2]?.length){
-	//     let teacher : string = Class.teachers[i][0];
-	//     let periods : [number,number][] = guardPeriodsList(Class.teachers[i][2]);
-	//     for (let j=0 ; j< periods.length ; j++){
-	//       if( Class.l[periods[j][0]][periods[j][1]][1].includes(teacher) ) {
-	//         someHowPutHimAt(Class , teacher , [periods[j][0],periods[j][1]]);
-	//       }
-	//     }
-	//   }
-	// }
-	const withoutPos = (lst: [number, number][], Pos: [number, number]) => {
+	const withoutPos = (lst: PosType[], Pos: PosType) => {
 		return lst.filter((p) => !equals(Pos, p));
 	};
-	// async function AsyncFill() {
-	//     try{
-	//         await fill();
-	//         //the loging isn't working
-	//         console.log(allClasses);
-	//         alert('DONE!');
-	//     }catch(err){
-	//         console.log(err);
-	//     }
-
-	// }
-
-	// function asyncFill( allClasses : IClass[] , availables : any) {
-	//     console.log("asyncFill is executing...");
-	//     return new Promise ((resolve,reject)=>{for (let i = 0; i < allClasses.length; i++) {
-	//         console.log("in the new Promsie returned by async...");
-	//         // each class
-	//         let Class = allClasses[i];
-	//         // scanning the grid
-	//         for (let x = 0; x < Class.l.length; x++) {
-	//         for (let y = 0; y < Class.l[x].length; y++) {
-	//             // scanning the teachers in the class
-	//             for (let j = 0; j < Class.teachers.length; j++) {
-	//             let teacher : string = Class.teachers[j][0];
-	//             //is the teacher available at that day
-	//             if( contains(availables[teacher],[x,y]) && Class.teachers[j][1]>0) {
-	//                 Class.l[x][y][1].push(teacher);
-	//                 Class.teachers[j][2] = guard (Class.teachers[j][2] , [x,y]);
-	//             }
-	//             }
-	//             Class.l[x][y].push(Class.l[x][y][1]);
-	//         }
-	//         }
-	//         noOtherOptionButToPutHere(Class);
-	//         console.log([allClasses,availables]);
-	//         //resolve([allClasses,availables]);
-	//     }});
-	// };
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-	const getHisActPeriods = (
-		Class: IClass,
-		teacher: string
-	): [number, number][] => {
-		let result: [number, number][] = [];
+	const getHisActPeriods = (Class: IClass, teacher: string): PosType[] => {
+		let result: PosType[] = [];
 		loopOverClass((i, j) => {
 			if (Class.l[i][j].currentTeacher === teacher) {
 				result.push([i, j]);
@@ -106,7 +45,7 @@ export const heavyLoad = async (arg: string) => {
 
 	const copyInstruction = (
 		obj: IActlistObj
-	): { Pos: [number, number]; m: number; teacher: string } => {
+	): { Pos: PosType; m: number; teacher: string } => {
 		const res = Object();
 		res.Pos = [];
 		res.Pos.push(obj.Pos[0]);
@@ -117,7 +56,7 @@ export const heavyLoad = async (arg: string) => {
 	};
 	const copyInstructions = (
 		objects: IActlistObj[]
-	): { Pos: [number, number]; m: number; teacher: string }[] => {
+	): { Pos: PosType; m: number; teacher: string }[] => {
 		const res: any = [];
 		objects.forEach((object) => {
 			res.push(copyInstruction(object));
@@ -143,7 +82,7 @@ export const heavyLoad = async (arg: string) => {
 	};
 	const situation = (
 		teacher: string,
-		Pos: [number, number],
+		Pos: PosType,
 		m: number,
 		week: IWEEK_GLOBAL_Object
 	): { currTeacher: string; action: actionType; r: number } => {
@@ -171,7 +110,7 @@ export const heavyLoad = async (arg: string) => {
 		r: number;
 	}) {
 		const { currTeacher: t, action: a, r } = s;
-		if (t === "") {
+		if (t === TeacherType_nullValue) {
 			if (a === "shift") {
 				if (r === -1) {
 					return 1;
@@ -206,12 +145,12 @@ export const heavyLoad = async (arg: string) => {
 
 	/**
 	 * obj : {
-	 * Pos: [number, number],
+	 * Pos: PosType,
 	 * m: number,
 	 * teacher: string}
 	 */
 	interface IActlistObj {
-		Pos: [number, number];
+		Pos: PosType;
 		m: number;
 		teacher: string;
 	}
@@ -242,7 +181,7 @@ export const heavyLoad = async (arg: string) => {
 	 */
 	type callNodeType = {
 		teacher: string;
-		Pos: [number, number];
+		Pos: PosType;
 		m: number;
 		callTo: "pre" | "re" | "pivotTo" | "nothing";
 		parent: callNodeType | undefined | null;
@@ -296,7 +235,9 @@ export const heavyLoad = async (arg: string) => {
 			}
 			console.log(this);
 			const total =
-				this._stats.preCalls + this._stats.reCalls + this._stats.pivotToCalls;
+				this._stats.preCalls +
+				this._stats.reCalls +
+				this._stats.pivotToCalls;
 			const obj = {
 				...this._stats,
 				total,
@@ -329,13 +270,17 @@ export const heavyLoad = async (arg: string) => {
 					re_fn(vertix);
 				}
 				// eslint-disable-next-line no-throw-literal
-				else throw { ...vertix, message: "Action not specified for re call" };
+				else
+					throw { ...vertix, message: "Action not specified for re call" };
 			} else if (vertix.callTo === "pivotTo") {
 				if (vertix.pivotArgs !== undefined) {
 					this._stats.pivotToCalls++;
 					pivot_fn(vertix);
 				} else {
-					throw { ...vertix, message: "callTo pivotTo with missing pivotArgs" };
+					throw {
+						...vertix,
+						message: "callTo pivotTo with missing pivotArgs",
+					};
 				}
 			} else if (vertix.callTo === "nothing") {
 				console.warn(`considering nothing a solution : `, vertix);
@@ -358,17 +303,17 @@ export const heavyLoad = async (arg: string) => {
 		[details: string]: (number | null)[][];
 	}
 	interface IAvailables {
-		[details: string]: [number, number][];
+		[details: string]: PosType[];
 	}
 	interface IWEEK_GLOBAL_Object {
 		allClasses: IClass[];
-		teachersGuild: string[];
+		teachersGuild: number[];
 		refreshTable: (() => void)[][][] | undefined;
 		tableFooterRefresher: (() => void)[] | undefined;
 		forceUpdate: () => void | undefined;
 		Swaping: boolean;
 		currentSolutionNumber: number;
-		activateList: { Pos: [number, number]; m: number; teacher: string }[][];
+		activateList: { Pos: PosType; m: number; teacher: string }[][];
 		availables: IAvailables;
 		teacherSchedule: ITeacherSchedule;
 	}
@@ -384,7 +329,7 @@ export const heavyLoad = async (arg: string) => {
 			const Class = allClasses[m];
 			loopOverClass((i: number, j: number) => {
 				if (
-					Class.l[i][j].currentTeacher === "" &&
+					Class.l[i][j].currentTeacher === TeacherType_nullValue &&
 					Class.l[i][j].Options.length !== 0 &&
 					!Class.l[i][j].isCemented
 				) {
@@ -399,7 +344,7 @@ export const heavyLoad = async (arg: string) => {
 		}
 	}
 	function actualOptions(
-		Pos: [number, number],
+		Pos: PosType,
 		m: number,
 		week: IWEEK_GLOBAL_Object,
 		command: "unfiltered" | "filtered" = "unfiltered"
@@ -417,14 +362,6 @@ export const heavyLoad = async (arg: string) => {
 		}
 		return res;
 	}
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------------------------------
-
 	const teacherHasNoMoreemptyAvailables = (
 		teacher: string,
 		teachersList: any
@@ -433,50 +370,11 @@ export const heavyLoad = async (arg: string) => {
 			console.log(`teachersList[${teacher}] = undefined`, teachersList);
 		return teachersList[teacher].remPeriods < 1;
 	};
-
-	// const teacherIsntAvailableAt = function(
-	// 	allClasses : IClass[] ,
-	// 	m : number,
-	// 	teacher : string ,
-	// 	Pos : [number , number] ,
-	// 	refreshTable? : (()=>void) [][][],
-	// 	doit : boolean = true
-	// ){
-	// 	if(doit){
-	// 		const [x , y] = Pos;
-	// 		for (let i = 0 ; i<allClasses.length ;i++){
-	// 			if ( allClasses[i].l[x][y].Options.includes(teacher) && allClasses[i].l[x][y].currentTeacher !== teacher && i!==m){
-	// 				// remove from options
-	// 				// allClasses[i].l[x][y].Options = removed( allClasses[i].l[x][y].Options , teacher);
-	// 				//remove Pos as an availability for the teacher
-	// 				allClasses[i].teachers[teacher].emptyAvailables= guardRemove (allClasses[i].teachers[teacher].emptyAvailables , [x,y]);
-	// 				if(refreshTable !== undefined){
-	// 					refreshTable[i][x][y]();
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// 	else{
-	// 		const [x , y] = Pos;
-	// 		for (let i = 0 ; i<allClasses.length ;i++){
-	// 			if ( allClasses[i].l[x][y].Options.includes(teacher)){
-	// 				// remove from options
-	// 				// allClasses[i].l[x][y].Options.push(teacher);
-	// 				//remove Pos as an availability for the teacher
-	// 				allClasses[i].teachers[teacher].emptyAvailables.push([x,y]);
-	// 				if(refreshTable !== undefined){
-	// 					refreshTable[i][x][y]();
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 	const putHimAt = function (
 		week: IWEEK_GLOBAL_Object,
 		m: number,
 		teacher: string,
-		Pos: [number, number],
+		Pos: PosType,
 		op: "put" | "remove"
 	) {
 		const doit: boolean = op === "put";
@@ -486,7 +384,7 @@ export const heavyLoad = async (arg: string) => {
 		if (doit) {
 			if (
 				!teacherHasNoMoreemptyAvailables(teacher, teachers) &&
-				allClasses[m].l[X][Y].currentTeacher === "" &&
+				allClasses[m].l[X][Y].currentTeacher === TeacherType_nullValue &&
 				week.teacherSchedule[teacher][X][Y] === -1
 			) {
 				allClasses[m].l[X][Y].currentTeacher = teacher;
@@ -508,9 +406,9 @@ export const heavyLoad = async (arg: string) => {
 				);
 			}
 		} else {
-			if (allClasses[m].l[X][Y].currentTeacher !== "") {
+			if (allClasses[m].l[X][Y].currentTeacher !== TeacherType_nullValue) {
 				const theTeacherBeingRemoved = allClasses[m].l[X][Y].currentTeacher;
-				allClasses[m].l[X][Y].currentTeacher = "";
+				allClasses[m].l[X][Y].currentTeacher = TeacherType_nullValue;
 				teachers[theTeacherBeingRemoved].remPeriods++;
 				teachers[theTeacherBeingRemoved].periodsHere = withoutPos(
 					teachers[theTeacherBeingRemoved].periodsHere,
@@ -529,52 +427,28 @@ export const heavyLoad = async (arg: string) => {
 			}
 		}
 	};
-	// const autoFill = function (
-	//   School: IClass[],
-	//   m: number,
-	//   teachersGuild: string[],
-	//   week: IWEEK_GLOBAL_Object
-	// ) {
-	//   let xxx = 0;
-	//   for (let x = 0; x < School[m].l.length; x++) {
-	//     for (let y = 0; y < School[m].l[x].length; y++) {
-	//       if (
-	//         School[m].l[x][y].Options.length === 1 &&
-	//         School[m].l[x][y].currentTeacher === ""
-	//       ) {
-	//         //do the change
-	//         someHowPutHimAt(m, School[m].l[x][y].Options[0], [x, y], week);
-
-	//         //alert(`here in [${x},${y}] calling with ${School[i].l[x][y].Options[0]}  who ${(teacherHasNoMoreemptyAvailables(School[i].l[x][y].Options[0] ,School[i].teachers)?'has NOOOOO more':'has more')}`);
-	//         //go back to the start to see if your changes affected what you have already checked
-
-	//         //do a clean if the teacher has no more periods
-	//         // debuging risky over looping infinite loop
-	//         if (xxx < 100) {
-	//           x = 0;
-	//           y = 0;
-	//           xxx++;
-	//         } else {
-	//           alert(`OK here is the deal infinite loop \n Again `);
-	//         }
-	//       }
-	//     }
-	//   }
-	// };
 	const fastForward = async (week: IWEEK_GLOBAL_Object) => {
 		console.time("fast");
 		week.allClasses.forEach((Class: IClass, m: number) => {
-			const empties: [number, number][] = [];
+			const empties: PosType[] = [];
 			loopOverClass((u: number, v: number) => {
-				if (Class.l[u][v].currentTeacher !== "" || Class.l[u][v].isCemented)
+				if (
+					Class.l[u][v].currentTeacher !== TeacherType_nullValue ||
+					Class.l[u][v].isCemented
+				)
 					return;
 				else empties.push([u, v]);
 			});
-			empties.forEach((Pos: [number, number]) => {
+			empties.forEach((Pos: PosType) => {
 				const [u, v] = Pos;
-				const teachers = Class.l[u][v].Options.sort(() => 0.5 - Math.random());
+				const teachers = Class.l[u][v].Options.sort(
+					() => 0.5 - Math.random()
+				);
 				let ind = 0;
-				while (Class.l[u][v].currentTeacher === "" && ind < teachers.length) {
+				while (
+					Class.l[u][v].currentTeacher === TeacherType_nullValue &&
+					ind < teachers.length
+				) {
 					const teacher = Class.l[u][v].Options[ind];
 					someHowPutHimAt(m, teacher, [u, v], week, false);
 					ind++;
@@ -587,7 +461,7 @@ export const heavyLoad = async (arg: string) => {
 	function conflicts(
 		...args:
 			| [callNodeType]
-			| [IActlistObj[], { Pos: [number, number]; m: number; teacher: string }]
+			| [IActlistObj[], { Pos: PosType; m: number; teacher: string }]
 	) {
 		if (args.length === 1) {
 			const vertix = args[0];
@@ -721,7 +595,12 @@ export const heavyLoad = async (arg: string) => {
 						vertix.week.allClasses[m].l[X][Y].currentTeacher
 					)
 						return false;
-					const s = situation(replacementTeacher, vertix.Pos, m, vertix.week);
+					const s = situation(
+						replacementTeacher,
+						vertix.Pos,
+						m,
+						vertix.week
+					);
 					if (
 						s.r === -1 ||
 						(replacementTeacher ===
@@ -754,7 +633,12 @@ export const heavyLoad = async (arg: string) => {
 					.sort(() => 0.5 - Math.random())
 					.slice(0, Math.ceil(requirePivoting.length / gen));
 				requirePivoting.forEach((replacementTeacher): void => {
-					const s = situation(replacementTeacher, vertix.Pos, m, vertix.week);
+					const s = situation(
+						replacementTeacher,
+						vertix.Pos,
+						m,
+						vertix.week
+					);
 					pivotTo({
 						...vertix,
 						Pivots: [...NewStack], // if augmentedParent is null [] would have got to the next gen
@@ -807,7 +691,7 @@ export const heavyLoad = async (arg: string) => {
 		const week = vertix.week;
 		const solutions = week.activateList;
 		if (!conflicts(vertix)) {
-			const edges: [number, number][] =
+			const edges: PosType[] =
 				week.allClasses[m].teachers[teacher].periodsHere ||
 				getHisActPeriods(week.allClasses[m], teacher);
 			const q_lenBefore = q.length();
@@ -892,7 +776,10 @@ export const heavyLoad = async (arg: string) => {
 		const oldTeacher = S.currTeacher;
 		if (vertix.teacher === oldTeacher) return;
 		const cyclingActionSatisfied = (aboutToBeSquashed: string) => {
-			if (Action === "cycle" && vertix.cycleClosingParentName === undefined) {
+			if (
+				Action === "cycle" &&
+				vertix.cycleClosingParentName === undefined
+			) {
 				throw {
 					...vertix,
 					message:
@@ -910,7 +797,7 @@ export const heavyLoad = async (arg: string) => {
 		const madePivots: number = Pivots.length;
 		if (!conflicts(vertix)) {
 			if (
-				((Action === "shift" && S.currTeacher === "") ||
+				((Action === "shift" && S.currTeacher === TeacherType_nullValue) ||
 					cyclingActionSatisfied(S.currTeacher)) &&
 				!conflicts(vertix)
 			) {
@@ -922,9 +809,9 @@ export const heavyLoad = async (arg: string) => {
 					takeOneOffTheStack(vertix);
 				}
 			} else {
-				if (oldTeacher === "") return;
-				const edges: [number, number][] = week.availables[oldTeacher].filter(
-					(edge: [number, number]) => {
+				if (oldTeacher === TeacherType_nullValue) return;
+				const edges: PosType[] = week.availables[oldTeacher].filter(
+					(edge: PosType) => {
 						let tmp: callNodeType | null = vertix;
 						while (tmp !== null) {
 							if (equals(tmp.Pos, edge)) return false;
@@ -949,7 +836,8 @@ export const heavyLoad = async (arg: string) => {
 						Action,
 					};
 					if (
-						((Action === "shift" && newSituation.currTeacher === "") ||
+						((Action === "shift" &&
+							newSituation.currTeacher === TeacherType_nullValue) ||
 							cyclingActionSatisfied(newSituation.currTeacher)) &&
 						newSituation.r === -1 &&
 						!conflicts(newNode)
@@ -1002,7 +890,7 @@ export const heavyLoad = async (arg: string) => {
 	}
 	const delegate = (
 		teacher: string,
-		Pos: [number, number],
+		Pos: PosType,
 		m: number,
 		week: IWEEK_GLOBAL_Object
 	) => {
@@ -1067,7 +955,11 @@ export const heavyLoad = async (arg: string) => {
 					callTo: "pivotTo",
 					pivotArgs: {
 						next_m: S.r,
-						AfterReChainNode: { ...rootVertix, callTo: "re", Action: S.action },
+						AfterReChainNode: {
+							...rootVertix,
+							callTo: "re",
+							Action: S.action,
+						},
 						beforeReChainNode: null,
 					},
 				});
@@ -1134,7 +1026,7 @@ export const heavyLoad = async (arg: string) => {
 	const someHowPutHimAt = (
 		m: number,
 		teacher: string,
-		Pos: [number, number],
+		Pos: PosType,
 		week: IWEEK_GLOBAL_Object,
 		freeze: boolean = true
 	): void => {
@@ -1255,7 +1147,6 @@ export const heavyLoad = async (arg: string) => {
 
 		week.forceUpdate && week.forceUpdate();
 	};
-	
 
 	console.log(`got the week`, arg);
 	const week = ((week: string): IWEEK_GLOBAL_Object => JSON.parse(week))(arg);
