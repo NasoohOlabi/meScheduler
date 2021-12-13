@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function ClassesPorter(): JSX.Element {
     const classes = useStyles();
     const forceUpdate = useForceUpdate();
-    const { week, id_provider: idProvider } = React.useContext(weekContext);
+    const { week } = React.useContext(weekContext);
     const allClasses = week.allClasses;
     const addClass = (event: any) => {
         allClasses.push(new ClassObj());

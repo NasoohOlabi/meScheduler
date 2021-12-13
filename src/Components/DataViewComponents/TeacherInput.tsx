@@ -6,6 +6,7 @@ import { PosType } from "../../types";
 import { texts } from "../UiText";
 import { MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH, weekContext } from "./weekContextProvider";
 import AddIcon from "@material-ui/icons/Add";
+import { equals } from "../../Logic/util";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -53,6 +54,11 @@ function ClassTeacherInputTableRows(props: { m: number; id: string }) {
         week.allClasses[props.m].teachers[props.id].Periods = n;
         week.allClasses[props.m].teachers[props.id].remPeriods = n;
     };
+    const onAvailabilitySubmission = (availability: PosType[]) => {
+        console.log('week.availables[props.id] = ', week.availables[props.id]);
+        console.log('availability = ', availability);
+        week.availables[props.id] = availability
+    }
     return (
         <Card className={classes.childCard}>
             <Table>
@@ -89,29 +95,56 @@ function ClassTeacherInputTableRows(props: { m: number; id: string }) {
                 </TableRow>
                 {(availabilityPromptOn) ? <TableRow>
                     <TeacherSchedulePorter
-                        onSubmission={() => { setAvailabilityPromptOn(false) }} />
+                        lastValue={week.availables[props.id] || []}
+                        onSubmission={(availability: PosType[]) => {
+                            onAvailabilitySubmission(availability)
+                            setAvailabilityPromptOn(false)
+                        }} />
                 </TableRow> : null}
             </Table>
         </Card>
     );
 }
 
-export const MemoClassTeachersInputTRows = React.memo(ClassTeacherInputTableRows);
+function parseModel(mat: boolean[][]) {
+    const Result: PosType[] = []
+    mat.forEach(
+        (row, i) => {
+            row.forEach(
+                (col, j) => {
+                    if (col) {
+                        Result.push([i, j])
+                    }
+                }
+            )
+        }
+    )
+    return Result;
+}
 
-function TeacherSchedulePorter(props: { onSubmission: any }) {
-    const classes = useStyles();
+function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] }) {
     const ModelSetState =
         React.useRef(
             Array(NUM_OF_DAYS + 1)
                 .fill(null)
                 .map(() => Array(NUM_OF_PERIODS_PER_DAY + 1).fill(undefined))
         ).current;
+    const Model: boolean[][] =
+        React.useRef(
+            Array(NUM_OF_DAYS + 1)
+                .fill(null)
+                .map(() => Array(NUM_OF_PERIODS_PER_DAY + 1).fill(false))
+        ).current;
+    const lastValue = props.lastValue
     function ControlledCheckbox(props: { Pos: PosType; label?: string }) {
         // unpack & alias
         const [x, y] = props.Pos;
 
-        const [checked, setChecked] = useState(false);
+        const [checked, setChecked] = useState(lastValue.some((v) =>
+            equals(v, [x, y])
+        ));
         ModelSetState[x][y] = setChecked;
+        Model[x][y] = checked
 
         const fn = (event: any) => {
             const newVal = event.target.checked;
@@ -156,9 +189,10 @@ function TeacherSchedulePorter(props: { onSubmission: any }) {
         );
     }
     const Avail_terminator = () => {
-        props.onSubmission()
+        const parsedModel = parseModel(Model)
+        props.onSubmission(parsedModel)
     };
-    const tmp: PosType = [0, 0];
+
     return (
         <div>
             <table>
@@ -194,3 +228,6 @@ function TeacherSchedulePorter(props: { onSubmission: any }) {
         </div>
     );
 }
+
+
+export const MemoClassTeachersInputTRows = React.memo(ClassTeacherInputTableRows);
