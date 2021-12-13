@@ -21,9 +21,13 @@ class TeacherClass implements ClassTeacherData {
 	}
 }
 export default class ClassObj implements IClass {
-	l: lCellObj[][] = Array(NUM_OF_DAYS).fill(
-		Array(NUM_OF_PERIODS_PER_DAY).fill(new cellClass())
-	);
+	l: lCellObj[][] = Array(NUM_OF_DAYS)
+		.fill(null)
+		.map(() =>
+			Array(NUM_OF_PERIODS_PER_DAY)
+				.fill(null)
+				.map(() => new cellClass())
+		);
 	Name: string = "";
 	teachers: IClassTeachers = {};
 	constructor(...args: any[]) {
@@ -38,9 +42,13 @@ export default class ClassObj implements IClass {
 	 * refreshTable
 	 */
 	public refreshTable(): (() => void)[][] {
-		return Array(NUM_OF_DAYS).fill(
-			Array(NUM_OF_PERIODS_PER_DAY).fill(() => {})
-		);
+		return Array(NUM_OF_DAYS)
+			.fill(null)
+			.map(() =>
+				Array(NUM_OF_PERIODS_PER_DAY)
+					.fill(null)
+					.map(() => () => {})
+			);
 	}
 	public addTeacher(teacher: string, Periods: number) {
 		this.teachers[teacher] = new TeacherClass(Periods);
