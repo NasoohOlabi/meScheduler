@@ -1,888 +1,5210 @@
-import { ClassTeacherData, lCellObj } from "../Interfaces/Interfaces";
-import { TeacherType_nullValue } from "../types";
+import {  WeekObj } from "../Interfaces/Interfaces";
 import ClassObj from "../Interfaces/ClassObj";
 
-// write as is using find and replace
-// but in prod you'll auto generate the stuff in the DataParserView...
-export const fart = "ffffa";
-function cel(): lCellObj {
-	return {
-		currentTeacher: TeacherType_nullValue,
-		isCemented: false,
-		Options: [],
-	};
-}
-function seven_cels(): lCellObj[] {
-	const acc = [];
-	for (let i = 0; i < 7; i++) {
-		acc.push(cel());
-	}
-	return acc;
-}
-export const newGrid = (): lCellObj[][] => {
-	const acc = [];
-	for (let i = 0; i < 5; i++) {
-		acc.push(seven_cels());
-	}
-	return acc;
-};
+export const DEFAULT_WEEK: WeekObj = new WeekObj({
+    "allClasses": [
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade7class1",
+            "teachers": {
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t10": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t17": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t23": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t25": {
+                    "Periods": 5,
+                    "remPeriods": 5,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t29": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade7class2",
+            "teachers": {
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t10": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t17": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t23": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t25": {
+                    "Periods": 5,
+                    "remPeriods": 5,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t29": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade8class1",
+            "teachers": {
+                "t0": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t1": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t12": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t17": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t23": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t29": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade8class2",
+            "teachers": {
+                "t0": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t1": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t12": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t17": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t23": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t29": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade9class1",
+            "teachers": {
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t3": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t12": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t14": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade9class2",
+            "teachers": {
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t3": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t12": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t14": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t28": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade10class1",
+            "teachers": {
+                "t0": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t4": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t10": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t24": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade10class2",
+            "teachers": {
+                "t0": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t4": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t10": {
+                    "Periods": 6,
+                    "remPeriods": 6,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t11": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t19": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t24": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade11class1",
+            "teachers": {
+                "t0": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t4": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t5": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t14": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t15": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t20": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t21": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade11class2",
+            "teachers": {
+                "t0": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t4": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t5": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t13": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t15": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t16": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t18": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t20": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t21": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t24": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t26": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t27": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        }),
+        new ClassObj({
+            "l": [
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ],
+                [
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    },
+                    {
+                        "currentTeacher": "",
+                        "isCemented": false,
+                        "Options": []
+                    }
+                ]
+            ],
+            "Name": "grade12class1",
+            "teachers": {
+                "t2": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t5": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t6": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t7": {
+                    "Periods": 3,
+                    "remPeriods": 3,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t8": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t9": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t14": {
+                    "Periods": 4,
+                    "remPeriods": 4,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t15": {
+                    "Periods": 5,
+                    "remPeriods": 5,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t20": {
+                    "Periods": 2,
+                    "remPeriods": 2,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t21": {
+                    "Periods": 5,
+                    "remPeriods": 5,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                },
+                "t22": {
+                    "Periods": 1,
+                    "remPeriods": 1,
+                    "periodsHere": [],
+                    "emptyAvailables": []
+                }
+            }
+        })
+    ],
+    "teachersGuild": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7",
+        "t8",
+        "t9",
+        "t10",
+        "t11",
+        "t12",
+        "t13",
+        "t14",
+        "t15",
+        "t16",
+        "t17",
+        "t18",
+        "t19",
+        "t20",
+        "t21",
+        "t22",
+        "t23",
+        "t24",
+        "t25",
+        "t26",
+        "t27",
+        "t28",
+        "t29"
+    ],
+    "activateList": [],
+    "availables": {
+        "MHD Bardawel": [
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ]
+        ],
+        "Music": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "PA": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ]
+        ],
+        "Arts": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "IT": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ]
+        ],
+        "Mona Hasanyn": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Eyad Al-Taba3": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ]
+        ],
+        "A'yda Husain": [
+            [
+                1,
+                0
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ]
+        ],
+        "Fayes Wahba": [
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Abyear Hammoud": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Tawfiq Khabaz": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ]
+        ],
+        "Mayson Al-Monakel": [
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ]
+        ],
+        "Nour Hamad": [
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Reem Mukhalalaty": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Oydad A'airan": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Maram jadeed": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Issam Kreeshan": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ]
+        ],
+        "Saeed KabaKouly": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Heba Kozon": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ]
+        ],
+        "Khaled Barakat": [
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Nisreen Selo": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "3rfan Kholendy": [
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Eiman Taha": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Rahaf Kayal": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Anas Shaban": [
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ]
+        ],
+        "Nour Refayi": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Hala Huobi": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ],
+            [
+                4,
+                0
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                2
+            ],
+            [
+                4,
+                3
+            ],
+            [
+                4,
+                4
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                4,
+                6
+            ]
+        ],
+        "Nada Al-Safadi": [
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Nermen Ash": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                1
+            ],
+            [
+                1,
+                2
+            ],
+            [
+                1,
+                3
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                1
+            ],
+            [
+                3,
+                2
+            ],
+            [
+                3,
+                3
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ],
+        "Laila": [
+            [
+                0,
+                0
+            ],
+            [
+                0,
+                1
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                0,
+                3
+            ],
+            [
+                0,
+                4
+            ],
+            [
+                0,
+                5
+            ],
+            [
+                0,
+                6
+            ],
+            [
+                1,
+                0
+            ],
+            [
+                1,
+                4
+            ],
+            [
+                1,
+                5
+            ],
+            [
+                1,
+                6
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                1
+            ],
+            [
+                2,
+                2
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                2,
+                4
+            ],
+            [
+                2,
+                5
+            ],
+            [
+                2,
+                6
+            ],
+            [
+                3,
+                0
+            ],
+            [
+                3,
+                4
+            ],
+            [
+                3,
+                5
+            ],
+            [
+                3,
+                6
+            ]
+        ]
+    },
+    "refreshTable": [],
+    "tableFooterRefresher": [],
+    "teacherSchedule": {},
+    "Swaping": false,
+    "currentSolutionNumber": 0
+})
 
-export const teachersGuild: string[] = [
-	"Rahaf Kayal",
-	"Anas Shaban",
-	"Nisreen Selo",
-	"Mayson Al-Monakel",
-	"Eyad Al-Taba3",
-	"Tawfiq Khabaz",
-	"MHD Bardawel",
-	"A'yda Husain",
-	"3rfan Kholendy",
-	"Laila",
-	"Oydad A'airan",
-	"Abyear Hammoud",
-	"Maram jadeed",
-	"Eiman Taha",
-	"Nermen Ash",
-	"Saeed KabaKouly",
-	"IT",
-	"Khaled Barakat",
-	"Mona Hasanyn",
-	"Nour Hamad",
-	"Fayes Wahba",
-	"Issam Kreeshan",
-	"Reem Mukhalalaty",
-	"Heba Kozon",
-	"Nada Al-Safadi",
-	"Nour Refayi",
-	"Arts",
-	"PA",
-	"Music",
-	"Hala Huobi",
-];
-const fn = (n: number) => {
-	const obj: ClassTeacherData = {
-		Periods: n,
-		remPeriods: n,
-		periodsHere: [],
-		emptyAvailables: [],
-	};
-	return obj;
-};
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const addTeacherToClass = (c: ClassObj, t: string, p: number) => {
-	c.teachers[t as string] = fn(p);
-};
-export const grade7class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade7class1",
-	teachers: {
-		27: fn(1),
-		25: fn(5),
-		28: fn(1),
-		22: fn(1),
-		23: fn(2),
-		26: fn(1),
-		16: fn(2),
-		10: fn(4),
-		17: fn(3),
-		18: fn(2),
-		29: fn(6),
-		9: fn(2),
-		11: fn(2),
-		19: fn(3),
-	},
-});
-export const grade7class2: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade7class2",
-	teachers: {
-		27: fn(1),
-		25: fn(5),
-		28: fn(1),
-		22: fn(1),
-		23: fn(2),
-		26: fn(1),
-		16: fn(2),
-		10: fn(4),
-		17: fn(3),
-		18: fn(2),
-		29: fn(6),
-		9: fn(2),
-		11: fn(2),
-		19: fn(3),
-	},
-});
-export const grade8class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade8class1",
-	teachers: {
-		27: fn(1),
-		12: fn(4),
-		23: fn(2),
-		"0": fn(3),
-		"1": fn(3),
-		28: fn(1),
-		22: fn(1),
-		17: fn(3),
-		29: fn(6),
-		26: fn(1),
-		16: fn(1),
-		18: fn(2),
-		11: fn(2),
-		19: fn(3),
-		9: fn(2),
-	},
-});
-export const grade8class2: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade8class2",
-	teachers: {
-		27: fn(1),
-		12: fn(4),
-		23: fn(2),
-		"0": fn(3),
-		"1": fn(3),
-		28: fn(1),
-		22: fn(1),
-		17: fn(3),
-		29: fn(6),
-		26: fn(1),
-		16: fn(1),
-		18: fn(2),
-		11: fn(2),
-		19: fn(3),
-		9: fn(2),
-	},
-});
-export const grade9class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade9class1",
-	teachers: {
-		27: fn(1),
-		22: fn(1),
-		12: fn(6),
-		28: fn(1),
-		"2": fn(3),
-		13: fn(4),
-		9: fn(2),
-		26: fn(1),
-		16: fn(1),
-		14: fn(6),
-		18: fn(3),
-		11: fn(3),
-		"3": fn(3),
-	},
-});
-export const grade9class2: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade9class2",
-	teachers: {
-		27: fn(1),
-		22: fn(1),
-		12: fn(6),
-		28: fn(1),
-		"2": fn(3),
-		13: fn(4),
-		9: fn(2),
-		26: fn(1),
-		16: fn(1),
-		14: fn(6),
-		18: fn(3),
-		11: fn(3),
-		"3": fn(3),
-	},
-});
-export const grade10class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade10class1",
-	teachers: {
-		27: fn(1),
-		22: fn(2),
-		10: fn(6),
-		"0": fn(2),
-		26: fn(1),
-		19: fn(2),
-		"2": fn(3),
-		13: fn(3),
-		16: fn(1),
-		18: fn(2),
-		24: fn(4),
-		9: fn(2),
-		"4": fn(3),
-		11: fn(3),
-	},
-});
-export const grade10class2: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade10class2",
-	teachers: {
-		27: fn(1),
-		22: fn(2),
-		10: fn(6),
-		"0": fn(2),
-		26: fn(1),
-		19: fn(2),
-		"2": fn(3),
-		13: fn(3),
-		16: fn(1),
-		18: fn(2),
-		24: fn(4),
-		9: fn(2),
-		"4": fn(3),
-		11: fn(3),
-	},
-});
-export const grade11class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade11class1",
-	teachers: {
-		27: fn(1),
-		21: fn(3),
-		15: fn(4),
-		"0": fn(2),
-		26: fn(1),
-		22: fn(2),
-		13: fn(3),
-		16: fn(1),
-		18: fn(2),
-		"2": fn(3),
-		"4": fn(2),
-		14: fn(4),
-		9: fn(2),
-		20: fn(2),
-		"5": fn(3),
-	},
-});
-export const grade11class2: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade11class2",
-	teachers: {
-		27: fn(1),
-		21: fn(3),
-		15: fn(4),
-		"0": fn(2),
-		26: fn(1),
-		22: fn(2),
-		13: fn(3),
-		16: fn(1),
-		18: fn(2),
-		"2": fn(3),
-		"4": fn(2),
-		24: fn(4),
-		9: fn(2),
-		20: fn(2),
-		"5": fn(3),
-	},
-});
-export const grade12class1: ClassObj = new ClassObj({
-	l: newGrid(),
-	Name: "grade12class1",
-	teachers: {
-		"6": fn(3),
-		21: fn(5),
-		15: fn(5),
-		"7": fn(3),
-		22: fn(1),
-		"8": fn(4),
-		9: fn(1),
-		20: fn(2),
-		"5": fn(4),
-		"2": fn(3),
-		14: fn(4),
-	},
-});
-export const allClasses = [
-	grade7class1,
-	grade7class2,
-	grade8class1,
-	grade8class2,
-	grade9class1,
-	grade9class2,
-	grade10class1,
-	grade10class2,
-	grade11class1,
-	grade11class2,
-	grade12class1,
-];
-export const availables: any = {
-	"MHD Bardawel": [
-		[2, 0],
-		[2, 1],
-		[2, 2],
-	],
-	Music: [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	PA: [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-	],
-	Arts: [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	IT: [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-	],
-	"Mona Hasanyn": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Eyad Al-Taba3": [
-		[0, 0],
-		[0, 1],
-		[1, 0],
-		[1, 1],
-		[2, 0],
-		[2, 1],
-		[3, 0],
-		[3, 1],
-		[4, 0],
-		[4, 1],
-	],
-	"A'yda Husain": [
-		[1, 0],
-		[3, 0],
-		[3, 1],
-	],
-	"Fayes Wahba": [
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Abyear Hammoud": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	"Tawfiq Khabaz": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-	],
-	"Mayson Al-Monakel": [
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-	],
-	"Nour Hamad": [
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Reem Mukhalalaty": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	"Oydad A'airan": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Maram jadeed": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Issam Kreeshan": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-	],
-	"Saeed KabaKouly": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Heba Kozon": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-	],
-	"Khaled Barakat": [
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Nisreen Selo": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"3rfan Kholendy": [
-		[2, 5],
-		[2, 6],
-		[4, 5],
-		[4, 6],
-	],
-	"Eiman Taha": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Rahaf Kayal": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	"Anas Shaban": [
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-	],
-	"Nour Refayi": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	"Hala Huobi": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-		[4, 0],
-		[4, 1],
-		[4, 2],
-		[4, 3],
-		[4, 4],
-		[4, 5],
-		[4, 6],
-	],
-	"Nada Al-Safadi": [
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	"Nermen Ash": [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 1],
-		[1, 2],
-		[1, 3],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[3, 0],
-		[3, 1],
-		[3, 2],
-		[3, 3],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-	Laila: [
-		[0, 0],
-		[0, 1],
-		[0, 2],
-		[0, 3],
-		[0, 4],
-		[0, 5],
-		[0, 6],
-		[1, 0],
-		[1, 4],
-		[1, 5],
-		[1, 6],
-		[2, 0],
-		[2, 1],
-		[2, 2],
-		[2, 3],
-		[2, 4],
-		[2, 5],
-		[2, 6],
-		[3, 0],
-		[3, 4],
-		[3, 5],
-		[3, 6],
-	],
-};
+
 
 /*
 let unavailables = {
