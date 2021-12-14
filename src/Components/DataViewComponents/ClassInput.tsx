@@ -2,7 +2,7 @@ import { makeStyles, Theme, createStyles, Table, TableHead, TableRow, TableCell,
 import { useContext } from "react";
 import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
-import { weekContext } from "./weekContextProvider";
+import { weekContext } from "./DataViewModel";
 import AddIcon from "@material-ui/icons/Add";
 import { MemoClassTeachersInputTRows } from "./TeacherInput";
 

@@ -1,10 +1,10 @@
 import { Card, Table, TableRow, TableCell, TextField, IconButton, Checkbox, FormControlLabel, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
+import { useEffect, memo, useRef } from "react";
 import { useState, useContext } from "react";
 import { NUM_OF_DAYS, NUM_OF_PERIODS_PER_DAY } from "../../Interfaces/ClassObj";
 import { PosType } from "../../types";
 import { texts } from "../UiText";
-import { MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH, weekContext } from "./weekContextProvider";
+import { MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH, weekContext } from "./DataViewModel";
 import AddIcon from "@material-ui/icons/Add";
 import { equals } from "../../Logic/util";
 
@@ -41,14 +41,55 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+function parseModel(mat: boolean[][]) {
+    const Result: PosType[] = []
+    mat.forEach(
+        (row, i) => {
+            row.forEach(
+                (col, j) => {
+                    if (col) {
+                        Result.push([i, j])
+                    }
+                }
+            )
+        }
+    )
+    return Result;
+}
+
+function ReactiveTextField(props: { id: string }) {
+
+    const { FormControl } = useContext(weekContext)
+    const [name, setName] = useState(texts.NameMap[props.id])
+
+    const onTeacherNameChange = (event: any) => {
+        const v: string = event.target.value;
+        texts.NameMap[props.id] = v;
+        FormControl.TeachersTopics[props.id].Publish(v)
+    };
+    useEffect(() => {
+        FormControl.TeachersTopics[props.id].Subscribe(setName)
+        return () => {
+            FormControl.TeachersTopics[props.id].Unsubscribe(setName)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    return (
+        <TextField
+            required
+            defaultValue={name}
+            value={name}
+            id="standard-required"
+            onChange={onTeacherNameChange}
+        />
+    )
+}
+
 function ClassTeacherInputTableRows(props: { m: number; id: string }) {
     const classes = useStyles();
     const [availabilityPromptOn, setAvailabilityPromptOn] = useState(false);
     const { week } = useContext(weekContext);
-    const onTeacherNameChange = (event: any) => {
-        const v = event.target.value;
-        texts.NameMap[props.id] = v;
-    };
+
     const onTeacherPeriodsChange = (event: any) => {
         const n = event.target.value;
         week.allClasses[props.m].teachers[props.id].Periods = n;
@@ -67,11 +108,7 @@ function ClassTeacherInputTableRows(props: { m: number; id: string }) {
                         {texts.teacherName} :
                     </TableCell>
                     <TableCell className={classes.cell} align="center">
-                        <TextField
-                            required
-                            id="standard-required"
-                            onChange={onTeacherNameChange}
-                        />
+                        <ReactiveTextField id={props.id} />
                     </TableCell>
                     <TableCell>
                         <TextField
@@ -79,6 +116,7 @@ function ClassTeacherInputTableRows(props: { m: number; id: string }) {
                             type="number"
                             id="standard-required"
                             onChange={onTeacherPeriodsChange}
+                            defaultValue={week.allClasses[props.m].teachers[props.id].Periods}
                             InputProps={{
                                 inputProps: {
                                     min: 0,
@@ -106,31 +144,15 @@ function ClassTeacherInputTableRows(props: { m: number; id: string }) {
     );
 }
 
-function parseModel(mat: boolean[][]) {
-    const Result: PosType[] = []
-    mat.forEach(
-        (row, i) => {
-            row.forEach(
-                (col, j) => {
-                    if (col) {
-                        Result.push([i, j])
-                    }
-                }
-            )
-        }
-    )
-    return Result;
-}
-
 function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] }) {
     const ModelSetState =
-        React.useRef(
+        useRef(
             Array(NUM_OF_DAYS + 1)
                 .fill(null)
                 .map(() => Array(NUM_OF_PERIODS_PER_DAY + 1).fill(undefined))
         ).current;
     const Model: boolean[][] =
-        React.useRef(
+        useRef(
             Array(NUM_OF_DAYS + 1)
                 .fill(null)
                 .map(() => Array(NUM_OF_PERIODS_PER_DAY + 1).fill(false))
@@ -230,4 +252,4 @@ function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] 
 }
 
 
-export const MemoClassTeachersInputTRows = React.memo(ClassTeacherInputTableRows);
+export const MemoClassTeachersInputTRows = memo(ClassTeacherInputTableRows);

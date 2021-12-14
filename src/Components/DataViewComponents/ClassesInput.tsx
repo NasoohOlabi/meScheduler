@@ -2,7 +2,7 @@ import { makeStyles, Theme, createStyles, TableContainer, Paper, Table, TableHea
 import ClassObj from "../../Interfaces/ClassObj";
 import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
-import { weekContext } from "./weekContextProvider";
+import { weekContext } from "./DataViewModel";
 import AddIcon from "@material-ui/icons/Add";
 import React from "react";
 import { Classporter } from "./ClassInput";

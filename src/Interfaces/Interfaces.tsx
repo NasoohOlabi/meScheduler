@@ -226,6 +226,9 @@ export interface ICell {
 	handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
+export interface TeachersDictionary<T> {
+	[index: string]: T
+}
 export interface ITeacherSchedule {
 	[index: string]: (number | null)[][];
 }
@@ -255,14 +258,24 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 	refreshTable: refreshTableType = [];
 	tableFooterRefresher: tableFooterRefresherType = [];
 	teacherSchedule: ITeacherSchedule = {};
-	forceUpdate: () => void = () => {};
+	forceUpdate: () => void = () => { };
 	Swaping = false;
 	currentSolutionNumber = 0;
+	constructor(...args: any[]) {
+		if (args && args.length === 1 && args[0].allClasses
+			&& args[0].teachersGuild
+			&& args[0].availables) {
+			const week = args[0]
+			this.allClasses = week.allClasses
+			this.teachersGuild = week.teachersGuild
+			this.availables = week.availables
+		}
+	}
 	public addClass() {
 		const cls = new ClassObj();
 		this.allClasses.push(cls);
 		this.refreshTable.push(cls.refreshTable());
-		this.tableFooterRefresher.push(() => {});
+		this.tableFooterRefresher.push(() => { });
 	}
 	public addTeacher(ind: number, m: number, teacher: string, Periods: number) {
 		this.teachersGuild[ind] = teacher;
