@@ -90,9 +90,10 @@ export function Classporter(props: { m: number }) {
                 </TableRow>
                 <TableRow>
                     <Card className={classes.pCard}>
-                        {Object.keys(Class.teachers).map((teacher_id: string) => {
+                        {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
                             return (
                                 <MemoClassTeachersInputTRows
+                                    key={index}
                                     m={props.m}
                                     id={teacher_id}
                                 />

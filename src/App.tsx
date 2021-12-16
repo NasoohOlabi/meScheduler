@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./App.css";
 import { TimeRemaining } from "./ETAScreen";
 import MyAppBar from "./Components/AppBar";
@@ -10,11 +10,12 @@ import { WeekView } from "./Components/Week";
 import { DataParserView } from "./DataParserView";
 import { Screen } from "./Interfaces/Interfaces";
 import { texts } from "./Components/UiText";
+import { weekContext, DataViewModel } from "./Components/DataViewComponents/DataViewModel";
 
 const HomeScreen: Screen = Screen.DATAPARSER;
 
-function Body(props: { UI: Screen }): JSX.Element {
-	switch (props.UI) {
+function AppropriateScreen(UI: Screen): JSX.Element {
+	switch (UI) {
 		case Screen.ETA:
 			return <TimeRemaining />;
 		case Screen.TABLE:
@@ -22,6 +23,12 @@ function Body(props: { UI: Screen }): JSX.Element {
 		case Screen.DATAPARSER:
 			return <DataParserView />;
 	}
+}
+
+function Body(props: { UI: Screen, model: DataViewModel }): JSX.Element {
+	return (<weekContext.Provider value={props.model}>
+		{AppropriateScreen(props.UI)}
+	</weekContext.Provider>)
 }
 
 function App(): JSX.Element {
@@ -55,6 +62,7 @@ function App(): JSX.Element {
 	};
 
 	let theme = () => (dark ? { ...darkTheme } : { ...lightTheme });
+	const model = useRef(new DataViewModel()).current;
 
 	return (
 		<div>
@@ -73,7 +81,7 @@ function App(): JSX.Element {
 					/>
 				</ReactPWAInstallProvider>
 				<div dir={lang}>
-					<Body UI={screen} />
+					<Body UI={screen} model={model} />
 				</div>
 			</ThemeProvider>
 		</div>

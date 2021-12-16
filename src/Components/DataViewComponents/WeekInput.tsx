@@ -1,10 +1,7 @@
-import { Paper, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
-import { useRef } from "react";
-import { useForceUpdate } from "../../Logic/Logic";
-import { DEFAULT_WEEK } from "../Data";
+import { Paper, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { texts } from "../UiText";
 import { ClassesPorter } from "./ClassesInput";
-import { weekContext, DataViewModel } from "./DataViewModel";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -45,25 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export function WeekInput() {
     const classes = useStyles();
 
-    const refresh = useForceUpdate();
-
-    const model = useRef(new DataViewModel()).current;
-
     return (
-        <weekContext.Provider value={model}>
-            <Paper className={classes.paper}>
-                <Button
-                    onClick={() => {
-                        refresh();
-                        console.log(model);
-                        console.log('DEFAULT_WEEK = ', DEFAULT_WEEK);
-
-                    }}
-                >
-                    Some TExt
-                </Button>
-                <ClassesPorter />
-            </Paper>
-        </weekContext.Provider>
+        <Paper className={classes.paper}>
+            <ClassesPorter />
+        </Paper>
     );
 }

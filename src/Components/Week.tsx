@@ -1,5 +1,5 @@
 //import { Card, Typography } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "../App.css";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { Paper, Button } from "@material-ui/core";
@@ -18,6 +18,7 @@ import { texts } from "./UiText";
 import { PosType } from "../types";
 import greenlet from "greenlet";
 import { heavyLoad } from "./worker/worker";
+import { weekContext } from "./DataViewComponents/DataViewModel";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -38,7 +39,9 @@ const workerize = greenlet(heavyLoad);
 export function WeekView(theme: any): JSX.Element {
 	const classes = useStyles();
 	const forceUpdate = useForceUpdate();
-	let WEEK_GLOBAL_Object: WeekObj = React.useRef(new WeekObj()).current;
+
+	// let WEEK_GLOBAL_Object: WeekObj = React.useRef(new WeekObj()).current;
+	let WEEK_GLOBAL_Object: WeekObj = useContext(weekContext).week;
 	WEEK_GLOBAL_Object.forceUpdate = forceUpdate;
 
 	const handleChange = () => {
