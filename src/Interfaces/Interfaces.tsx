@@ -219,10 +219,8 @@ export interface IMyAppBarProps {
 }
 export interface ICell {
 	Pos: PosType;
-	data: lCellObj;
 	cellInitializer: any;
 	m: number;
-	teacher: string;
 	handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
@@ -269,6 +267,21 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 			this.allClasses = week.allClasses
 			this.teachersGuild = week.teachersGuild
 			this.availables = week.availables
+			if (!week.refreshTable) {
+				this.refreshTable = new Array(week.allClasses.length)
+					.fill(null)
+					.map((_) =>
+						Array(NUM_OF_DAYS)
+							.fill(null)
+							.map(() =>
+								Array(NUM_OF_PERIODS_PER_DAY)
+									.fill(null)
+									.map(() => () => { })
+							));
+			}
+			else {
+				this.refreshTable = week.refreshTable
+			}
 		}
 	}
 	public addClass() {

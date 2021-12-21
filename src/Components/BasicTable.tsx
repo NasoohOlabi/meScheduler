@@ -212,12 +212,8 @@ export function BasicTable(props: IBasicTableProps) {
 										<Cell
 											key={`${[index, jndex]}`}
 											cellInitializer={props.cellInitializer([index, jndex])}
-											data={week.allClasses[props.m].l[index][jndex]}
 											Pos={[index, jndex]}
 											m={props.m}
-											teacher={
-												week.allClasses[props.m].l[index][jndex].currentTeacher
-											}
 											handleChange={props.handleChange([index, jndex], props.m)}
 											WEEK_GLOBAL_Object={week}
 										/>

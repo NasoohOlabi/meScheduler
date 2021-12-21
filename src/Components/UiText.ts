@@ -27,6 +27,7 @@ const headCol = [day[0], day[1], day[2], day[3], day[4]];
 export const displayNamesMap: {
 	[details: string]: string;
 } = {
+	"":"",
 	"Rahaf Kayal": "t0",
 	t0: "Rahaf Kayal",
 	"Anas Shaban": "t1",
@@ -91,6 +92,7 @@ export const displayNamesMap: {
 export const ArabicDisplayNamesMap: {
 	[details: string]: string;
 } = {
+	"":"",
 	"رهف كيال": "t0",
 	t0: "رهف كيال",
 	"أنس شعبان": "t1",
@@ -207,3 +209,4 @@ const arabicUiTextObj: textObj = {
 };
 
 export const texts = { ...arabicUiTextObj, changeLanguage: () => {} };
+// export const texts = { ...currentDevUiTextObj, changeLanguage: () => {} };

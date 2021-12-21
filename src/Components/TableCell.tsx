@@ -29,11 +29,9 @@ const useStyles = makeStyles((theme: any) =>
 export function UnmemCell(props: ICell): JSX.Element {
 	const classes = useStyles();
 	const week = props.WEEK_GLOBAL_Object;
-	// const classes = useStyles();
-	// const [More , setMore] = React.useState(false);
-	// const tug = ()=>{
-	// 	setMore(!More);
-	// }
+	const [X, Y] = props.Pos
+	const cellData = props.WEEK_GLOBAL_Object.allClasses[props.m].l[X][Y];
+
 	const refreshCell = useForceUpdate();
 	React.useEffect(
 		() => {
@@ -44,13 +42,11 @@ export function UnmemCell(props: ICell): JSX.Element {
 	);
 
 	const cell = (D: boolean, show: string, highlight = false): JSX.Element => {
-		const ActList: string[] =
-			props.WEEK_GLOBAL_Object.allClasses[props.m].l[props.Pos[0]][
-				props.Pos[1]
-			].Options;
-		ActList.map((t: string) => {
-			return texts.NameMap[t];
-		});
+		const TeacherOptionsDropDown: string[] =
+			cellData.Options.map((t: string) => {
+				return texts.NameMap[t];
+			});
+		const displayTeacherName = texts.NameMap[show]
 		return (
 			<TableCell align="center">
 				<FormControl>
@@ -59,14 +55,14 @@ export function UnmemCell(props: ICell): JSX.Element {
 						disabled={D}
 						labelId="demo-simple-select-label"
 						id="demo-simple-select"
-						value={show}
+						value={displayTeacherName}
 						onChange={props.handleChange}
 						onMouseOver={refreshCell}
 						className={highlight ? classes.highlighted : ""}
 						error={highlight}
 					>
-						{ActList &&
-							ActList.map((teachersName: string, index) => {
+						{TeacherOptionsDropDown &&
+							TeacherOptionsDropDown.map((teachersName: string, index) => {
 								return (
 									<MenuItem value={teachersName} key={index}>
 										{teachersName}
@@ -79,8 +75,8 @@ export function UnmemCell(props: ICell): JSX.Element {
 		);
 	};
 
-	if (props.data.isCemented) {
-		return cell(true, props.data.currentTeacher);
+	if (cellData.isCemented) {
+		return cell(true, cellData.currentTeacher);
 	}
 
 	if (week.Swaping) {
@@ -97,9 +93,9 @@ export function UnmemCell(props: ICell): JSX.Element {
 				return cell(true, week.activateList[i][j].teacher, true);
 			}
 		}
-		return cell(true, props.data.currentTeacher);
+		return cell(true, cellData.currentTeacher);
 	} else {
-		return cell(false, props.data.currentTeacher);
+		return cell(false, cellData.currentTeacher);
 	}
 }
 

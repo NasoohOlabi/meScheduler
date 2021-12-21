@@ -153,17 +153,6 @@ export const CementNoOtherOptionButToPutHere = (
 		}
 	});
 };
-export const SwitchEventHander = (
-	Pos: PosType,
-	m: number,
-	week: IWEEK_GLOBAL_Object
-) => {
-	return (event: React.ChangeEvent<{ value: unknown }>) => {
-		let teacher: string = JSON.stringify(event.target.value);
-		console.clear();
-		someHowPutHimAt(m, teacher, Pos, week);
-	};
-};
 export const fastForward = async (week: IWEEK_GLOBAL_Object) => {
 	console.time("fast");
 	week.allClasses.forEach((Class: IClass, m: number) => {
