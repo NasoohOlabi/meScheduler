@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import { BasicTable } from "./BasicTable";
 import {
 	fill,
-	SwitchEventHander,
 	useForceUpdate,
 	randomFiller,
 	fastForward,
@@ -16,9 +15,9 @@ import { WeekObj } from "../Interfaces/Interfaces";
 // import { allClasses } from "./Data";
 import { texts } from "./UiText";
 import { PosType } from "../types";
-import greenlet from "greenlet";
-import { heavyLoad } from "./worker/worker";
+import solveWorker from "./solve.worker";
 import { weekContext } from "./DataViewComponents/DataViewModel";
+import { someHowPutHimAt } from "../Logic/CoreAlgo";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		},
 	})
 );
-const workerize = greenlet(heavyLoad);
+// const workerize = greenlet(heavyLoad);
 export function WeekView(theme: any): JSX.Element {
 	const classes = useStyles();
 	const forceUpdate = useForceUpdate();
@@ -46,7 +45,11 @@ export function WeekView(theme: any): JSX.Element {
 
 	const handleChange = () => {
 		return (Pos: PosType, m: number) => {
-			return SwitchEventHander(Pos, m, WEEK_GLOBAL_Object);
+			return (event: React.ChangeEvent<{ value: unknown }>) => {
+				let teacher: string = texts.NameMap[JSON.stringify(event.target.value)];
+				console.clear();
+				someHowPutHimAt(m, teacher, Pos, WEEK_GLOBAL_Object);
+			}
 		};
 	};
 	const initCell = (m: number) => {
@@ -94,24 +97,21 @@ export function WeekView(theme: any): JSX.Element {
 			<Button
 				onClick={async (e) => {
 					if (window.Worker) {
-						// else
-						//   let getName = greenlet( async username => {
-						//     let url = `https://api.github.com/users/${username}`
-						//     let res = await fetch(url)
-						//     let profile = await res.json()
-						//     return profile.name
-						// })
-						// console.log(await getName('developit'))
 						const data: any = JSON.stringify({
 							...WEEK_GLOBAL_Object,
 							refreshTable: undefined,
 							forceUpdate: undefined,
 							tableFooterRefresher: undefined,
 						});
-						const solved = JSON.parse(await workerize(data));
-						WEEK_GLOBAL_Object.allClasses = solved.allClasses;
-						WEEK_GLOBAL_Object.teacherSchedule = solved.teacherSchedule;
-						forceUpdate();
+						const worker: Worker = new solveWorker();
+						worker.postMessage(data);
+						worker.onmessage = (event) => {
+							const solved = JSON.parse(event.data);
+							WEEK_GLOBAL_Object.allClasses = solved.allClasses;
+							WEEK_GLOBAL_Object.teacherSchedule = solved.teacherSchedule;
+							worker.terminate();
+							forceUpdate();
+						}
 					} else {
 						console.log("Your browser doesn't support web workers.");
 					}
