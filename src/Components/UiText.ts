@@ -27,7 +27,7 @@ const headCol = [day[0], day[1], day[2], day[3], day[4]];
 export const displayNamesMap: {
 	[details: string]: string;
 } = {
-	"":"",
+	"": "",
 	"Rahaf Kayal": "t0",
 	t0: "Rahaf Kayal",
 	"Anas Shaban": "t1",
@@ -92,7 +92,7 @@ export const displayNamesMap: {
 export const ArabicDisplayNamesMap: {
 	[details: string]: string;
 } = {
-	"":"",
+	"": "",
 	"رهف كيال": "t0",
 	t0: "رهف كيال",
 	"أنس شعبان": "t1",
@@ -155,7 +155,7 @@ export const ArabicDisplayNamesMap: {
 	t29: "هالة حبي",
 };
 
-type textObj = {
+interface ITexts {
 	randomFillerButton: string;
 	doneButton: string;
 	headRow: string[];
@@ -171,7 +171,7 @@ type textObj = {
 		[details: string]: string;
 	};
 };
-const currentDevUiTextObj: textObj = {
+const currentDevUiTextObj: ITexts = {
 	randomFillerButton: "Random Filler",
 	LangDirection: "ltr",
 	doneButton: "Done",
@@ -185,7 +185,7 @@ const currentDevUiTextObj: textObj = {
 	headCol,
 	NameMap: displayNamesMap,
 };
-const arabicUiTextObj: textObj = {
+const arabicUiTextObj: ITexts = {
 	randomFillerButton: "حل عشوائي",
 	doneButton: "موافق",
 	DataViewBtn: "بيانات",
@@ -207,6 +207,68 @@ const arabicUiTextObj: textObj = {
 	headCol: ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"],
 	NameMap: ArabicDisplayNamesMap,
 };
+class textsObj implements ITexts {
+	randomFillerButton!: string;
+	doneButton!: string;
+	headRow!: string[];
+	headCol!: string[];
+	DataViewBtn!: string;
+	WeekBtn!: string;
+	classGroupName!: string;
+	classTeachers!: string;
+	teacherName!: string;
+	LangDirection!: "rtl" | "ltr";
+	addClass!: string;
+	NameMap!: { [details: string]: string; };
+	lang: "en" | "ar"
+	constructor(UiTexts: ITexts, lang: "en" | "ar") {
+		this.randomFillerButton = UiTexts.randomFillerButton
+		this.doneButton = UiTexts.doneButton
+		this.headRow = UiTexts.headRow
+		this.headCol = UiTexts.headCol
+		this.DataViewBtn = UiTexts.DataViewBtn
+		this.WeekBtn = UiTexts.WeekBtn
+		this.classGroupName = UiTexts.classGroupName
+		this.classTeachers = UiTexts.classTeachers
+		this.teacherName = UiTexts.teacherName
+		this.LangDirection = UiTexts.LangDirection
+		this.addClass = UiTexts.addClass
+		this.NameMap = UiTexts.NameMap
+		this.lang = lang
+	}
+	changeLanguage = () => {
+		if (this.lang === "en") {
+			this.lang = "ar"
+			this.randomFillerButton = arabicUiTextObj.randomFillerButton
+			this.doneButton = arabicUiTextObj.doneButton
+			this.headRow = arabicUiTextObj.headRow
+			this.headCol = arabicUiTextObj.headCol
+			this.DataViewBtn = arabicUiTextObj.DataViewBtn
+			this.WeekBtn = arabicUiTextObj.WeekBtn
+			this.classGroupName = arabicUiTextObj.classGroupName
+			this.classTeachers = arabicUiTextObj.classTeachers
+			this.teacherName = arabicUiTextObj.teacherName
+			this.LangDirection = arabicUiTextObj.LangDirection
+			this.addClass = arabicUiTextObj.addClass
+			this.NameMap = arabicUiTextObj.NameMap
+		}
+		else {
+			this.lang = "en"
+			this.randomFillerButton = currentDevUiTextObj.randomFillerButton
+			this.doneButton = currentDevUiTextObj.doneButton
+			this.headRow = currentDevUiTextObj.headRow
+			this.headCol = currentDevUiTextObj.headCol
+			this.DataViewBtn = currentDevUiTextObj.DataViewBtn
+			this.WeekBtn = currentDevUiTextObj.WeekBtn
+			this.classGroupName = currentDevUiTextObj.classGroupName
+			this.classTeachers = currentDevUiTextObj.classTeachers
+			this.teacherName = currentDevUiTextObj.teacherName
+			this.LangDirection = currentDevUiTextObj.LangDirection
+			this.addClass = currentDevUiTextObj.addClass
+			this.NameMap = currentDevUiTextObj.NameMap
+		}
 
-export const texts = { ...arabicUiTextObj, changeLanguage: () => {} };
-// export const texts = { ...currentDevUiTextObj, changeLanguage: () => {} };
+	}
+}
+
+export let texts = new textsObj(currentDevUiTextObj, "en")
