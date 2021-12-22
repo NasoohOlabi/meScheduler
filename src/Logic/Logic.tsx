@@ -2,10 +2,10 @@
 import React from "react";
 import { useState } from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
-import { IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
+import { IActlistObj, IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
 import { PosType, TeacherType_nullValue } from "../types";
 import { someHowPutHimAt } from "./CoreAlgo";
-import { contains, loopOverClass, withoutPos } from "./util";
+import { contains, loopOverClass, util, withoutPos } from "./util";
 export function fill(week: IWEEK_GLOBAL_Object) {
 	const availables = week.availables;
 	const allClasses: IClass[] = week.allClasses;
@@ -24,8 +24,50 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 		CementNoOtherOptionButToPutHere(allClasses, m, week);
 	});
 }
+// const noOtherOptionButToPutHere = (m: number, week: IWEEK_GLOBAL_Object, changeCellPost: (change: IActlistObj) => void) => {
+// 	const Class = week.allClasses[m];
+// 	Object.keys(Class.teachers).forEach((teacher) => {
+// 		const t = Class.teachers[teacher]
+// 		if (t !== undefined &&
+// 			t.remPeriods === t.emptyAvailables.length) {
+// 			t.emptyAvailables.forEach((Pos: PosType) => {
+// 				if (1 === util.situationInt(util.situation(teacher, Pos, m, week))) {
+// 					changeCellPost({ teacher, m, Pos })
+// 					putHimAt(week, m, teacher, Pos, "put");
+// 				}
+// 			});
+// 		}
+// 	});
+// };
+// const autoFill = function (
+// 	m: number,
+// 	week: IWEEK_GLOBAL_Object,
+// 	changeCellPost: (change: IActlistObj) => void
+// ) {
+// 	let xxx = 0;
+// 	const Class = week.allClasses[m]
+// 	for (let x = 0; x < Class.l.length; x++) {
+// 		for (let y = 0; y < Class.l[x].length; y++) {
+// 			const RealOptions = actualOptions([x, y], m, week)
+// 			if (RealOptions.length === 1 && Class.l[x][y].currentTeacher === '') {
+// 				//do the change
+// 				changeCellPost({ teacher: RealOptions[0], m, Pos: [x, y] })
+// 				putHimAt(week, m, RealOptions[0], [x, y], "put")
 
-export async function randomFiller(week: IWEEK_GLOBAL_Object) {
+// 				//go back to the start to see if your changes affected what you have already checked
+// 				if (xxx < 100) {
+// 					x = 0; y = 0;
+// 					xxx++;
+// 				}
+// 				else {
+// 					alert(`OK here is the deal infinite loop \n Again `);
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+export function randomFiller(week: IWEEK_GLOBAL_Object, changeCellPost?: (change: IActlistObj) => void) {
 	const allClasses = week.allClasses;
 	for (let m = allClasses.length - 1; m >= 0; m--) {
 		const Class = allClasses[m];
@@ -39,7 +81,10 @@ export async function randomFiller(week: IWEEK_GLOBAL_Object) {
 				if (aOptions.length > 0) {
 					const teacher =
 						aOptions[Math.floor(Math.random() * aOptions.length)];
+					changeCellPost && changeCellPost({ Pos: [i, j], teacher, m })
 					putHimAt(week, m, teacher, [i, j], "put");
+					// noOtherOptionButToPutHere(m, week, changeCellPost)
+					// autoFill(m, week, changeCellPost)
 				}
 			}
 		});
@@ -153,7 +198,7 @@ export const CementNoOtherOptionButToPutHere = (
 		}
 	});
 };
-export const fastForward = async (week: IWEEK_GLOBAL_Object) => {
+export const fastForward = (week: IWEEK_GLOBAL_Object, iterativeSolutionPoster?: (changes: IActlistObj[]) => void) => {
 	console.time("fast");
 	week.allClasses.forEach((Class: IClass, m: number) => {
 		const empties: PosType[] = [];
@@ -176,10 +221,13 @@ export const fastForward = async (week: IWEEK_GLOBAL_Object) => {
 				ind < teachers.length
 			) {
 				const teacher = Class.l[u][v].Options[ind];
-				someHowPutHimAt(m, teacher, [u, v], week, false);
+				someHowPutHimAt(m, teacher, [u, v], week, false, iterativeSolutionPoster, true);
 				ind++;
 			}
 		});
 	});
 	console.timeEnd("fast");
 };
+
+
+//alert(`here in [${x},${y}] calling with ${School[i].l[x][y].Options[0]}  who ${(teacherHasNoMoreemptyAvailables(School[i].l[x][y].Options[0] ,School[i].teachers)?'has NOOOOO more':'has more')}`);

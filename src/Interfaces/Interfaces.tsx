@@ -54,11 +54,6 @@ export type callNodeType = {
 		 */
 		AfterReChainNode?: callNodeType;
 		beforeReChainNode: callNodeType | null;
-		/**
-		 * To reduce calls to pivotTo that could potencially lock the queue
-		 * What you may call decay
-		 */
-		gen?: number;
 	};
 	cycleClosingParentName?: string;
 	Action?: actionType;
@@ -69,9 +64,9 @@ export type NodeProcessor = (vertix: callNodeType) => void;
 
 export class argumentsQueue {
 	queue: Queue<callNodeType> = new Queue<callNodeType>();
-	_max: number = 50000;
+	_max: number = 100000;
 	_accepting: boolean = true;
-	_stats = { preCalls: 0, reCalls: 0, pivotToCalls: 0 };
+	// _stats = { preCalls: 0, reCalls: 0, pivotToCalls: 0 };
 	Empty(): boolean {
 		return this.queue.Empty();
 	}
@@ -90,22 +85,24 @@ export class argumentsQueue {
 		this.queue.dequeue();
 	}
 	unlock(): void {
-		if (this._accepting) console.log(`Max wasn't reached!`);
-		else {
-			console.log(`Max was reached ;( `);
+		if (!this._accepting)
 			this._accepting = true;
-		}
-		console.log(this);
-		const total =
-			this._stats.preCalls + this._stats.reCalls + this._stats.pivotToCalls;
-		const obj = {
-			...this._stats,
-			total,
-			stoped_at: this.queue.length(),
-			sched: total + this.queue.length(),
-		};
-		console.log(JSON.stringify(obj));
-		this._stats = { preCalls: 0, reCalls: 0, pivotToCalls: 0 };
+		// if (this._accepting) console.log(`Max wasn't reached!`);
+		// else {
+		// 	console.log(`Max was reached ;( `);
+		// 	this._accepting = true;
+		// }
+		// console.log(this);
+		// const total =
+		// 	this._stats.preCalls + this._stats.reCalls + this._stats.pivotToCalls;
+		// const obj = {
+		// 	...this._stats,
+		// 	total,
+		// 	stoped_at: this.queue.length(),
+		// 	sched: total + this.queue.length(),
+		// };
+		// console.log(JSON.stringify(obj));
+		// this._stats = { preCalls: 0, reCalls: 0, pivotToCalls: 0 };
 	}
 	length() {
 		return this.queue.length();
@@ -122,18 +119,18 @@ export class argumentsQueue {
 	): void {
 		const vertix = this.queue.front();
 		if (vertix.callTo === "pre") {
-			this._stats.preCalls++;
+			// this._stats.preCalls++;
 			pre_fn(vertix);
 		} else if (vertix.callTo === "re") {
 			if (vertix.Action !== undefined) {
-				this._stats.reCalls++;
+				// this._stats.reCalls++;
 				re_fn(vertix);
 			}
 			// eslint-disable-next-line no-throw-literal
 			else throw { ...vertix, message: "Action not specified for re call" };
 		} else if (vertix.callTo === "pivotTo") {
 			if (vertix.pivotArgs !== undefined) {
-				this._stats.pivotToCalls++;
+				// this._stats.pivotToCalls++;
 				pivot_fn(vertix);
 			} else {
 				throw {
@@ -142,7 +139,7 @@ export class argumentsQueue {
 				};
 			}
 		} else if (vertix.callTo === "nothing") {
-			console.warn(`considering nothing a solution : `, vertix);
+			// console.warn(`considering nothing a solution : `, vertix);
 			if (vertix.Pivots.length !== 0) {
 				takeOneOffTheStack(vertix);
 			} else {

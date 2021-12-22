@@ -43,14 +43,12 @@ export function WeekView(theme: any): JSX.Element {
 	let WEEK_GLOBAL_Object: WeekObj = useContext(weekContext).week;
 	WEEK_GLOBAL_Object.forceUpdate = forceUpdate;
 
-	const handleChange = () => {
-		return (Pos: PosType, m: number) => {
-			return (event: React.ChangeEvent<{ value: unknown }>) => {
-				let teacher: string = texts.NameMap[JSON.stringify(event.target.value)];
-				console.clear();
-				someHowPutHimAt(m, teacher, Pos, WEEK_GLOBAL_Object);
-			}
-		};
+	const handleChange = (Pos: PosType, m: number) => {
+		return (event: React.ChangeEvent<{ value: unknown }>) => {
+			let teacher: string = texts.NameMap[event.target.value as string];
+			console.clear();
+			someHowPutHimAt(m, teacher, Pos, WEEK_GLOBAL_Object);
+		}
 	};
 	const initCell = (m: number) => {
 		return (Pos: PosType) => {
@@ -73,53 +71,54 @@ export function WeekView(theme: any): JSX.Element {
 			WEEK_GLOBAL_Object.teacherScheduleInit();
 			fill(WEEK_GLOBAL_Object);
 			forceUpdate();
+			if (!window.Worker) {
+				console.log("Your browser doesn't support web workers.");
+				return
+			}
+			const data: any = JSON.stringify({
+				...WEEK_GLOBAL_Object,
+				refreshTable: undefined,
+				forceUpdate: undefined,
+				tableFooterRefresher: undefined,
+			});
+			const worker: Worker = new solveWorker();
+			worker.postMessage(data);
+			worker.onmessage = (event) => {
+				const msg = event.data;
+				try {
+
+					if (msg.type === "oneChange") {
+						const [x, y] = msg.payload.Pos
+						const m = msg.payload.m
+						WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher = msg.payload.teacher
+						WEEK_GLOBAL_Object.refreshTable[m][x][y]()
+					}
+					else if (msg.type === "multipleChanges") {
+						for (let i = 0; i < event.data.payload.length; i++) {
+							const [x, y] = msg.payload[i].Pos
+							const m = msg.payload[i].m
+							WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher = msg.payload[i].teacher
+							WEEK_GLOBAL_Object.refreshTable[m][x][y]()
+						}
+					}
+					else {
+						console.log('Final post msg.payload = ', msg.payload);
+						WEEK_GLOBAL_Object.allClasses = msg.payload.allClasses;
+						WEEK_GLOBAL_Object.teacherSchedule = msg.payload.teacherSchedule;
+						worker.terminate();
+						forceUpdate();
+					}
+				}
+				catch {
+					console.log(`unknown message error`, msg)
+				}
+			}
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
 	return (
 		<div className={classes.root}>
-			<Button
-				onClick={(e) => {
-					fastForward(WEEK_GLOBAL_Object);
-				}}
-			>
-				fast Forward
-			</Button>
-			<Button
-				onClick={() => {
-					randomFiller(WEEK_GLOBAL_Object);
-					forceUpdate();
-				}}
-			>
-				{texts.randomFillerButton}
-			</Button>
-			<Button
-				onClick={async (e) => {
-					if (window.Worker) {
-						const data: any = JSON.stringify({
-							...WEEK_GLOBAL_Object,
-							refreshTable: undefined,
-							forceUpdate: undefined,
-							tableFooterRefresher: undefined,
-						});
-						const worker: Worker = new solveWorker();
-						worker.postMessage(data);
-						worker.onmessage = (event) => {
-							const solved = JSON.parse(event.data);
-							WEEK_GLOBAL_Object.allClasses = solved.allClasses;
-							WEEK_GLOBAL_Object.teacherSchedule = solved.teacherSchedule;
-							worker.terminate();
-							forceUpdate();
-						}
-					} else {
-						console.log("Your browser doesn't support web workers.");
-					}
-				}}
-			>
-				{texts.randomFillerButton}
-				Worker Grand fill
-			</Button>
 			<Grid container spacing={0}>
 				<Grid item xs={12}>
 					{WEEK_GLOBAL_Object.allClasses.map((Class, i) => {
@@ -132,7 +131,7 @@ export function WeekView(theme: any): JSX.Element {
 									headRow={texts.headRow}
 									cellInitializer={initCell(i)}
 									tableFooterInitializer={initTableFooter(i)}
-									handleChange={handleChange()}
+									handleChange={handleChange}
 									WEEK_GLOBAL_Object={WEEK_GLOBAL_Object}
 								/>
 							</Paper>
