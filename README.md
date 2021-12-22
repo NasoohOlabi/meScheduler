@@ -9,4 +9,6 @@ And what's great about this method is that it already implement an editing algor
 
 
 ### Demo ###
+https://meschedule-64bda.web.app/
+because pages isn't working for some reason 
 https://nasooholabi.github.io/meScheduler/
