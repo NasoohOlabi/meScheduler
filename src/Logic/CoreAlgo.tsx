@@ -460,7 +460,7 @@ const delegate = (
 	console.log("" + JSON.stringify(Pos) + " # " + week.allClasses[m].Name + " # " + teacher + " -> " + sit)
 	switch (sit) {
 		case 1: // t==='' & r===-1 & a ==='shift'
-			week.Swaping = false;
+			week.Swapping = false;
 			putHimAt(week, m, teacher, Pos, "put");
 			break;
 		case 2: // t==='' & r!==-1 & a ==='shift'
@@ -561,7 +561,7 @@ export const someHowPutHimAt = (
 	?!
 	*/
 	//short hands
-	week.Swaping = true;
+	week.Swapping = true;
 	// week.HandyAny.beforeAction = [];
 	// for (let i = 0; i < week.allClasses.length; i++) {
 	// 	let acc = 0;
@@ -673,7 +673,7 @@ export const Done = (m: number, week: IWEEK_GLOBAL_Object, iterativeSolutionPost
 	return (e: any) => {
 		const sol = week.activateList[week.currentSolutionNumber];
 		if (sol === undefined) {
-			week.Swaping = false;
+			week.Swapping = false;
 			week.activateList = [];
 			week.currentSolutionNumber = 0;
 			week.forceUpdate && week.forceUpdate();
@@ -687,7 +687,7 @@ export const Done = (m: number, week: IWEEK_GLOBAL_Object, iterativeSolutionPost
 			putHimAt(week, sol[i].m, sol[i].teacher, sol[i].Pos, "put");
 		}
 
-		week.Swaping = false;
+		week.Swapping = false;
 		week.activateList = [];
 		week.currentSolutionNumber = 0;
 		week.forceUpdate && week.forceUpdate();

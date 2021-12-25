@@ -79,7 +79,7 @@ export function UnmemCell(props: ICell): JSX.Element {
 		return cell(true, cellData.currentTeacher);
 	}
 
-	if (week.Swaping) {
+	if (week.Swapping) {
 		const i = week.currentSolutionNumber;
 		for (
 			let j = 0;

@@ -66,7 +66,7 @@ function TableFooter(props: ITableFooter) {
 	);
 	return (
 		<div>
-			{week.Swaping ? (
+			{week.Swapping ? (
 				week.activateList.length > 0 ? (
 					ms.includes(props.m) ? (
 						<table>

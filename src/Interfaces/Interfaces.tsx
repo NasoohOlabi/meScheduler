@@ -239,7 +239,7 @@ export interface IWEEK_GLOBAL_Object {
 	refreshTable?: (() => void)[][][];
 	tableFooterRefresher?: (() => void)[];
 	forceUpdate?: () => void;
-	Swaping: boolean;
+	Swapping: boolean;
 	currentSolutionNumber: number;
 	activateList: { Pos: PosType; m: number; teacher: string }[][];
 	availables: IAvailables;
@@ -254,7 +254,7 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 	tableFooterRefresher: tableFooterRefresherType = [];
 	teacherSchedule: ITeacherSchedule = {};
 	forceUpdate: () => void = () => { };
-	Swaping = false;
+	Swapping = false;
 	currentSolutionNumber = 0;
 	constructor(...args: any[]) {
 		if (args && args.length === 1 && args[0].allClasses
@@ -314,3 +314,19 @@ export interface ClassTeacherData {
 	periodsHere: PosType[];
 	emptyAvailables: PosType[];
 }
+export interface IWeekData {
+	allClasses: ClassObj[];
+	teachersGuild: string[];
+	Swapping: boolean;
+	currentSolutionNumber: number;
+	activateList: { Pos: PosType; m: number; teacher: string }[][];
+	availables: IAvailables;
+	teacherSchedule: ITeacherSchedule;
+}
+export type ISomeHowPutHimAtWorkerMsg = [
+	number,
+	string,
+	PosType,
+	IWEEK_GLOBAL_Object,
+	boolean?
+]

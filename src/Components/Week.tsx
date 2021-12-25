@@ -15,7 +15,7 @@ import { WeekObj } from "../Interfaces/Interfaces";
 // import { allClasses } from "./Data";
 import { texts } from "./UiText";
 import { PosType } from "../types";
-import solveWorker from "./solve.worker";
+import solveWorker from "../workers/solve.worker";
 import { weekContext } from "./DataViewComponents/DataViewModel";
 import { someHowPutHimAt } from "../Logic/CoreAlgo";
 
