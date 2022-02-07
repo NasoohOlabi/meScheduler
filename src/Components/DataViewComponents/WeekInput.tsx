@@ -1,7 +1,7 @@
 import { Paper, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { texts } from "../UiText";
 import { ClassesPorter } from "./ClassesInput";
-
+import React from "react";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
