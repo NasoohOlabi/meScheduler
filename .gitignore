@@ -22,3 +22,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+StaticSolutions
+
+.gitignore
+
+package-lock.json
+package.json
+yarn.lock
+file.json
+Go
+.vscode
+.firebase
+Processor.go
