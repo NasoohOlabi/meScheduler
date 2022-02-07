@@ -5,9 +5,11 @@ import { NUM_OF_DAYS, NUM_OF_PERIODS_PER_DAY } from "../../Interfaces/ClassObj";
 import { PosType } from "../../types";
 import { texts } from "../UiText";
 import { MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH, weekContext } from "./DataViewModel";
-import AddIcon from "@material-ui/icons/Add";
+import ScheduleIcon from "@material-ui/icons/Schedule";
+import RemoveIcon from "@material-ui/icons/Remove";
 import { equals } from "../../Logic/util";
 import { Topic } from "./Topic";
+import React from "react"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -68,6 +70,12 @@ function ReactiveTextField(props: { id: string }) {
         texts.NameMap[props.id] = v;
         FormControl.TeachersTopics[props.id].Publish(v)
     };
+    useEffect(() => {
+        setName(texts.NameMap[props.id])
+    },
+        [texts.NameMap[props.id]]
+    )
+
     useEffect(() => {
         FormControl.TeachersTopics[props.id].Subscribe(setName)
         return () => {
@@ -220,7 +228,7 @@ function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] 
     );
 }
 
-function ClassTeacherInputTableRows(props: { m: number; id: string; key: number }) {
+export function ClassTeacherInputTableRows(props: { m: number; id: string; key: number }) {
     const classes = useStyles();
     const [availabilityPromptOn, setAvailabilityPromptOn] = useState(false);
     const { week } = useContext(weekContext);
@@ -237,6 +245,11 @@ function ClassTeacherInputTableRows(props: { m: number; id: string; key: number 
         <Card className={classes.childCard}>
             <Table>
                 <TableRow>
+                    <TableCell>
+                        <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
+                            <RemoveIcon />
+                        </IconButton>
+                    </TableCell>
                     <TableCell className={classes.cell}>
                         {texts.teacherName} :
                     </TableCell>
@@ -260,7 +273,7 @@ function ClassTeacherInputTableRows(props: { m: number; id: string; key: number 
                     </TableCell>
                     <TableCell>
                         <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
-                            <AddIcon />
+                            <ScheduleIcon />
                         </IconButton>
                     </TableCell>
                 </TableRow>
@@ -277,4 +290,3 @@ function ClassTeacherInputTableRows(props: { m: number; id: string; key: number 
     );
 }
 
-export const MemoClassTeachersInputTRows = memo(ClassTeacherInputTableRows);

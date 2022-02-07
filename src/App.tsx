@@ -11,6 +11,7 @@ import { DataParserView } from "./DataParserView";
 import { Screen } from "./Interfaces/Interfaces";
 import { texts } from "./Components/UiText";
 import { weekContext, DataViewModel } from "./Components/DataViewComponents/DataViewModel";
+import { useForceUpdate } from "./Logic/Logic";
 
 const HomeScreen: Screen = Screen.DATAPARSER;
 
@@ -34,7 +35,8 @@ function Body(props: { UI: Screen, model: DataViewModel }): JSX.Element {
 function App(): JSX.Element {
 	const [screen, setScreen] = React.useState(HomeScreen);
 	const [dark, setDark] = React.useState(true);
-	const [lang, setLang] = React.useState(texts.LangDirection);
+	const reRender = useForceUpdate()
+
 	const switchViewTo =
 		(s: "ETA" | "TABLE" | "DATAPARASER") => (event: any) => {
 			switch (s) {
@@ -54,11 +56,8 @@ function App(): JSX.Element {
 		setDark(!dark);
 	};
 	const toggleLang = (event: any) => {
-		if (lang === "ltr") {
-			setLang("rtl");
-		} else {
-			setLang("ltr");
-		}
+		texts.changeLanguage()
+		reRender()
 	};
 
 	let theme = () => (dark ? { ...darkTheme } : { ...lightTheme });
@@ -80,7 +79,7 @@ function App(): JSX.Element {
 						toggleLang={toggleLang}
 					/>
 				</ReactPWAInstallProvider>
-				<div dir={lang}>
+				<div dir={texts.LangDirection}>
 					<Body UI={screen} model={model} />
 				</div>
 			</ThemeProvider>

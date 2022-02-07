@@ -4,7 +4,8 @@ import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
 import { weekContext } from "./DataViewModel";
 import AddIcon from "@material-ui/icons/Add";
-import { MemoClassTeachersInputTRows } from "./TeacherInput";
+import { ClassTeacherInputTableRows } from "./TeacherInput";
+import React from "react"
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -92,7 +93,7 @@ export function Classporter(props: { m: number }) {
                     <Card className={classes.pCard}>
                         {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
                             return (
-                                <MemoClassTeachersInputTRows
+                                <ClassTeacherInputTableRows
                                     key={index}
                                     m={props.m}
                                     id={teacher_id}
