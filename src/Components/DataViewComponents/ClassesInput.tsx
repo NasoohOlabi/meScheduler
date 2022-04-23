@@ -65,11 +65,13 @@ export function ClassesPorter(): JSX.Element {
                 </TableHead>
                 <TableBody>
                     {allClasses.map((Class, index) => (
-                        <TableRow>
-                            <Classporter
-                                m={index}
-                                key={index}
-                            />
+                        <TableRow key={index}>
+                            <TableCell className={classes.cell}>
+                                <Classporter
+                                    m={index}
+                                    key={index}
+                                />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

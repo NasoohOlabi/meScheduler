@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles, Table, TableHead, TableRow, TableCell, Typography, TextField, TableBody, IconButton, Card } from "@material-ui/core";
+import { makeStyles, Theme, createStyles, Table, TableHead, TableRow, TableCell, Typography, TextField, TableBody, IconButton, Card, TableContainer, Paper } from "@material-ui/core";
 import { useContext } from "react";
 import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
@@ -59,9 +59,9 @@ export function Classporter(props: { m: number }) {
         Class.Name = value;
     };
     return (
-        <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-                <Table>
+        <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+                <TableHead>
                     <TableRow>
                         <TableCell
                             className={classes.cell}
@@ -74,35 +74,31 @@ export function Classporter(props: { m: number }) {
                             <TextField
                                 onChange={textChange}
                                 id="standard-required"
-                                label={Class.Name}
+                                defaultValue={Class.Name}
                             />
                         </TableCell>
                     </TableRow>
-                </Table>
-            </TableHead>
-            <TableBody>
-                <TableRow>
-                    <TableCell className={classes.cell} component="th" scope="row">
-                        {texts.classTeachers}
-                        <IconButton color="inherit" onClick={addClassTeacherInput}>
-                            <AddIcon />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <Card className={classes.pCard}>
-                        {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
-                            return (
-                                <ClassTeacherInputTableRows
-                                    key={index}
-                                    m={props.m}
-                                    id={teacher_id}
-                                />
-                            );
-                        })}
-                    </Card>
-                </TableRow>
-            </TableBody>
-        </Table>
+                </TableHead>
+                <TableBody>
+                    <TableRow >
+                        <TableCell colSpan={2} className={classes.cell} component="th" scope="row">
+                            {texts.classTeachers}
+                            <IconButton color="inherit" onClick={addClassTeacherInput}>
+                                <AddIcon />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow >
+                        <TableCell colSpan={2} className={classes.cell} component="th" scope="row">
+                            <Card className={classes.pCard}>
+                                {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
+                                    return <ClassTeacherInputTableRows key={index} m={props.m} id={teacher_id} />;
+                                })}
+                            </Card>
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }

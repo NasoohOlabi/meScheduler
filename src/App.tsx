@@ -13,7 +13,7 @@ import { texts } from "./Components/UiText";
 import { weekContext, DataViewModel } from "./Components/DataViewComponents/DataViewModel";
 import { useForceUpdate } from "./Logic/Logic";
 
-const HomeScreen: Screen = Screen.TABLE;
+const HomeScreen: Screen = Screen.DATAPARSER;
 
 function AppropriateScreen(UI: Screen): JSX.Element {
 	switch (UI) {

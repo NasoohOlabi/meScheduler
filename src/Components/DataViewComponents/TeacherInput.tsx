@@ -1,4 +1,5 @@
-import { Card, Table, TableRow, TableCell, TextField, IconButton, Checkbox, FormControlLabel, Button, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { Card, TableContainer, Paper, Table, TableRow, TableCell, TextField, IconButton, Checkbox, FormControlLabel, Button, createStyles, makeStyles, Theme, Select, MenuItem, TableBody, TableHead } from "@material-ui/core";
+
 import { useEffect, memo, useRef } from "react";
 import { useState, useContext } from "react";
 import { NUM_OF_DAYS, NUM_OF_PERIODS_PER_DAY } from "../../Interfaces/ClassObj";
@@ -60,9 +61,9 @@ function parseModel(mat: boolean[][]) {
     return Result;
 }
 
-function ReactiveTextField(props: { id: string }) {
+function TeacherSelector(props: { id: string }) {
 
-    const { FormControl } = useContext(weekContext)
+    const { FormControl, week } = useContext(weekContext)
     const [name, setName] = useState(texts.NameMap[props.id])
 
     const onTeacherNameChange = (event: any) => {
@@ -84,13 +85,17 @@ function ReactiveTextField(props: { id: string }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
-        <TextField
-            required
-            defaultValue={name}
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
             value={name}
-            id="standard-required"
+            label="Age"
             onChange={onTeacherNameChange}
-        />
+            defaultValue={name}
+            placeholder={texts.NameMap['Teacher']}
+        >
+            {week.teachersGuild.map((t, i) => <MenuItem key={i} value={texts.NameMap[t]} >{texts.NameMap[t]}</MenuItem>)}
+        </Select>
     )
 }
 
@@ -133,27 +138,6 @@ function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] 
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [])
 
-        // const fn = (event: any) => {
-        //     const newVal = event.target.checked;
-        //     ModelSetState[x][y]?.(newVal);
-        //     if (x === 0 && y === 0) {
-        //         for (let i = 0; i < ModelSetState.length; i++) {
-        //             for (let j = 0; j < ModelSetState[i].length; j++) {
-        //                 ModelSetState[i][j]?.(newVal);
-        //             }
-        //         }
-        //     }
-        //     else if (x === 0) {
-        //         for (let i = 1; i < ModelSetState.length; i++) {
-        //             ModelSetState[i][y]?.(newVal);
-        //         }
-        //     } else if (y === 0) {
-        //         for (let j = 1; j < ModelSetState[x].length; j++) {
-        //             ModelSetState[x][j]?.(newVal);
-        //         }
-        //     }
-        // };
-
         const changeHandler = (event: any) => {
             const newVal: boolean = event.target.checked;
             setChecked(newVal)
@@ -194,37 +178,42 @@ function TeacherSchedulePorter(props: { onSubmission: any, lastValue: PosType[] 
     };
 
     return (
-        <div>
-            <table>
-                {Array(NUM_OF_DAYS + 1)
-                    .fill(Array(NUM_OF_PERIODS_PER_DAY + 1).fill(0))
-                    .map((dayArr: number[], index) => {
-                        return (
-                            <tr>
-                                {dayArr.map((Period, jndex) => {
-                                    let label = undefined;
-                                    if (index === 0 && jndex === 0) {
-                                        label = "Select all";
-                                    } else if (index === 0) {
-                                        label = texts.headRow[jndex - 1];
-                                    } else if (jndex === 0) {
-                                        label = texts.headCol[index - 1];
-                                    }
-                                    return (
-                                        <td>
-                                            <ControlledCheckbox
-                                                Pos={[index, jndex]}
-                                                label={label}
-                                            />
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        );
-                    })}
-            </table>
+        <Card>
+            <TableContainer>
+                <Table>
+                    <TableHead></TableHead>
+                    <TableBody>
+                        {Array(NUM_OF_DAYS + 1)
+                            .fill(Array(NUM_OF_PERIODS_PER_DAY + 1).fill(0))
+                            .map((dayArr: number[], index) => {
+                                return (
+                                    <TableRow key={index}>
+                                        {dayArr.map((Period, jndex) => {
+                                            let label = undefined;
+                                            if (index === 0 && jndex === 0) {
+                                                label = "Select all";
+                                            } else if (index === 0) {
+                                                label = texts.headRow[jndex - 1];
+                                            } else if (jndex === 0) {
+                                                label = texts.headCol[index - 1];
+                                            }
+                                            return (
+                                                <TableCell key={`${index},${jndex}`}>
+                                                    <ControlledCheckbox
+                                                        Pos={[index, jndex]}
+                                                        label={label}
+                                                    />
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <Button onClick={Avail_terminator}>Done</Button>
-        </div>
+        </Card >
     );
 }
 
@@ -242,51 +231,57 @@ export function ClassTeacherInputTableRows(props: { m: number; id: string; key: 
         week.availables[props.id] = availability
     }
     return (
-        <Card className={classes.childCard}>
+        <TableContainer component={Paper}>
             <Table>
-                <TableRow>
-                    <TableCell>
-                        <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
-                            <RemoveIcon />
-                        </IconButton>
-                    </TableCell>
-                    <TableCell className={classes.cell}>
-                        {texts.teacherName} :
-                    </TableCell>
-                    <TableCell className={classes.cell} align="center">
-                        <ReactiveTextField id={props.id} />
-                    </TableCell>
-                    <TableCell>
-                        <TextField
-                            required
-                            type="number"
-                            id="standard-required"
-                            onChange={onTeacherPeriodsChange}
-                            defaultValue={week.allClasses[props.m].teachers[props.id].Periods}
-                            InputProps={{
-                                inputProps: {
-                                    min: 0,
-                                    max: MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH,
-                                },
-                            }}
-                        />
-                    </TableCell>
-                    <TableCell>
-                        <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
-                            <ScheduleIcon />
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                {(availabilityPromptOn) ? <TableRow>
-                    <TeacherSchedulePorter
-                        lastValue={week.availables[props.id] || []}
-                        onSubmission={(availability: PosType[]) => {
-                            onAvailabilitySubmission(availability)
-                            setAvailabilityPromptOn(false)
-                        }} />
-                </TableRow> : null}
+                <TableHead>
+                    <TableRow>
+                        <TableCell>
+                            <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
+                                <RemoveIcon />
+                            </IconButton>
+                        </TableCell>
+                        <TableCell className={classes.cell}>
+                            {texts.teacherName} :
+                        </TableCell>
+                        <TableCell className={classes.cell} align="center">
+                            <TeacherSelector id={props.id} />
+                        </TableCell>
+                        <TableCell>
+                            <TextField
+                                required
+                                type="number"
+                                id="standard-required"
+                                onChange={onTeacherPeriodsChange}
+                                defaultValue={week.allClasses[props.m].teachers[props.id].Periods}
+                                InputProps={{
+                                    inputProps: {
+                                        min: 0,
+                                        max: MAX_NUMBER_OF_PERIODS_TEACHER_CAN_TEACH,
+                                    },
+                                }}
+                            />
+                        </TableCell>
+                        <TableCell>
+                            <IconButton color="inherit" onClick={(e) => { setAvailabilityPromptOn(!availabilityPromptOn) }}>
+                                <ScheduleIcon />
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {(availabilityPromptOn) ? <TableRow>
+                        <TableCell>
+                            <TeacherSchedulePorter
+                                lastValue={week.availables[props.id] || []}
+                                onSubmission={(availability: PosType[]) => {
+                                    onAvailabilitySubmission(availability)
+                                    setAvailabilityPromptOn(false)
+                                }} />
+                        </TableCell>
+                    </TableRow> : null}
+                </TableBody>
             </Table>
-        </Card>
+        </TableContainer>
     );
 }
 
