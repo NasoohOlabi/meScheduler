@@ -191,6 +191,7 @@ const arabicUiTextObj: ITexts = {
 	DataViewBtn: "بيانات",
 	WeekBtn: "البرنامج",
 	addClass: "إضافة صف",
+	// addTeacher: "إضافة إستاذ",
 	LangDirection: "rtl",
 	classGroupName: "اسم الصف",
 	classTeachers: "أساتذة الصف",
@@ -205,6 +206,7 @@ const arabicUiTextObj: ITexts = {
 		"الحصة السابعة",
 	],
 	headCol: ["الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس"],
+
 	NameMap: ArabicDisplayNamesMap,
 };
 class textsObj implements ITexts {

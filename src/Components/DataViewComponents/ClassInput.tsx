@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles, Table, TableHead, TableRow, TableCell, Typography, TextField, TableBody, IconButton, Card, TableContainer, Paper } from "@material-ui/core";
+import { makeStyles, Theme, createStyles, Table, TableHead, TableRow, TableCell, Typography, TextField, TableBody, IconButton, Card, TableContainer, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select } from "@material-ui/core";
 import { useContext } from "react";
 import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
@@ -46,24 +46,21 @@ export function Classporter(props: { m: number }) {
     const classes = useStyles();
     const { week, id_provider: idProvider } = useContext(weekContext);
     const Class = week.allClasses[props.m];
-    const forceUpdate = useForceUpdate();
-    const addClassTeacherInput = () => {
-        const Id = idProvider.get_id();
-        Class.addTeacher(Id, 0);
-        week.teachersGuild.push(Id);
-        forceUpdate();
-        console.log(Class.teachers);
-    };
+
+
     const textChange = (event: any) => {
         const value = event.target.value;
         Class.Name = value;
     };
+
+
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                     <TableRow>
                         <TableCell
+                            colSpan={4}
                             className={classes.cell}
                             component="th"
                             scope="row"
@@ -81,22 +78,19 @@ export function Classporter(props: { m: number }) {
                 </TableHead>
                 <TableBody>
                     <TableRow >
-                        <TableCell colSpan={2} className={classes.cell} component="th" scope="row">
+                        <TableCell colSpan={5} className={classes.cell} component="th" scope="row">
                             {texts.classTeachers}
-                            <IconButton color="inherit" onClick={addClassTeacherInput}>
+                            <IconButton color="inherit" >
                                 <AddIcon />
                             </IconButton>
+
+
+
                         </TableCell>
                     </TableRow>
-                    <TableRow >
-                        <TableCell colSpan={2} className={classes.cell} component="th" scope="row">
-                            <Card className={classes.pCard}>
-                                {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
-                                    return <ClassTeacherInputTableRows key={index} m={props.m} id={teacher_id} />;
-                                })}
-                            </Card>
-                        </TableCell>
-                    </TableRow>
+                    {Object.keys(Class.teachers).map((teacher_id: string, index: number) => {
+                        return <ClassTeacherInputTableRows key={index} m={props.m} id={teacher_id} />;
+                    })}
                 </TableBody>
             </Table>
         </TableContainer>

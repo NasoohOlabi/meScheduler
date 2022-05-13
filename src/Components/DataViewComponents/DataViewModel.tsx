@@ -5,6 +5,9 @@ import { Topic } from "./Topic";
 
 export class teacher_id_generator implements Iid_provider {
     n: number = -1;
+    constructor(m: number) {
+        this.n = m;
+    }
     get_id() {
         this.n++;
         return "t" + this.n;
@@ -30,9 +33,6 @@ export interface Iid_provider {
 }
 export class DataViewModel {
     week = DEFAULT_WEEK
-    id_provider = new teacher_id_generator()
-    FormControl = {
-        TeachersTopics: topicList(DEFAULT_WEEK.teachersGuild)
-    }
+    id_provider = new teacher_id_generator(DEFAULT_WEEK.teachersGuild.length - 1)
 }
 export const weekContext = createContext(new DataViewModel());
