@@ -100,7 +100,13 @@ export function TeacherSelector(props: { defaultId?: string, onChange: (id: stri
         >
             {week
                 .teachersGuild
-                .map((t, i) => <MenuItem key={i} value={texts.NameMap[t]} >{texts.NameMap[t]}</MenuItem>)}
+                .map(
+                    (t, i) =>
+                        <MenuItem key={i} value={texts.NameMap[t]} >
+                            {texts.NameMap[t]}
+                        </MenuItem>
+                )
+            }
         </Select>
     )
 }

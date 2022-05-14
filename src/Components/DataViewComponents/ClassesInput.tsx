@@ -1,13 +1,15 @@
-import { makeStyles, Theme, createStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, Typography, IconButton, TableBody, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@material-ui/core";
+import { makeStyles, Theme, createStyles, TableContainer, Paper, Table, TableHead, TableRow, TableCell, Typography, IconButton, TableBody, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, SvgIconTypeMap } from "@material-ui/core";
 import ClassObj from "../../Interfaces/ClassObj";
 import { useForceUpdate } from "../../Logic/Logic";
 import { texts } from "../UiText";
-import RemoveIcon from "@material-ui/icons/Remove";
 import { weekContext } from "./DataViewModel";
-import AddIcon from "@material-ui/icons/Add";
 import React from "react";
 import { Classporter } from "./ClassInput";
-import { TeacherSelector } from "./TeacherInput";
+import AddIcon from "@material-ui/icons/Add";
+import { AddModal } from "./Modals/AddModal";
+import { RemoveModal } from "./Modals/RemoveModal";
+import { RenameModal } from "./Modals/RenameModal";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
+
 export function ClassesPorter(): JSX.Element {
     const classes = useStyles();
     const forceUpdate = useForceUpdate();
@@ -52,45 +55,6 @@ export function ClassesPorter(): JSX.Element {
         allClasses.push(new ClassObj());
         forceUpdate();
     };
-    const [AddDialogOpen, setAddDialogOpen] = React.useState(false);
-    let formTeacherName = "";
-
-    const handleAddDialogClose = () => {
-        setAddDialogOpen(false);
-    }
-    const addClassTeacherInput = () => {
-        setAddDialogOpen(true);
-    };
-    const dialogTeacherTextChange = (event: any) => {
-        const value = event.target.value;
-        formTeacherName = value;
-    }
-    const onAddDialogOK = () => {
-        const id = idProvider.get_id();
-        week.teachersGuild.push(id);
-        texts.NameMap[id] = formTeacherName;
-        setAddDialogOpen(false);
-    }
-
-
-    const [removeDialogOpen, setRemoveDialogOpen] = React.useState(false);
-    const removeClassTeacherInput = () => {
-        setRemoveDialogOpen(true);
-    };
-
-    const onRemoveDialogOK = (id: string) => {
-        week.allClasses.forEach(Class => {
-            Class.removeTeacher(id);
-        })
-        week.teachersGuild = week.teachersGuild.filter(t => t !== id);
-        delete texts.NameMap[id]
-    }
-
-    const handleRemoveDialogClose = () => {
-        setRemoveDialogOpen(false);
-    }
-
-
 
     return (
         <TableContainer component={Paper}>
@@ -104,51 +68,9 @@ export function ClassesPorter(): JSX.Element {
                             </IconButton>
                         </TableCell>
                         <TableCell className={classes.cell}>
-                            <Typography display="inline">Add Teacher</Typography>
-                            <IconButton color="inherit" onClick={addClassTeacherInput}>
-                                <AddIcon />
-                            </IconButton>
-                            <Dialog open={AddDialogOpen} onClose={handleAddDialogClose}>
-                                <DialogTitle>Add Teacher</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>
-                                        Add The Name of the Teacher.
-                                    </DialogContentText>
-                                    <TextField
-                                        autoFocus
-                                        margin="dense"
-                                        id="name"
-                                        label="Teacher's Name"
-                                        type="text"
-                                        fullWidth
-                                        variant="standard"
-                                        onChange={dialogTeacherTextChange}
-                                    />
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleAddDialogClose}>Cancel</Button>
-                                    <Button onClick={onAddDialogOK}>Add</Button>
-                                </DialogActions>
-                            </Dialog>
-                            <Typography display="inline">Remove Teacher</Typography>
-                            <IconButton color="inherit" onClick={removeClassTeacherInput}>
-                                <RemoveIcon />
-                            </IconButton>
-                            <Dialog open={removeDialogOpen} onClose={handleRemoveDialogClose}>
-                                <DialogTitle>Remove Teacher</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText>
-                                    Select The Teacher to remove.
-                                    </DialogContentText>
-                                    <TeacherSelector
-                                        onChange={onRemoveDialogOK}
-                                        />
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleRemoveDialogClose}>Cancel</Button>
-                                    {/* <Button onClick={onRemoveDialogOK}>Remove</Button> */}
-                                </DialogActions>
-                            </Dialog>
+                            <AddModal />
+                            <RemoveModal />
+                            <RenameModal />
                         </TableCell>
                     </TableRow>
                 </TableHead>
