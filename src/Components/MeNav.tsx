@@ -1,29 +1,23 @@
-import React from 'react';
-import '../App.css';
+import React from "react";
+import "../App.css";
 //import {Button,Navbar,NavDropdown, FormControl, Form, Nav} from "react-bootstrap";
 //import ReactPWAInstallProvider from "react-pwa-install";
-import { InstallButton } from './A2HS';
-import { AppBar , Typography , Toolbar} from '@material-ui/core';
-import classes from '*.module.css';
-import { INavProps } from '../Interfaces/Interfaces';
+import { InstallButton } from "./A2HS";
+import { AppBar, Typography, Toolbar } from "@material-ui/core";
+import classes from "*.module.css";
+import { INavProps } from "../Interfaces/Interfaces";
 
-
-
-
-
-
-
-export function MeNav (props : INavProps){
-  return(
-      <AppBar position="static">
-  <Toolbar>
-    <Typography variant="h6" className={classes.title}>
-      My Scheduler
-    </Typography>
-    <InstallButton/>
-  </Toolbar>
-</AppBar>
-  );
+export function MeNav(props: INavProps) {
+	return (
+		<AppBar position="static">
+			<Toolbar>
+				<Typography variant="h6" className={classes.title}>
+					My Scheduler
+				</Typography>
+				<InstallButton />
+			</Toolbar>
+		</AppBar>
+	);
 }
 
 /*

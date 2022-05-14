@@ -78,27 +78,33 @@ function TableFooter(props: ITableFooter) {
 												week.currentSolutionNumber--;
 												// week.forceUpdate();
 												const sol1 =
-													week.activateList[week.currentSolutionNumber + 1];
+													week.activateList[
+														week.currentSolutionNumber + 1
+													];
 												const sol2 =
-													week.activateList[week.currentSolutionNumber];
+													week.activateList[
+														week.currentSolutionNumber
+													];
 												if (sol1)
 													sol1.forEach((step: IActlistObj) => {
 														if (week.refreshTable !== undefined)
-															week.refreshTable[step.m][step.Pos[0]][
-																step.Pos[1]
-															]();
+															week.refreshTable[step.m][
+																step.Pos[0]
+															][step.Pos[1]]();
 													});
 												if (sol2)
 													sol2.forEach((step: IActlistObj) => {
 														if (week.refreshTable !== undefined)
-															week.refreshTable[step.m][step.Pos[0]][
-																step.Pos[1]
-															]();
+															week.refreshTable[step.m][
+																step.Pos[0]
+															][step.Pos[1]]();
 													});
 												if (week.tableFooterRefresher !== undefined)
-													week.tableFooterRefresher.forEach((tfr: any) => {
-														tfr();
-													});
+													week.tableFooterRefresher.forEach(
+														(tfr: any) => {
+															tfr();
+														}
+													);
 											}
 										}}
 									>
@@ -106,7 +112,8 @@ function TableFooter(props: ITableFooter) {
 									</Button>
 								</td>
 								<td>
-									{week.currentSolutionNumber + 1}/{week.activateList.length}
+									{week.currentSolutionNumber + 1}/
+									{week.activateList.length}
 								</td>
 								<td>
 									<Button
@@ -117,27 +124,33 @@ function TableFooter(props: ITableFooter) {
 											) {
 												week.currentSolutionNumber++;
 												const sol1 =
-													week.activateList[week.currentSolutionNumber - 1];
+													week.activateList[
+														week.currentSolutionNumber - 1
+													];
 												const sol2 =
-													week.activateList[week.currentSolutionNumber];
+													week.activateList[
+														week.currentSolutionNumber
+													];
 												if (sol1)
 													sol1.forEach((step: IActlistObj) => {
 														if (week.refreshTable !== undefined)
-															week.refreshTable[step.m][step.Pos[0]][
-																step.Pos[1]
-															]();
+															week.refreshTable[step.m][
+																step.Pos[0]
+															][step.Pos[1]]();
 													});
 												if (sol2)
 													sol2.forEach((step: IActlistObj) => {
 														if (week.refreshTable !== undefined)
-															week.refreshTable[step.m][step.Pos[0]][
-																step.Pos[1]
-															]();
+															week.refreshTable[step.m][
+																step.Pos[0]
+															][step.Pos[1]]();
 													});
 												if (week.tableFooterRefresher !== undefined)
-													week.tableFooterRefresher.forEach((tfr: any) => {
-														tfr();
-													});
+													week.tableFooterRefresher.forEach(
+														(tfr: any) => {
+															tfr();
+														}
+													);
 											}
 										}}
 									>
@@ -149,21 +162,27 @@ function TableFooter(props: ITableFooter) {
 								</td>
 								<td>
 									Effected Classes :{" "}
-									{week.activateList[week.currentSolutionNumber].reduce(
-										(acc, item) => {
-											if (!acc.includes("" + week.allClasses[item.m].Name)) {
-												return acc + `${week.allClasses[item.m].Name} `;
-											} else return acc + "";
-										},
-										""
-									)}
+									{week.activateList[
+										week.currentSolutionNumber
+									].reduce((acc, item) => {
+										if (
+											!acc.includes(
+												"" + week.allClasses[item.m].Name
+											)
+										) {
+											return (
+												acc + `${week.allClasses[item.m].Name} `
+											);
+										} else return acc + "";
+									}, "")}
 								</td>
 							</tr>
 						</table>
 					) : null
 				) : (
 					<p>
-						No Solutions! <Button onClick={Done(props.m, week)}>OK</Button>
+						No Solutions!{" "}
+						<Button onClick={Done(props.m, week)}>OK</Button>
 					</p>
 				)
 			) : null}
@@ -211,10 +230,16 @@ export function BasicTable(props: IBasicTableProps) {
 									return (
 										<Cell
 											key={`${[index, jndex]}`}
-											cellInitializer={props.cellInitializer([index, jndex])}
+											cellInitializer={props.cellInitializer([
+												index,
+												jndex,
+											])}
 											Pos={[index, jndex]}
 											m={props.m}
-											handleChange={props.handleChange([index, jndex], props.m)}
+											handleChange={props.handleChange(
+												[index, jndex],
+												props.m
+											)}
 											WEEK_GLOBAL_Object={week}
 										/>
 									);

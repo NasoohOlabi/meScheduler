@@ -28,8 +28,8 @@
 }
 */
 .App-header {
-  min-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	min-height: 90vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

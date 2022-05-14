@@ -85,8 +85,7 @@ export class argumentsQueue {
 		this.queue.dequeue();
 	}
 	unlock(): void {
-		if (!this._accepting)
-			this._accepting = true;
+		if (!this._accepting) this._accepting = true;
 		// if (this._accepting) console.log(`Max wasn't reached!`);
 		// else {
 		// 	console.log(`Max was reached ;( `);
@@ -222,7 +221,7 @@ export interface ICell {
 	WEEK_GLOBAL_Object: IWEEK_GLOBAL_Object;
 }
 export interface TeachersDictionary<T> {
-	[index: string]: T
+	[index: string]: T;
 }
 export interface ITeacherSchedule {
 	[index: string]: (number | null)[][];
@@ -253,17 +252,21 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 	refreshTable: refreshTableType = [];
 	tableFooterRefresher: tableFooterRefresherType = [];
 	teacherSchedule: ITeacherSchedule = {};
-	forceUpdate: () => void = () => { };
+	forceUpdate: () => void = () => {};
 	Swapping = false;
 	currentSolutionNumber = 0;
 	constructor(...args: any[]) {
-		if (args && args.length === 1 && args[0].allClasses
-			&& args[0].teachersGuild
-			&& args[0].availables) {
-			const week = args[0]
-			this.allClasses = week.allClasses
-			this.teachersGuild = week.teachersGuild
-			this.availables = week.availables
+		if (
+			args &&
+			args.length === 1 &&
+			args[0].allClasses &&
+			args[0].teachersGuild &&
+			args[0].availables
+		) {
+			const week = args[0];
+			this.allClasses = week.allClasses;
+			this.teachersGuild = week.teachersGuild;
+			this.availables = week.availables;
 			if (!week.refreshTable) {
 				this.refreshTable = new Array(week.allClasses.length)
 					.fill(null)
@@ -273,11 +276,11 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 							.map(() =>
 								Array(NUM_OF_PERIODS_PER_DAY)
 									.fill(null)
-									.map(() => () => { })
-							));
-			}
-			else {
-				this.refreshTable = week.refreshTable
+									.map(() => () => {})
+							)
+					);
+			} else {
+				this.refreshTable = week.refreshTable;
 			}
 		}
 	}
@@ -285,7 +288,7 @@ export class WeekObj implements IWEEK_GLOBAL_Object {
 		const cls = new ClassObj();
 		this.allClasses.push(cls);
 		this.refreshTable.push(cls.refreshTable());
-		this.tableFooterRefresher.push(() => { });
+		this.tableFooterRefresher.push(() => {});
 	}
 	public addTeacher(ind: number, m: number, teacher: string, Periods: number) {
 		this.teachersGuild[ind] = teacher;
@@ -329,4 +332,4 @@ export type ISomeHowPutHimAtWorkerMsg = [
 	PosType,
 	IWEEK_GLOBAL_Object,
 	boolean?
-]
+];

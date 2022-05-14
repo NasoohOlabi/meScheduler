@@ -48,7 +48,7 @@ export function WeekView(theme: any): JSX.Element {
 			let teacher: string = texts.NameMap[event.target.value as string];
 			console.clear();
 			someHowPutHimAt(m, teacher, Pos, WEEK_GLOBAL_Object);
-		}
+		};
 	};
 	const initCell = (m: number) => {
 		return (Pos: PosType) => {
@@ -73,7 +73,7 @@ export function WeekView(theme: any): JSX.Element {
 			forceUpdate();
 			if (!window.Worker) {
 				console.log("Your browser doesn't support web workers.");
-				return
+				return;
 			}
 			const data: any = JSON.stringify({
 				...WEEK_GLOBAL_Object,
@@ -86,33 +86,32 @@ export function WeekView(theme: any): JSX.Element {
 			worker.onmessage = (event) => {
 				const msg = event.data;
 				try {
-
 					if (msg.type === "oneChange") {
-						const [x, y] = msg.payload.Pos
-						const m = msg.payload.m
-						WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher = msg.payload.teacher
-						WEEK_GLOBAL_Object.refreshTable[m][x][y]()
-					}
-					else if (msg.type === "multipleChanges") {
+						const [x, y] = msg.payload.Pos;
+						const m = msg.payload.m;
+						WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
+							msg.payload.teacher;
+						WEEK_GLOBAL_Object.refreshTable[m][x][y]();
+					} else if (msg.type === "multipleChanges") {
 						for (let i = 0; i < event.data.payload.length; i++) {
-							const [x, y] = msg.payload[i].Pos
-							const m = msg.payload[i].m
-							WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher = msg.payload[i].teacher
-							WEEK_GLOBAL_Object.refreshTable[m][x][y]()
+							const [x, y] = msg.payload[i].Pos;
+							const m = msg.payload[i].m;
+							WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
+								msg.payload[i].teacher;
+							WEEK_GLOBAL_Object.refreshTable[m][x][y]();
 						}
-					}
-					else {
-						console.log('Final post msg.payload = ', msg.payload);
+					} else {
+						console.log("Final post msg.payload = ", msg.payload);
 						WEEK_GLOBAL_Object.allClasses = msg.payload.allClasses;
-						WEEK_GLOBAL_Object.teacherSchedule = msg.payload.teacherSchedule;
+						WEEK_GLOBAL_Object.teacherSchedule =
+							msg.payload.teacherSchedule;
 						worker.terminate();
 						forceUpdate();
 					}
+				} catch {
+					console.log(`unknown message error`, msg);
 				}
-				catch {
-					console.log(`unknown message error`, msg)
-				}
-			}
+			};
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]

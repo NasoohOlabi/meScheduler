@@ -10,7 +10,10 @@ import { WeekView } from "./Components/Week";
 import { DataParserView } from "./DataParserView";
 import { Screen } from "./Interfaces/Interfaces";
 import { texts } from "./Components/UiText";
-import { weekContext, DataViewModel } from "./Components/DataViewComponents/DataViewModel";
+import {
+	weekContext,
+	DataViewModel,
+} from "./Components/DataViewComponents/DataViewModel";
 import { useForceUpdate } from "./Logic/Logic";
 
 const HomeScreen: Screen = Screen.DATAPARSER;
@@ -26,16 +29,18 @@ function AppropriateScreen(UI: Screen): JSX.Element {
 	}
 }
 
-function Body(props: { UI: Screen, model: DataViewModel }): JSX.Element {
-	return (<weekContext.Provider value={props.model}>
-		{AppropriateScreen(props.UI)}
-	</weekContext.Provider>)
+function Body(props: { UI: Screen; model: DataViewModel }): JSX.Element {
+	return (
+		<weekContext.Provider value={props.model}>
+			{AppropriateScreen(props.UI)}
+		</weekContext.Provider>
+	);
 }
 
 function App(): JSX.Element {
 	const [screen, setScreen] = React.useState(HomeScreen);
 	const [dark, setDark] = React.useState(true);
-	const reRender = useForceUpdate()
+	const reRender = useForceUpdate();
 
 	const switchViewTo =
 		(s: "ETA" | "TABLE" | "DATAPARASER") => (event: any) => {
@@ -56,8 +61,8 @@ function App(): JSX.Element {
 		setDark(!dark);
 	};
 	const toggleLang = (event: any) => {
-		texts.changeLanguage()
-		reRender()
+		texts.changeLanguage();
+		reRender();
 	};
 
 	let theme = () => (dark ? { ...darkTheme } : { ...lightTheme });

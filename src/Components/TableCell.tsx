@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: any) =>
 export function UnmemCell(props: ICell): JSX.Element {
 	const classes = useStyles();
 	const week = props.WEEK_GLOBAL_Object;
-	const [X, Y] = props.Pos
+	const [X, Y] = props.Pos;
 	const cellData = props.WEEK_GLOBAL_Object.allClasses[props.m].l[X][Y];
 
 	const refreshCell = useForceUpdate();
@@ -42,11 +42,12 @@ export function UnmemCell(props: ICell): JSX.Element {
 	);
 
 	const cell = (D: boolean, show: string, highlight = false): JSX.Element => {
-		const TeacherOptionsDropDown: string[] =
-			cellData.Options.map((t: string) => {
+		const TeacherOptionsDropDown: string[] = cellData.Options.map(
+			(t: string) => {
 				return texts.NameMap[t];
-			});
-		const displayTeacherName = texts.NameMap[show]
+			}
+		);
+		const displayTeacherName = texts.NameMap[show];
 		return (
 			<TableCell align="center">
 				<FormControl>
@@ -62,13 +63,15 @@ export function UnmemCell(props: ICell): JSX.Element {
 						error={highlight}
 					>
 						{TeacherOptionsDropDown &&
-							TeacherOptionsDropDown.map((teachersName: string, index) => {
-								return (
-									<MenuItem value={teachersName} key={index}>
-										{teachersName}
-									</MenuItem>
-								);
-							})}
+							TeacherOptionsDropDown.map(
+								(teachersName: string, index) => {
+									return (
+										<MenuItem value={teachersName} key={index}>
+											{teachersName}
+										</MenuItem>
+									);
+								}
+							)}
 					</Select>
 				</FormControl>
 			</TableCell>

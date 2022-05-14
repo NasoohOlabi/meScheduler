@@ -2,7 +2,11 @@
 import React from "react";
 import { useState } from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
-import { IActlistObj, IClass, IWEEK_GLOBAL_Object } from "../Interfaces/Interfaces";
+import {
+	IActlistObj,
+	IClass,
+	IWEEK_GLOBAL_Object,
+} from "../Interfaces/Interfaces";
 import { PosType, TeacherType_nullValue } from "../types";
 import { someHowPutHimAt } from "./CoreAlgo";
 import { contains, loopOverClass, util, withoutPos } from "./util";
@@ -67,7 +71,10 @@ export function fill(week: IWEEK_GLOBAL_Object) {
 // 	}
 // }
 
-export function randomFiller(week: IWEEK_GLOBAL_Object, changeCellPost?: (change: IActlistObj) => void) {
+export function randomFiller(
+	week: IWEEK_GLOBAL_Object,
+	changeCellPost?: (change: IActlistObj) => void
+) {
 	const allClasses = week.allClasses;
 	for (let m = allClasses.length - 1; m >= 0; m--) {
 		const Class = allClasses[m];
@@ -81,7 +88,7 @@ export function randomFiller(week: IWEEK_GLOBAL_Object, changeCellPost?: (change
 				if (aOptions.length > 0) {
 					const teacher =
 						aOptions[Math.floor(Math.random() * aOptions.length)];
-					changeCellPost && changeCellPost({ Pos: [i, j], teacher, m })
+					changeCellPost && changeCellPost({ Pos: [i, j], teacher, m });
 					putHimAt(week, m, teacher, [i, j], "put");
 					// noOtherOptionButToPutHere(m, week, changeCellPost)
 					// autoFill(m, week, changeCellPost)
@@ -198,7 +205,10 @@ export const CementNoOtherOptionButToPutHere = (
 		}
 	});
 };
-export const fastForward = (week: IWEEK_GLOBAL_Object, iterativeSolutionPoster?: (changes: IActlistObj[]) => void) => {
+export const fastForward = (
+	week: IWEEK_GLOBAL_Object,
+	iterativeSolutionPoster?: (changes: IActlistObj[]) => void
+) => {
 	console.time("fast");
 	week.allClasses.forEach((Class: IClass, m: number) => {
 		const empties: PosType[] = [];
@@ -221,13 +231,20 @@ export const fastForward = (week: IWEEK_GLOBAL_Object, iterativeSolutionPoster?:
 				ind < teachers.length
 			) {
 				const teacher = Class.l[u][v].Options[ind];
-				someHowPutHimAt(m, teacher, [u, v], week, false, iterativeSolutionPoster, true);
+				someHowPutHimAt(
+					m,
+					teacher,
+					[u, v],
+					week,
+					false,
+					iterativeSolutionPoster,
+					true
+				);
 				ind++;
 			}
 		});
 	});
 	console.timeEnd("fast");
 };
-
 
 //alert(`here in [${x},${y}] calling with ${School[i].l[x][y].Options[0]}  who ${(teacherHasNoMoreemptyAvailables(School[i].l[x][y].Options[0] ,School[i].teachers)?'has NOOOOO more':'has more')}`);

@@ -47,13 +47,13 @@ export default class ClassObj implements IClass {
 			.map(() =>
 				Array(NUM_OF_PERIODS_PER_DAY)
 					.fill(null)
-					.map(() => () => { })
+					.map(() => () => {})
 			);
 	}
 	public addTeacher(teacher: string, Periods: number) {
 		this.teachers[teacher] = new TeacherClass(Periods);
 	}
 	public removeTeacher(teacher: string) {
-		delete this.teachers[teacher]
+		delete this.teachers[teacher];
 	}
 }
