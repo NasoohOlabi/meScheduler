@@ -12,30 +12,40 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import React from "react";
 import { texts } from "../../UiText";
+import { weekContext } from "../DataViewModel";
 import { TeacherSelector } from "../TeacherInput";
 
-export function RenameModal() {
+interface RemoveModalProps {
+	onSave: (name: string) => void;
+}
+export function RenameModal(props: RemoveModalProps) {
 	const [DialogOpen, setDialogOpen] = React.useState(false);
-	let formTeacherName: string;
-	const Handler = (s: string) => {
-		texts.NameMap[s] = formTeacherName;
-		setDialogOpen(false);
-		console.log(`texts.NameMap[${s}] = ${texts.NameMap[s]}`);
-	};
+	const { week } = React.useContext(weekContext);
+
+	const formTeacherName = React.useRef<string>(
+		texts.NameMap[week.teachersGuild[0]]
+	);
+	const targetedId = React.useRef<string>(week.teachersGuild[0]);
 
 	const dialogTeacherTextChange = (event: any) => {
 		const value = event.target.value;
-		formTeacherName = value;
+		formTeacherName.current = value;
 	};
 	const ClassTeacherInput = () => {
 		setDialogOpen(true);
 	};
 	const onDialogChange = (id: string) => {
-		console.log(id);
-		formTeacherName = id;
+		targetedId.current = texts.NameMap[id];
 	};
 	const onDialogOK = () => {
-		Handler(formTeacherName);
+		texts.NameMap[targetedId.current] = formTeacherName.current;
+		setDialogOpen(false);
+		props.onSave(formTeacherName.current);
+		console.log(
+			`texts.NameMap[${targetedId.current}] = ${
+				texts.NameMap[targetedId.current]
+			}`
+		);
 	};
 
 	const handleDialogClose = () => {

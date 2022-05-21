@@ -14,9 +14,12 @@ import { weekContext } from "../DataViewModel";
 import { TeacherSelector } from "../TeacherInput";
 import RemoveIcon from "@material-ui/icons/Remove";
 
-export function RemoveModal() {
+interface RemoveModalProps {
+	onSave: (name: string) => void;
+}
+export function RemoveModal(props: RemoveModalProps) {
 	const [DialogOpen, setDialogOpen] = React.useState(false);
-	const { week, id_provider: idProvider } = React.useContext(weekContext);
+	const { week } = React.useContext(weekContext);
 	let chosenToTeacher = useRef<string>("");
 
 	const ClassTeacherInput = () => {
@@ -27,6 +30,7 @@ export function RemoveModal() {
 		chosenToTeacher.current = id;
 	};
 	const onDialogOK = () => {
+		chosenToTeacher.current = texts.NameMap[chosenToTeacher.current];
 		week.allClasses.forEach((Class) => {
 			Class.removeTeacher(chosenToTeacher.current);
 		});
@@ -34,6 +38,9 @@ export function RemoveModal() {
 			(t) => t !== chosenToTeacher.current
 		);
 		delete texts.NameMap[chosenToTeacher.current];
+		console.log(week);
+		props.onSave(chosenToTeacher.current);
+		setDialogOpen(false);
 	};
 
 	const handleDialogClose = () => {

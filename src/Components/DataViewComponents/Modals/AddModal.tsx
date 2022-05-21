@@ -14,11 +14,14 @@ import { texts } from "../../UiText";
 import { weekContext } from "../DataViewModel";
 import AddIcon from "@material-ui/icons/Add";
 
-export function AddModal() {
+interface IAddModalProps {
+	onSave: (name: string) => void;
+}
+export function AddModal(props: IAddModalProps) {
 	const { week, id_provider: idProvider } = React.useContext(weekContext);
 
 	const [DialogOpen, setDialogOpen] = React.useState(false);
-	let formTeacherName = "";
+	const formTeacherName = React.useRef<string>("");
 
 	const handleDialogClose = () => {
 		setDialogOpen(false);
@@ -28,13 +31,13 @@ export function AddModal() {
 	};
 	const dialogTeacherTextChange = (event: any) => {
 		const value = event.target.value;
-
-		formTeacherName = value;
+		formTeacherName.current = value;
 	};
 	const onDialogOK = () => {
 		const id = idProvider.get_id();
 		week.teachersGuild.push(id);
-		texts.NameMap[id] = formTeacherName;
+		texts.NameMap[id] = formTeacherName.current;
+
 		setDialogOpen(false);
 	};
 

@@ -11,14 +11,6 @@ import {
 	Typography,
 	IconButton,
 	TableBody,
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	TextField,
-	SvgIconTypeMap,
 } from "@material-ui/core";
 import ClassObj from "../../Interfaces/ClassObj";
 import { useForceUpdate } from "../../Logic/Logic";
@@ -67,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function ClassesPorter(): JSX.Element {
 	const classes = useStyles();
 	const forceUpdate = useForceUpdate();
-	const { week, id_provider: idProvider } = React.useContext(weekContext);
+	const { week } = React.useContext(weekContext);
 	const allClasses = week.allClasses;
 	const addClass = (event: any) => {
 		allClasses.push(new ClassObj());
@@ -86,9 +78,9 @@ export function ClassesPorter(): JSX.Element {
 							</IconButton>
 						</TableCell>
 						<TableCell className={classes.cell}>
-							<AddModal />
-							<RemoveModal />
-							<RenameModal />
+							<AddModal onSave={(s) => forceUpdate()} />
+							<RemoveModal onSave={(s) => forceUpdate()} />
+							<RenameModal onSave={(s) => forceUpdate()} />
 						</TableCell>
 					</TableRow>
 				</TableHead>
