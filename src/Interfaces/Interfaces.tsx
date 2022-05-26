@@ -66,7 +66,6 @@ export class argumentsQueue {
 	queue: Queue<callNodeType> = new Queue<callNodeType>();
 	_max: number = 100000;
 	_accepting: boolean = true;
-	
 	// _stats = { preCalls: 0, reCalls: 0, pivotToCalls: 0 };
 	Empty(): boolean {
 		return this.queue.Empty();
@@ -241,7 +240,7 @@ export interface IWEEK_GLOBAL_Object {
 	forceUpdate?: () => void;
 	Swapping: boolean;
 	currentSolutionNumber: number;
-	activateList: IActlistObj[][];
+	activateList: { Pos: PosType; m: number; teacher: string }[][];
 	availables: IAvailables;
 	teacherSchedule: ITeacherSchedule;
 }
@@ -323,25 +322,14 @@ export interface IWeekData {
 	teachersGuild: string[];
 	Swapping: boolean;
 	currentSolutionNumber: number;
-	activateList: IActlistObj[][];
+	activateList: { Pos: PosType; m: number; teacher: string }[][];
 	availables: IAvailables;
 	teacherSchedule: ITeacherSchedule;
 }
-export type ISomeHowPutHimAtWorkerMsg = {
-	week: IWeekData;
-	nodes: callNodeType[];
-	name: string;
-};
-export interface coreAlgoWorkerAnswer {
-	type: "Done" | "Error";
-	payload: IActlistObj[][];
-	name: string;
-}
-
-export type blowoutFunction = (lst: callNodeType[]) => void | undefined;
-
-export type blowoutFunctionSetupType = (
-	week: IWeekData,
-	lst: callNodeType[],
-	callBack: (msg: coreAlgoWorkerAnswer) => void
-) => void;
+export type ISomeHowPutHimAtWorkerMsg = [
+	number,
+	string,
+	PosType,
+	IWEEK_GLOBAL_Object,
+	boolean?
+];

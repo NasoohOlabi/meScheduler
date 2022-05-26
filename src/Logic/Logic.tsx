@@ -3,7 +3,6 @@ import React from "react";
 import { useState } from "react";
 //import { IBasicTableProps } from "../Components/BasicTable";
 import {
-	blowoutFunction,
 	IActlistObj,
 	IClass,
 	IWEEK_GLOBAL_Object,
@@ -208,8 +207,7 @@ export const CementNoOtherOptionButToPutHere = (
 };
 export const fastForward = (
 	week: IWEEK_GLOBAL_Object,
-	iterativeSolutionPoster?: (changes: IActlistObj[]) => void,
-	blowout?: blowoutFunction
+	iterativeSolutionPoster?: (changes: IActlistObj[]) => void
 ) => {
 	console.time("fast");
 	week.allClasses.forEach((Class: IClass, m: number) => {
@@ -240,8 +238,7 @@ export const fastForward = (
 					week,
 					false,
 					iterativeSolutionPoster,
-					true,
-					blowout
+					true
 				);
 				ind++;
 			}
