@@ -16,7 +16,7 @@ import {
 } from "./Components/DataViewComponents/DataViewModel";
 import { useForceUpdate } from "./Logic/Logic";
 
-const HomeScreen: Screen = Screen.DATAPARSER;
+const HomeScreen: Screen = Screen.ETA;
 
 function AppropriateScreen(UI: Screen): JSX.Element {
 	switch (UI) {
