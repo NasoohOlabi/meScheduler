@@ -167,6 +167,7 @@ interface ITexts {
 	teacherName: string;
 	LangDirection: "ltr" | "rtl";
 	addClass: string;
+	Solve: string;
 	NameMap: {
 		[details: string]: string;
 	};
@@ -183,6 +184,7 @@ const currentDevUiTextObj: ITexts = {
 	teacherName: "Teacher's Name",
 	classGroupName: "Class Name",
 	headCol,
+	Solve: "Solve",
 	NameMap: displayNamesMap,
 };
 const arabicUiTextObj: ITexts = {
@@ -196,6 +198,7 @@ const arabicUiTextObj: ITexts = {
 	classGroupName: "اسم الصف",
 	classTeachers: "أساتذة الصف",
 	teacherName: "إسم الإستاذ",
+	Solve: "حل",
 	headRow: [
 		"الحصة الأولى",
 		"الحصة الثانية",
@@ -221,6 +224,7 @@ class textsObj implements ITexts {
 	teacherName!: string;
 	LangDirection!: "rtl" | "ltr";
 	addClass!: string;
+	Solve!: string;
 	NameMap!: { [details: string]: string; };
 	lang: "en" | "ar"
 	constructor(UiTexts: ITexts, lang: "en" | "ar") {
@@ -237,6 +241,7 @@ class textsObj implements ITexts {
 		this.addClass = UiTexts.addClass
 		this.NameMap = UiTexts.NameMap
 		this.lang = lang
+		this.Solve = UiTexts.Solve
 	}
 	changeLanguage = () => {
 		if (this.lang === "en") {
@@ -253,6 +258,7 @@ class textsObj implements ITexts {
 			this.LangDirection = arabicUiTextObj.LangDirection
 			this.addClass = arabicUiTextObj.addClass
 			this.NameMap = arabicUiTextObj.NameMap
+			this.Solve = arabicUiTextObj.Solve
 		}
 		else {
 			this.lang = "en"
@@ -268,6 +274,7 @@ class textsObj implements ITexts {
 			this.LangDirection = currentDevUiTextObj.LangDirection
 			this.addClass = currentDevUiTextObj.addClass
 			this.NameMap = currentDevUiTextObj.NameMap
+			this.Solve = currentDevUiTextObj.Solve
 		}
 
 	}

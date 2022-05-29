@@ -78,9 +78,9 @@ export function UnmemCell(props: ICell): JSX.Element {
 		);
 	};
 
-	if (cellData.isCemented) {
-		return cell(true, cellData.currentTeacher);
-	}
+	// if (cellData.isCemented) {
+	// 	return cell(true, cellData.currentTeacher);
+	// }
 
 	if (week.Swapping) {
 		const i = week.currentSolutionNumber;

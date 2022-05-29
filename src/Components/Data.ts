@@ -3033,7 +3033,7 @@ export const DEFAULT_WEEK: WeekObj = new WeekObj({
                 }
             }
         })
-    ],
+    ].reverse(),
     "teachersGuild": [
         "t0",
         "t1",

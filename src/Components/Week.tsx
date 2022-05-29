@@ -5,19 +5,15 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { Paper, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { BasicTable } from "./BasicTable";
-import {
-	fill,
-	useForceUpdate,
-	randomFiller,
-	fastForward,
-} from "../Logic/Logic";
+import { fill, useForceUpdate } from "../Logic/Logic";
 import { WeekObj } from "../Interfaces/Interfaces";
 // import { allClasses } from "./Data";
 import { texts } from "./UiText";
 import { PosType } from "../types";
-import solveWorker from "../workers/solve.worker";
 import { weekContext } from "./DataViewComponents/DataViewModel";
 import { someHowPutHimAt } from "../Logic/CoreAlgo";
+import solveWorker from "../workers/solve.worker";
+import SubAppBar from "./SubAppBar";
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -48,6 +44,7 @@ export function WeekView(theme: any): JSX.Element {
 			let teacher: string = texts.NameMap[event.target.value as string];
 			console.clear();
 			someHowPutHimAt(m, teacher, Pos, WEEK_GLOBAL_Object);
+			WEEK_GLOBAL_Object.allClasses[m].l[Pos[0]][Pos[1]].isCemented = true;
 		};
 	};
 	const initCell = (m: number) => {
@@ -71,53 +68,55 @@ export function WeekView(theme: any): JSX.Element {
 			WEEK_GLOBAL_Object.teacherScheduleInit();
 			fill(WEEK_GLOBAL_Object);
 			forceUpdate();
-			if (!window.Worker) {
-				console.log("Your browser doesn't support web workers.");
-				return;
-			}
-			const data: any = JSON.stringify({
-				...WEEK_GLOBAL_Object,
-				refreshTable: undefined,
-				forceUpdate: undefined,
-				tableFooterRefresher: undefined,
-			});
-			const worker: Worker = new solveWorker();
-			worker.postMessage(data);
-			worker.onmessage = (event) => {
-				const msg = event.data;
-				try {
-					if (msg.type === "oneChange") {
-						const [x, y] = msg.payload.Pos;
-						const m = msg.payload.m;
-						WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
-							msg.payload.teacher;
-						WEEK_GLOBAL_Object.refreshTable[m][x][y]();
-					} else if (msg.type === "multipleChanges") {
-						for (let i = 0; i < event.data.payload.length; i++) {
-							const [x, y] = msg.payload[i].Pos;
-							const m = msg.payload[i].m;
-							WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
-								msg.payload[i].teacher;
-							WEEK_GLOBAL_Object.refreshTable[m][x][y]();
-						}
-					} else {
-						console.log("Final post msg.payload = ", msg.payload);
-						WEEK_GLOBAL_Object.allClasses = msg.payload.allClasses;
-						WEEK_GLOBAL_Object.teacherSchedule =
-							msg.payload.teacherSchedule;
-						worker.terminate();
-						forceUpdate();
-					}
-				} catch {
-					console.log(`unknown message error`, msg);
-				}
-			};
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
+	const Solve = () => {
+		if (!window.Worker) {
+			console.log("Your browser doesn't support web workers.");
+			return;
+		}
+		const data: any = JSON.stringify({
+			...WEEK_GLOBAL_Object,
+			refreshTable: undefined,
+			forceUpdate: undefined,
+			tableFooterRefresher: undefined,
+		});
+		const worker: Worker = new solveWorker();
+		worker.postMessage(data);
+		worker.onmessage = (event) => {
+			const msg = event.data;
+			try {
+				if (msg.type === "oneChange") {
+					const [x, y] = msg.payload.Pos;
+					const m = msg.payload.m;
+					WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
+						msg.payload.teacher;
+					WEEK_GLOBAL_Object.refreshTable[m][x][y]();
+				} else if (msg.type === "multipleChanges") {
+					for (let i = 0; i < event.data.payload.length; i++) {
+						const [x, y] = msg.payload[i].Pos;
+						const m = msg.payload[i].m;
+						WEEK_GLOBAL_Object.allClasses[m].l[x][y].currentTeacher =
+							msg.payload[i].teacher;
+						WEEK_GLOBAL_Object.refreshTable[m][x][y]();
+					}
+				} else {
+					console.log("Final post msg.payload = ", msg.payload);
+					WEEK_GLOBAL_Object.allClasses = msg.payload.allClasses;
+					WEEK_GLOBAL_Object.teacherSchedule = msg.payload.teacherSchedule;
+					worker.terminate();
+					forceUpdate();
+				}
+			} catch {
+				console.log(`unknown message error`, msg);
+			}
+		};
+	};
 	return (
 		<div className={classes.root}>
+			<SubAppBar Solve={Solve} />
 			<Grid container spacing={0}>
 				<Grid item xs={12}>
 					{WEEK_GLOBAL_Object.allClasses.map((Class, i) => {

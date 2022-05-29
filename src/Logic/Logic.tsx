@@ -76,7 +76,7 @@ export function randomFiller(
 	changeCellPost?: (change: IActlistObj) => void
 ) {
 	const allClasses = week.allClasses;
-	for (let m = allClasses.length - 1; m >= 0; m--) {
+	for (let m = 0; m < allClasses.length; m++) {
 		const Class = allClasses[m];
 		loopOverClass((i: number, j: number) => {
 			if (
