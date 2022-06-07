@@ -231,6 +231,8 @@ export const fastForward = (
 				ind < teachers.length
 			) {
 				const teacher = Class.l[u][v].Options[ind];
+				const s = `iter: ${teacher} in ${Class.Name} in [${u},${v}]`;
+				console.time(s)
 				someHowPutHimAt(
 					m,
 					teacher,
@@ -240,6 +242,7 @@ export const fastForward = (
 					iterativeSolutionPoster,
 					true
 				);
+				console.timeEnd(s)
 				ind++;
 			}
 		});

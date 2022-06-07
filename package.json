@@ -1,5 +1,5 @@
 {
-  "homepage": "https://nasooholabi.github.io/meScheduler",
+  "homepage": "https://meschedule-64bda.web.app/",
   "name": "my-pwa",
   "version": "0.1.0",
   "private": true,
@@ -19,7 +19,7 @@
     "comlink": "^4.3.1",
     "depcheck": "^1.4.0",
     "firebase": "^8.2.0",
-    "firebase-tools": "^9.0.1",
+    "firebase-tools": "^11.0.1",
     "gh-pages": "^3.2.3",
     "greenlet": "^1.1.0",
     "jquery": "^3.5.1",
